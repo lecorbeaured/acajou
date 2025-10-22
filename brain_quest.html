@@ -1,239 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"> <link rel="icon" type="image/png" href="favicon-32x32.png">
+<!-- Favicons --> <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"> <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"> <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"> <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brain Quest Challenge</title>
+    <title>Brain Quest - ACAJOU GAMES</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             min-height: 100vh;
+            padding: 80px 20px 20px 20px;
+        }
+
+        /* Navigation Styles */
+        .acajou-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 99999;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 10px;
+        }
+
+        .acajou-nav-logo {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .acajou-nav-logo:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .acajou-nav-back {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            transition: all 0.3s;
+        }
+
+        .acajou-nav-back:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-3px);
         }
 
         .game-container {
+            max-width: 900px;
+            margin: 0 auto;
             background: white;
             border-radius: 25px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            max-width: 800px;
-            width: 100%;
-            border: 4px solid #f093fb;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
         h1 {
             text-align: center;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-size: clamp(2em, 6vw, 3em);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             margin-bottom: 10px;
         }
 
         .subtitle {
             text-align: center;
             color: #666;
-            margin-bottom: 25px;
-            font-size: clamp(0.9em, 2.5vw, 1.1em);
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            margin-bottom: 30px;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             color: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
+            box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3);
         }
 
         .stat-label {
-            font-size: clamp(0.7em, 2vw, 0.85em);
-            opacity: 0.9;
-            margin-bottom: 5px;
+            font-size: 0.85rem;
+            opacity: 0.95;
             text-transform: uppercase;
-            font-weight: bold;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
         .stat-value {
-            font-size: clamp(1.3em, 4vw, 1.8em);
+            font-size: 2rem;
             font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
-        .category-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        .category-display {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .category-btn {
-            padding: 15px;
-            border: 3px solid #f093fb;
-            background: white;
-            color: #f093fb;
-            border-radius: 15px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: clamp(0.9em, 2.5vw, 1em);
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .category-btn.active {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .category-btn:hover:not(.active) {
-            background: #fce4ec;
-            transform: scale(1.02);
-        }
-
-        .question-panel {
-            background: linear-gradient(135deg, #fff5f7 0%, #e3f2fd 100%);
-            border: 4px solid #f093fb;
-            border-radius: 20px;
-            padding: 30px 20px;
-            margin-bottom: 25px;
-            min-height: 300px;
+            margin-bottom: 30px;
         }
 
         .category-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 8px 20px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1rem;
+            border: 3px solid;
+            transition: all 0.3s;
+        }
+
+        .category-badge.spelling {
+            background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);
+            color: #1e40af;
+            border-color: #3b82f6;
+        }
+
+        .category-badge.geography {
+            background: linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%);
+            color: #065f46;
+            border-color: #10b981;
+        }
+
+        .category-badge.science {
+            background: linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%);
+            color: #831843;
+            border-color: #ec4899;
+        }
+
+        .category-badge.history {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde047 100%);
+            color: #78350f;
+            border-color: #f59e0b;
+        }
+
+        .category-badge.math {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            color: #3730a3;
+            border-color: #6366f1;
+        }
+
+        .category-badge.active {
+            transform: scale(1.15);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .question-area {
+            background: linear-gradient(135deg, #fff7ed 0%, #fff 100%);
+            border: 4px solid #fa709a;
             border-radius: 20px;
-            font-size: clamp(0.85em, 2vw, 1em);
+            padding: 40px 30px;
+            margin-bottom: 30px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .question-number {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #fa709a;
             font-weight: bold;
             margin-bottom: 20px;
         }
 
         .question-text {
-            font-size: clamp(1.3em, 3.5vw, 1.8em);
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: bold;
             color: #333;
-            margin-bottom: 25px;
-            line-height: 1.5;
-            font-weight: 500;
+            text-align: center;
+            margin-bottom: 35px;
+            line-height: 1.4;
         }
 
-        .choices {
+        .options-grid {
             display: grid;
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        .choice-btn {
+        .option-btn {
+            padding: 20px;
             background: white;
-            border: 3px solid #e0e0e0;
-            padding: 18px 20px;
+            border: 3px solid #fa709a;
             border-radius: 15px;
-            cursor: pointer;
-            font-size: clamp(1em, 2.5vw, 1.2em);
-            text-align: left;
-            transition: all 0.3s;
-            font-weight: 500;
+            font-size: 1.2rem;
+            font-weight: bold;
             color: #333;
-            position: relative;
-            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
         }
 
-        .choice-btn:hover:not(.correct):not(.incorrect):not(:disabled) {
-            border-color: #f093fb;
-            background: #fce4ec;
-            transform: translateX(5px);
+        .option-btn:hover:not(.correct):not(.wrong):not(:disabled) {
+            background: #fff7ed;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(250, 112, 154, 0.3);
         }
 
-        .choice-btn.correct {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        .option-btn.correct {
+            background: linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%);
             border-color: #10b981;
             color: #065f46;
-            font-weight: bold;
+            animation: correctPulse 0.6s;
         }
 
-        .choice-btn.incorrect {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        .option-btn.wrong {
+            background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
             border-color: #ef4444;
             color: #991b1b;
-            font-weight: bold;
+            animation: wrongShake 0.5s;
         }
 
-        .choice-btn:disabled {
+        .option-btn:disabled {
             cursor: not-allowed;
         }
 
-        .input-answer {
-            width: 100%;
-            padding: 18px;
-            font-size: clamp(1.2em, 3vw, 1.5em);
-            border: 3px solid #e0e0e0;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: 500;
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        .input-answer:focus {
-            outline: none;
-            border-color: #f093fb;
-            box-shadow: 0 0 20px rgba(240, 147, 251, 0.3);
-        }
-
-        .submit-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            border: none;
-            padding: 18px;
-            font-size: clamp(1.2em, 3vw, 1.4em);
-            border-radius: 15px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
         }
 
         .feedback {
-            background: white;
-            border-left: 5px solid #f093fb;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 10px;
-            font-size: clamp(1.1em, 2.5vw, 1.3em);
-            font-weight: 500;
-            animation: slideIn 0.3s;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: slideDown 0.3s;
         }
 
-        @keyframes slideIn {
+        @keyframes slideDown {
             from {
                 opacity: 0;
                 transform: translateY(-20px);
@@ -246,128 +282,139 @@
 
         .feedback.correct {
             background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            border-left-color: #10b981;
             color: #065f46;
+            border: 3px solid #10b981;
         }
 
-        .feedback.incorrect {
+        .feedback.wrong {
             background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            border-left-color: #ef4444;
             color: #991b1b;
+            border: 3px solid #ef4444;
         }
 
         .controls {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 15px;
+            justify-content: center;
             flex-wrap: wrap;
         }
 
-        .control-btn {
-            flex: 1;
-            min-width: 140px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
             border: none;
-            padding: 14px;
-            font-size: clamp(0.95em, 2.5vw, 1.1em);
             border-radius: 12px;
             cursor: pointer;
-            font-weight: bold;
             transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
-        .progress-indicator {
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .game-over {
             text-align: center;
-            font-size: clamp(1em, 2.5vw, 1.2em);
-            color: #666;
-            font-weight: bold;
-            margin-bottom: 20px;
+            padding: 40px;
         }
 
-        .game-over-screen {
-            display: none;
-            text-align: center;
-            padding: 30px;
-        }
-
-        .game-over-screen.show {
-            display: block;
-            animation: slideIn 0.5s;
-        }
-
-        .game-over-screen h2 {
-            color: #f093fb;
-            font-size: clamp(2em, 5vw, 3em);
+        .game-over h2 {
+            font-size: 3rem;
+            color: #fa709a;
             margin-bottom: 20px;
         }
 
         .final-stats {
-            background: #f0f0f0;
-            padding: 25px;
+            background: #fff7ed;
+            padding: 30px;
             border-radius: 15px;
             margin: 20px 0;
-            font-size: clamp(1em, 2.5vw, 1.2em);
+            font-size: 1.3rem;
             line-height: 2;
         }
 
-        .category-scores {
+        .category-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
-            margin: 20px 0;
+            margin: 30px 0;
         }
 
-        .category-score-box {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #e0e0e0;
+        .category-stat-box {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 3px solid;
         }
 
-        .category-score-title {
-            font-weight: bold;
-            color: #f093fb;
-            margin-bottom: 8px;
+        .hidden {
+            display: none;
         }
 
-        .hint {
-            background: rgba(240, 147, 251, 0.1);
-            border: 2px solid #f093fb;
-            padding: 12px;
-            border-radius: 10px;
-            margin-top: 15px;
-            font-size: clamp(0.9em, 2vw, 1em);
-            color: #666;
-            font-style: italic;
-        }
-
-        @media (max-width: 480px) {
-            .game-container {
-                padding: 20px;
+        @media (max-width: 768px) {
+            body {
+                padding: 70px 10px 20px 10px;
             }
 
-            .question-panel {
-                padding: 20px 15px;
-                min-height: 250px;
+            .game-container {
+                padding: 25px;
+            }
+
+            .acajou-nav-logo span {
+                display: none;
+            }
+
+            .question-text {
+                font-size: 1.3rem;
+            }
+
+            .option-btn {
+                padding: 15px;
+                font-size: 1rem;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <h1>🧠 Brain Quest Challenge 🎓</h1>
-        <div class="subtitle">Test your knowledge across multiple subjects!</div>
+    <!-- Navigation -->
+    <nav class="acajou-nav">
+        <a href="index.html" class="acajou-nav-logo">
+            🎮 <span>ACAJOU GAMES</span>
+        </a>
+        <a href="index.html" class="acajou-nav-back">
+            ← All Games
+        </a>
+    </nav>
 
+    <div class="game-container">
+        <h1>🧠 Brain Quest 🎯</h1>
+        <p class="subtitle">Test your knowledge across 5 subjects! Can you master them all?</p>
+
+        <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-box">
                 <div class="stat-label">Score</div>
                 <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Question</div>
+                <div class="stat-value" id="questionNum">0/20</div>
             </div>
             <div class="stat-box">
                 <div class="stat-label">Correct</div>
@@ -377,45 +424,41 @@
                 <div class="stat-label">Streak</div>
                 <div class="stat-value" id="streak">0🔥</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-label">Round</div>
-                <div class="stat-value" id="round">1/10</div>
-            </div>
         </div>
 
-        <div id="categoryPanel">
-            <div class="category-selector">
-                <button class="category-btn active" onclick="toggleCategory('all')">🎯 All Topics</button>
-                <button class="category-btn" onclick="toggleCategory('spelling')">📝 Spelling</button>
-                <button class="category-btn" onclick="toggleCategory('geography')">🌍 Geography</button>
-                <button class="category-btn" onclick="toggleCategory('science')">🔬 Science</button>
-                <button class="category-btn" onclick="toggleCategory('history')">📜 History</button>
-                <button class="category-btn" onclick="toggleCategory('math')">➕ Math</button>
-            </div>
+        <!-- Category Display -->
+        <div class="category-display">
+            <div class="category-badge spelling" id="badge-spelling">📝 Spelling</div>
+            <div class="category-badge geography" id="badge-geography">🌍 Geography</div>
+            <div class="category-badge science" id="badge-science">🔬 Science</div>
+            <div class="category-badge history" id="badge-history">📜 History</div>
+            <div class="category-badge math" id="badge-math">🧮 Math</div>
         </div>
 
-        <div class="progress-indicator" id="progress"></div>
-
-        <div id="gamePanel">
-            <div class="question-panel">
-                <div class="category-badge" id="categoryBadge">Choose a category</div>
-                <div class="question-text" id="questionText">Press "Start Game" to begin your Brain Quest!</div>
-                <div id="answerArea"></div>
-                <div id="feedback"></div>
-            </div>
+        <!-- Question Area -->
+        <div id="questionArea" class="question-area">
+            <div class="question-number" id="questionLabel">Question 1 of 20</div>
+            <div class="question-text" id="questionText">Ready to test your brain? Click START!</div>
+            <div class="options-grid" id="optionsGrid"></div>
+            <div id="feedback" class="feedback hidden"></div>
         </div>
 
+        <!-- Controls -->
         <div class="controls">
-            <button class="control-btn" id="startBtn" onclick="startGame()">🎮 Start Game</button>
-            <button class="control-btn" onclick="skipQuestion()">⏭️ Skip (-20 pts)</button>
-            <button class="control-btn" onclick="showHint()">💡 Hint (-10 pts)</button>
+            <button class="btn btn-primary" id="startBtn" onclick="startGame()">
+                🎮 Start Quest!
+            </button>
+            <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()" class="hidden">
+                ➡️ Next Question
+            </button>
         </div>
 
-        <div class="game-over-screen" id="gameOverScreen">
-            <h2>🎉 Game Complete! 🎉</h2>
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="game-over hidden">
+            <h2>🎉 Quest Complete! 🎉</h2>
             <div class="final-stats" id="finalStats"></div>
-            <div class="category-scores" id="categoryScores"></div>
-            <button class="control-btn" onclick="restartGame()" style="width: 250px; margin: 20px auto;">🔄 Play Again</button>
+            <div class="category-stats" id="categoryStats"></div>
+            <button class="btn btn-secondary" onclick="restartGame()">🔄 Play Again</button>
         </div>
     </div>
 
@@ -423,14 +466,12 @@
         let gameState = {
             running: false,
             score: 0,
+            currentQuestion: 0,
+            totalQuestions: 20,
             correct: 0,
-            incorrect: 0,
+            wrong: 0,
             streak: 0,
             maxStreak: 0,
-            round: 1,
-            totalRounds: 10,
-            currentQuestion: null,
-            selectedCategories: ['all'],
             categoryStats: {
                 spelling: { correct: 0, total: 0 },
                 geography: { correct: 0, total: 0 },
@@ -438,305 +479,73 @@
                 history: { correct: 0, total: 0 },
                 math: { correct: 0, total: 0 }
             },
-            hintUsed: false
+            currentCategory: null,
+            currentAnswer: null,
+            usedQuestions: []
         };
 
         const questions = {
             spelling: [
-                { question: "Spell the word: Beautiful", answer: "beautiful", hint: "Starts with B-E-A" },
-                { question: "Spell the word: Necessary", answer: "necessary", hint: "One C, two S's" },
-                { question: "Spell the word: Tomorrow", answer: "tomorrow", hint: "Two M's, two R's" },
-                { question: "Spell the word: Definitely", answer: "definitely", hint: "Ends with -itely" },
-                { question: "Spell the word: Separate", answer: "separate", hint: "There's 'a rat' in separate" },
-                { question: "Spell the word: Occurred", answer: "occurred", hint: "Two C's, two R's" },
-                { question: "Spell the word: Recommend", answer: "recommend", hint: "One C, two M's" },
-                { question: "Spell the word: Surprise", answer: "surprise", hint: "Starts with SUR-" },
-                { question: "Spell the word: Wednesday", answer: "wednesday", hint: "WED-NES-DAY" },
-                { question: "Spell the word: Privilege", answer: "privilege", hint: "Ends with -lege" }
+                { q: "How do you spell: 'a structure built across a river'?", options: ["Bridge", "Brige", "Brigde", "Bridg"], answer: 0 },
+                { q: "Correct spelling:", options: ["Nessesary", "Necessary", "Necesary", "Neccesary"], answer: 1 },
+                { q: "Which is correct?", options: ["Definately", "Definatly", "Definitely", "Definetly"], answer: 2 },
+                { q: "Spell: 'happening now'", options: ["Occuring", "Occurring", "Ocurring", "Ocuring"], answer: 1 },
+                { q: "Correct spelling:", options: ["Recieve", "Receive", "Receeve", "Recive"], answer: 1 },
+                { q: "How do you spell: 'very big'?", options: ["Enourmous", "Enormous", "Enormus", "Enormos"], answer: 1 },
+                { q: "Correct spelling:", options: ["Seperate", "Separete", "Separate", "Seprate"], answer: 2 },
+                { q: "Spell: 'a place to learn'", options: ["Libary", "Liberry", "Library", "Librery"], answer: 2 }
             ],
-            
             geography: [
-                { question: "What is the capital of France?", choices: ["London", "Paris", "Berlin", "Rome"], answer: 0, hint: "City of Love" },
-                { question: "Which ocean is the largest?", choices: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: 3, hint: "Covers about 46% of Earth's water surface" },
-                { question: "What is the longest river in the world?", choices: ["Amazon", "Nile", "Mississippi", "Yangtze"], answer: 1, hint: "Located in Africa" },
-                { question: "Which continent is the driest inhabited continent?", choices: ["Africa", "Australia", "Asia", "South America"], answer: 1, hint: "Home to kangaroos" },
-                { question: "What is the tallest mountain in the world?", choices: ["K2", "Kilimanjaro", "Mount Everest", "Denali"], answer: 2, hint: "Located in the Himalayas" },
-                { question: "Which country has the most people?", choices: ["India", "USA", "China", "Indonesia"], answer: 2, hint: "Great Wall is here" },
-                { question: "What is the smallest country in the world?", choices: ["Monaco", "Vatican City", "San Marino", "Liechtenstein"], answer: 1, hint: "Home to the Pope" },
-                { question: "Which desert is the largest in the world?", choices: ["Sahara", "Arabian", "Gobi", "Antarctica"], answer: 3, hint: "It's actually frozen!" },
-                { question: "What is the capital of Japan?", choices: ["Seoul", "Beijing", "Tokyo", "Bangkok"], answer: 2, hint: "Hosted 2020 Olympics" },
-                { question: "Which US state is the largest by area?", choices: ["Texas", "California", "Alaska", "Montana"], answer: 2, hint: "Way up north!" }
+                { q: "What is the capital of France?", options: ["London", "Berlin", "Paris", "Rome"], answer: 2 },
+                { q: "Which is the largest ocean?", options: ["Atlantic", "Pacific", "Indian", "Arctic"], answer: 1 },
+                { q: "Mount Everest is in which mountain range?", options: ["Alps", "Rockies", "Andes", "Himalayas"], answer: 3 },
+                { q: "What is the smallest continent?", options: ["Europe", "Australia", "Antarctica", "South America"], answer: 1 },
+                { q: "Which river is the longest in the world?", options: ["Amazon", "Nile", "Mississippi", "Yangtze"], answer: 1 },
+                { q: "What is the capital of Japan?", options: ["Beijing", "Seoul", "Tokyo", "Bangkok"], answer: 2 },
+                { q: "Which country has the most people?", options: ["India", "China", "USA", "Indonesia"], answer: 1 },
+                { q: "What is the largest desert?", options: ["Gobi", "Sahara", "Arabian", "Kalahari"], answer: 1 }
             ],
-            
             science: [
-                { question: "What planet is known as the Red Planet?", choices: ["Venus", "Mars", "Jupiter", "Mercury"], answer: 1, hint: "Named after the Roman god of war" },
-                { question: "How many bones are in the adult human body?", choices: ["186", "206", "226", "246"], answer: 1, hint: "Between 200 and 210" },
-                { question: "What is the chemical symbol for water?", choices: ["H2O", "CO2", "O2", "HO"], answer: 0, hint: "Two hydrogen, one oxygen" },
-                { question: "What is the fastest land animal?", choices: ["Lion", "Cheetah", "Leopard", "Tiger"], answer: 1, hint: "Can run up to 70 mph" },
-                { question: "What gas do plants absorb from the atmosphere?", choices: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Helium"], answer: 2, hint: "Used in photosynthesis" },
-                { question: "How many planets are in our solar system?", choices: ["7", "8", "9", "10"], answer: 1, hint: "Pluto is no longer counted" },
-                { question: "What is the center of an atom called?", choices: ["Electron", "Proton", "Nucleus", "Neutron"], answer: 2, hint: "Contains protons and neutrons" },
-                { question: "What is the largest organ in the human body?", choices: ["Heart", "Brain", "Liver", "Skin"], answer: 3, hint: "Covers your entire body" },
-                { question: "What force pulls objects toward Earth?", choices: ["Magnetism", "Gravity", "Friction", "Inertia"], answer: 1, hint: "What Newton discovered" },
-                { question: "What is the process plants use to make food?", choices: ["Respiration", "Digestion", "Photosynthesis", "Transpiration"], answer: 2, hint: "Uses sunlight" }
+                { q: "What is the chemical symbol for water?", options: ["H2O", "CO2", "O2", "H2"], answer: 0 },
+                { q: "How many planets are in our solar system?", options: ["7", "8", "9", "10"], answer: 1 },
+                { q: "What do plants need to make food?", options: ["Darkness", "Sunlight", "Music", "Cold"], answer: 1 },
+                { q: "What is the closest star to Earth?", options: ["Moon", "Mars", "Sun", "Venus"], answer: 2 },
+                { q: "What gas do humans breathe in?", options: ["Carbon Dioxide", "Helium", "Nitrogen", "Oxygen"], answer: 3 },
+                { q: "What is the largest planet?", options: ["Earth", "Saturn", "Jupiter", "Neptune"], answer: 2 },
+                { q: "What is the center of an atom called?", options: ["Nucleus", "Electron", "Proton", "Neutron"], answer: 0 },
+                { q: "What does DNA stand for?", options: ["Data Network Access", "Deoxyribonucleic Acid", "Digital Neural Algorithm", "Direct Nuclear Action"], answer: 1 }
             ],
-            
             history: [
-                { question: "Who was the first President of the United States?", choices: ["Thomas Jefferson", "George Washington", "John Adams", "Benjamin Franklin"], answer: 1, hint: "On the $1 bill" },
-                { question: "In what year did World War II end?", choices: ["1943", "1944", "1945", "1946"], answer: 2, hint: "Middle of the 1940s" },
-                { question: "Who invented the telephone?", choices: ["Thomas Edison", "Nikola Tesla", "Alexander Graham Bell", "Benjamin Franklin"], answer: 2, hint: "Scottish-born inventor" },
-                { question: "What year did the Titanic sink?", choices: ["1910", "1911", "1912", "1913"], answer: 2, hint: "Early 1910s" },
-                { question: "Who was the ancient Egyptian queen known for her beauty?", choices: ["Nefertiti", "Cleopatra", "Hatshepsut", "Nefertari"], answer: 1, hint: "Had relationships with Julius Caesar and Mark Antony" },
-                { question: "What year did Christopher Columbus discover America?", choices: ["1482", "1492", "1502", "1512"], answer: 1, hint: "In fourteen hundred ninety-two..." },
-                { question: "Who wrote the Declaration of Independence?", choices: ["George Washington", "Benjamin Franklin", "Thomas Jefferson", "John Adams"], answer: 2, hint: "Third US President" },
-                { question: "What ancient wonder was built in Egypt?", choices: ["Colosseum", "Great Wall", "Pyramids", "Taj Mahal"], answer: 2, hint: "Giant triangular structures" },
-                { question: "Who was the famous nurse in the Crimean War?", choices: ["Clara Barton", "Florence Nightingale", "Mary Seacole", "Dorothea Dix"], answer: 1, hint: "Called the 'Lady with the Lamp'" },
-                { question: "What empire did Julius Caesar rule?", choices: ["Greek", "Roman", "Persian", "Egyptian"], answer: 1, hint: "Capital was in Italy" }
+                { q: "Who was the first President of the USA?", options: ["Jefferson", "Washington", "Lincoln", "Adams"], answer: 1 },
+                { q: "In which year did World War II end?", options: ["1943", "1944", "1945", "1946"], answer: 2 },
+                { q: "Who painted the Mona Lisa?", options: ["Van Gogh", "Picasso", "Da Vinci", "Michelangelo"], answer: 2 },
+                { q: "What year did Columbus reach America?", options: ["1492", "1500", "1520", "1480"], answer: 0 },
+                { q: "Who wrote Romeo and Juliet?", options: ["Dickens", "Shakespeare", "Hemingway", "Twain"], answer: 1 },
+                { q: "What was the name of the first man on the moon?", options: ["Buzz Aldrin", "Neil Armstrong", "John Glenn", "Yuri Gagarin"], answer: 1 },
+                { q: "Ancient Egypt was ruled by:", options: ["Kings", "Emperors", "Pharaohs", "Sultans"], answer: 2 },
+                { q: "The Great Wall of China was built to:", options: ["Decoration", "Trade route", "Defense", "Tourism"], answer: 2 }
             ],
-            
             math: [
-                { question: "What is 7 × 8?", choices: ["54", "56", "58", "60"], answer: 1, hint: "Between 55 and 57" },
-                { question: "What is 144 ÷ 12?", choices: ["11", "12", "13", "14"], answer: 1, hint: "Think: 12 times what equals 144?" },
-                { question: "What is 25% of 200?", choices: ["25", "50", "75", "100"], answer: 1, hint: "Quarter of 200" },
-                { question: "What is the square root of 64?", choices: ["6", "7", "8", "9"], answer: 2, hint: "What number times itself equals 64?" },
-                { question: "What is 15² (15 squared)?", choices: ["200", "215", "225", "235"], answer: 2, hint: "15 × 15" },
-                { question: "If a triangle has angles of 60°, 60°, and ?°, what is the missing angle?", choices: ["50°", "60°", "70°", "80°"], answer: 1, hint: "All angles in a triangle add up to 180°" },
-                { question: "What is 3/4 as a decimal?", choices: ["0.5", "0.6", "0.75", "0.85"], answer: 2, hint: "Three quarters" },
-                { question: "What is 20% of 50?", choices: ["5", "10", "15", "20"], answer: 1, hint: "One fifth of 50" },
-                { question: "How many sides does a hexagon have?", choices: ["5", "6", "7", "8"], answer: 1, hint: "HEX means 6" },
-                { question: "What is 9 × 11?", choices: ["98", "99", "100", "101"], answer: 1, hint: "Almost 100" }
+                { q: "What is 15 × 8?", options: ["120", "130", "115", "125"], answer: 0 },
+                { q: "What is 144 ÷ 12?", options: ["11", "12", "13", "14"], answer: 1 },
+                { q: "What is 25% of 200?", options: ["25", "50", "75", "100"], answer: 1 },
+                { q: "What is the square root of 64?", options: ["6", "7", "8", "9"], answer: 2 },
+                { q: "What is 7³ (7 cubed)?", options: ["21", "49", "147", "343"], answer: 3 },
+                { q: "If a triangle has angles 60°, 60°, what is the third angle?", options: ["30°", "45°", "60°", "90°"], answer: 2 },
+                { q: "What is 3/4 as a decimal?", options: ["0.25", "0.50", "0.75", "1.00"], answer: 2 },
+                { q: "What is the perimeter of a square with side 5?", options: ["10", "15", "20", "25"], answer: 2 }
             ]
         };
-
-        function toggleCategory(category) {
-            const buttons = document.querySelectorAll('.category-btn');
-            
-            if (category === 'all') {
-                gameState.selectedCategories = ['all'];
-                buttons.forEach(btn => btn.classList.remove('active'));
-                event.target.classList.add('active');
-            } else {
-                // Remove 'all' if selecting specific category
-                gameState.selectedCategories = gameState.selectedCategories.filter(c => c !== 'all');
-                
-                // Toggle this category
-                if (gameState.selectedCategories.includes(category)) {
-                    gameState.selectedCategories = gameState.selectedCategories.filter(c => c !== category);
-                    event.target.classList.remove('active');
-                } else {
-                    gameState.selectedCategories.push(category);
-                    event.target.classList.add('active');
-                }
-                
-                // If nothing selected, default to all
-                if (gameState.selectedCategories.length === 0) {
-                    gameState.selectedCategories = ['all'];
-                    buttons[0].classList.add('active');
-                } else {
-                    buttons[0].classList.remove('active');
-                }
-            }
-        }
-
-        function getRandomQuestion() {
-            let availableCategories = gameState.selectedCategories.includes('all') 
-                ? ['spelling', 'geography', 'science', 'history', 'math']
-                : gameState.selectedCategories;
-            
-            const category = availableCategories[Math.floor(Math.random() * availableCategories.length)];
-            const categoryQuestions = questions[category];
-            const question = categoryQuestions[Math.floor(Math.random() * categoryQuestions.length)];
-            
-            return { ...question, category };
-        }
-
-        function displayQuestion(questionData) {
-            gameState.currentQuestion = questionData;
-            gameState.hintUsed = false;
-            
-            const categoryIcons = {
-                spelling: '📝',
-                geography: '🌍',
-                science: '🔬',
-                history: '📜',
-                math: '➕'
-            };
-            
-            document.getElementById('categoryBadge').textContent = 
-                `${categoryIcons[questionData.category]} ${questionData.category.toUpperCase()}`;
-            document.getElementById('questionText').textContent = questionData.question;
-            document.getElementById('feedback').innerHTML = '';
-            
-            const answerArea = document.getElementById('answerArea');
-            answerArea.innerHTML = '';
-            
-            if (questionData.choices) {
-                // Multiple choice
-                const choicesDiv = document.createElement('div');
-                choicesDiv.className = 'choices';
-                
-                questionData.choices.forEach((choice, index) => {
-                    const button = document.createElement('button');
-                    button.className = 'choice-btn';
-                    button.textContent = choice;
-                    button.onclick = () => checkAnswer(index);
-                    choicesDiv.appendChild(button);
-                });
-                
-                answerArea.appendChild(choicesDiv);
-            } else {
-                // Text input (spelling)
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'input-answer';
-                input.id = 'textAnswer';
-                input.placeholder = 'Type your answer...';
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') checkAnswer();
-                });
-                answerArea.appendChild(input);
-                
-                const submitBtn = document.createElement('button');
-                submitBtn.className = 'submit-btn';
-                submitBtn.textContent = 'Submit Answer';
-                submitBtn.onclick = () => checkAnswer();
-                answerArea.appendChild(submitBtn);
-                
-                setTimeout(() => input.focus(), 100);
-            }
-        }
-
-        function checkAnswer(choiceIndex = null) {
-            const question = gameState.currentQuestion;
-            let isCorrect = false;
-            let userAnswer;
-            
-            if (question.choices) {
-                // Multiple choice
-                userAnswer = choiceIndex;
-                isCorrect = choiceIndex === question.answer;
-                
-                // Disable all buttons and show results
-                const buttons = document.querySelectorAll('.choice-btn');
-                buttons.forEach((btn, idx) => {
-                    btn.disabled = true;
-                    if (idx === question.answer) {
-                        btn.classList.add('correct');
-                    } else if (idx === choiceIndex && !isCorrect) {
-                        btn.classList.add('incorrect');
-                    }
-                });
-            } else {
-                // Text input
-                const input = document.getElementById('textAnswer');
-                userAnswer = input.value.trim().toLowerCase();
-                isCorrect = userAnswer === question.answer.toLowerCase();
-                input.disabled = true;
-                document.querySelector('.submit-btn').disabled = true;
-            }
-            
-            // Update stats
-            gameState.categoryStats[question.category].total++;
-            
-            if (isCorrect) {
-                gameState.correct++;
-                gameState.streak++;
-                gameState.score += 100 + (gameState.streak * 10);
-                gameState.categoryStats[question.category].correct++;
-                
-                if (gameState.streak > gameState.maxStreak) {
-                    gameState.maxStreak = gameState.streak;
-                }
-                
-                showFeedback(`✅ Correct! +${100 + (gameState.streak * 10)} points`, true);
-            } else {
-                gameState.incorrect++;
-                gameState.streak = 0;
-                gameState.score = Math.max(0, gameState.score - 20);
-                
-                const correctAnswer = question.choices 
-                    ? question.choices[question.answer]
-                    : question.answer;
-                showFeedback(`❌ Incorrect! The answer was: ${correctAnswer}`, false);
-            }
-            
-            updateStats();
-            
-            if (gameState.round >= gameState.totalRounds) {
-                setTimeout(gameOver, 2500);
-            } else {
-                setTimeout(nextQuestion, 2500);
-            }
-        }
-
-        function showFeedback(message, isCorrect) {
-            const feedback = document.getElementById('feedback');
-            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-            feedback.textContent = message;
-        }
-
-        function showHint() {
-            if (!gameState.running || !gameState.currentQuestion || gameState.hintUsed) return;
-            
-            gameState.hintUsed = true;
-            gameState.score = Math.max(0, gameState.score - 10);
-            
-            const hintDiv = document.createElement('div');
-            hintDiv.className = 'hint';
-            hintDiv.textContent = `💡 Hint: ${gameState.currentQuestion.hint}`;
-            document.getElementById('answerArea').appendChild(hintDiv);
-            
-            updateStats();
-        }
-
-        function skipQuestion() {
-            if (!gameState.running) return;
-            
-            gameState.score = Math.max(0, gameState.score - 20);
-            gameState.streak = 0;
-            gameState.categoryStats[gameState.currentQuestion.category].total++;
-            
-            const correctAnswer = gameState.currentQuestion.choices 
-                ? gameState.currentQuestion.choices[gameState.currentQuestion.answer]
-                : gameState.currentQuestion.answer;
-            
-            showFeedback(`⏭️ Skipped! The answer was: ${correctAnswer}`, false);
-            updateStats();
-            
-            if (gameState.round >= gameState.totalRounds) {
-                setTimeout(gameOver, 2000);
-            } else {
-                setTimeout(nextQuestion, 2000);
-            }
-        }
-
-        function nextQuestion() {
-            gameState.round++;
-            updateStats();
-            
-            const questionData = getRandomQuestion();
-            displayQuestion(questionData);
-        }
-
-        function updateStats() {
-            document.getElementById('score').textContent = gameState.score;
-            document.getElementById('correct').textContent = gameState.correct;
-            document.getElementById('streak').textContent = gameState.streak + '🔥';
-            document.getElementById('round').textContent = `${gameState.round}/${gameState.totalRounds}`;
-            
-            const percentage = Math.round((gameState.round - 1) / gameState.totalRounds * 100);
-            document.getElementById('progress').textContent = 
-                `Progress: ${percentage}% Complete`;
-        }
 
         function startGame() {
             gameState.running = true;
             gameState.score = 0;
+            gameState.currentQuestion = 0;
             gameState.correct = 0;
-            gameState.incorrect = 0;
+            gameState.wrong = 0;
             gameState.streak = 0;
             gameState.maxStreak = 0;
-            gameState.round = 1;
+            gameState.usedQuestions = [];
             gameState.categoryStats = {
                 spelling: { correct: 0, total: 0 },
                 geography: { correct: 0, total: 0 },
@@ -744,74 +553,173 @@
                 history: { correct: 0, total: 0 },
                 math: { correct: 0, total: 0 }
             };
-            
-            document.getElementById('gameOverScreen').classList.remove('show');
-            document.getElementById('gamePanel').style.display = 'block';
-            document.getElementById('startBtn').textContent = '🔄 Restart';
-            document.getElementById('categoryPanel').style.opacity = '0.5';
-            document.querySelectorAll('.category-btn').forEach(btn => btn.disabled = true);
-            
+
+            document.getElementById('startBtn').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+
             updateStats();
-            
-            const questionData = getRandomQuestion();
-            displayQuestion(questionData);
+            nextQuestion();
         }
 
-        function gameOver() {
-            gameState.running = false;
+        function nextQuestion() {
+            if (gameState.currentQuestion >= gameState.totalQuestions) {
+                endGame();
+                return;
+            }
+
+            gameState.currentQuestion++;
             
-            const accuracy = gameState.correct + gameState.incorrect > 0 
-                ? Math.round((gameState.correct / (gameState.correct + gameState.incorrect)) * 100) 
-                : 0;
+            // Select category (cycle through or random)
+            const categories = ['spelling', 'geography', 'science', 'history', 'math'];
+            const category = categories[Math.floor(Math.random() * categories.length)];
+            gameState.currentCategory = category;
             
-            document.getElementById('finalStats').innerHTML = `
-                <strong>Final Score:</strong> ${gameState.score}<br>
-                <strong>Questions Correct:</strong> ${gameState.correct}/${gameState.totalRounds}<br>
-                <strong>Accuracy:</strong> ${accuracy}%<br>
-                <strong>Max Streak:</strong> ${gameState.maxStreak}🔥<br>
-                <strong>Grade:</strong> ${getGrade(accuracy)}
-            `;
-            
-            // Category breakdown
-            const categoryScoresDiv = document.getElementById('categoryScores');
-            categoryScoresDiv.innerHTML = '';
-            
-            Object.keys(gameState.categoryStats).forEach(category => {
-                const stats = gameState.categoryStats[category];
-                if (stats.total > 0) {
-                    const categoryAccuracy = Math.round((stats.correct / stats.total) * 100);
-                    const box = document.createElement('div');
-                    box.className = 'category-score-box';
-                    box.innerHTML = `
-                        <div class="category-score-title">${category.toUpperCase()}</div>
-                        ${stats.correct}/${stats.total} correct (${categoryAccuracy}%)
-                    `;
-                    categoryScoresDiv.appendChild(box);
-                }
+            // Get random question from category
+            const categoryQuestions = questions[category];
+            const availableQuestions = categoryQuestions.filter((q, idx) => {
+                return !gameState.usedQuestions.includes(`${category}-${idx}`);
             });
             
-            document.getElementById('gamePanel').style.display = 'none';
-            document.getElementById('gameOverScreen').classList.add('show');
-            document.getElementById('categoryPanel').style.opacity = '1';
-            document.querySelectorAll('.category-btn').forEach(btn => btn.disabled = false);
+            let question;
+            let questionIndex;
+            if (availableQuestions.length > 0) {
+                question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                questionIndex = categoryQuestions.indexOf(question);
+            } else {
+                // All used, pick any
+                question = categoryQuestions[Math.floor(Math.random() * categoryQuestions.length)];
+                questionIndex = categoryQuestions.indexOf(question);
+            }
+            
+            gameState.usedQuestions.push(`${category}-${questionIndex}`);
+            gameState.currentAnswer = question.answer;
+            gameState.categoryStats[category].total++;
+
+            // Update UI
+            document.getElementById('questionLabel').textContent = 
+                `Question ${gameState.currentQuestion} of ${gameState.totalQuestions}`;
+            document.getElementById('questionText').textContent = question.q;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+
+            // Highlight current category
+            document.querySelectorAll('.category-badge').forEach(badge => {
+                badge.classList.remove('active');
+            });
+            document.getElementById(`badge-${category}`).classList.add('active');
+
+            // Create option buttons
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectAnswer(index);
+                optionsGrid.appendChild(btn);
+            });
+
+            updateStats();
         }
 
-        function getGrade(accuracy) {
-            if (accuracy >= 90) return '🌟 A+ Outstanding!';
-            if (accuracy >= 80) return '⭐ A Great Job!';
-            if (accuracy >= 70) return '✨ B Good Work!';
-            if (accuracy >= 60) return '👍 C Keep Practicing!';
-            return '💪 Keep Trying!';
+        function selectAnswer(selected) {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.disabled = true);
+
+            const isCorrect = selected === gameState.currentAnswer;
+
+            if (isCorrect) {
+                buttons[selected].classList.add('correct');
+                gameState.correct++;
+                gameState.streak++;
+                gameState.categoryStats[gameState.currentCategory].correct++;
+                
+                let points = 100 + (gameState.streak * 10);
+                gameState.score += points;
+
+                if (gameState.streak > gameState.maxStreak) {
+                    gameState.maxStreak = gameState.streak;
+                }
+
+                showFeedback(`✅ Correct! +${points} points`, true);
+            } else {
+                buttons[selected].classList.add('wrong');
+                buttons[gameState.currentAnswer].classList.add('correct');
+                gameState.wrong++;
+                gameState.streak = 0;
+
+                showFeedback(`❌ Wrong! Correct answer: ${buttons[gameState.currentAnswer].textContent}`, false);
+            }
+
+            updateStats();
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function showFeedback(message, isCorrect) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'wrong'}`;
+        }
+
+        function updateStats() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('questionNum').textContent = 
+                `${gameState.currentQuestion}/${gameState.totalQuestions}`;
+            document.getElementById('correct').textContent = gameState.correct;
+            document.getElementById('streak').textContent = gameState.streak + '🔥';
+        }
+
+        function endGame() {
+            gameState.running = false;
+
+            const accuracy = Math.round((gameState.correct / gameState.totalQuestions) * 100);
+
+            document.getElementById('questionArea').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+
+            document.getElementById('finalStats').innerHTML = `
+                <strong>🏆 Final Score:</strong> ${gameState.score}<br>
+                <strong>✅ Correct:</strong> ${gameState.correct}/${gameState.totalQuestions}<br>
+                <strong>❌ Wrong:</strong> ${gameState.wrong}<br>
+                <strong>🎯 Accuracy:</strong> ${accuracy}%<br>
+                <strong>🔥 Max Streak:</strong> ${gameState.maxStreak}
+            `;
+
+            // Category breakdown
+            const categoryStatsDiv = document.getElementById('categoryStats');
+            categoryStatsDiv.innerHTML = '';
+            
+            const categoryInfo = {
+                spelling: { name: '📝 Spelling', class: 'spelling' },
+                geography: { name: '🌍 Geography', class: 'geography' },
+                science: { name: '🔬 Science', class: 'science' },
+                history: { name: '📜 History', class: 'history' },
+                math: { name: '🧮 Math', class: 'math' }
+            };
+
+            for (let cat in gameState.categoryStats) {
+                const stats = gameState.categoryStats[cat];
+                if (stats.total > 0) {
+                    const accuracy = Math.round((stats.correct / stats.total) * 100);
+                    const div = document.createElement('div');
+                    div.className = `category-stat-box ${categoryInfo[cat].class}`;
+                    div.innerHTML = `
+                        <strong>${categoryInfo[cat].name}</strong><br>
+                        ${stats.correct}/${stats.total}<br>
+                        ${accuracy}%
+                    `;
+                    categoryStatsDiv.appendChild(div);
+                }
+            }
+
+            document.getElementById('gameOverScreen').classList.remove('hidden');
         }
 
         function restartGame() {
-            document.getElementById('gameOverScreen').classList.remove('show');
-            document.getElementById('gamePanel').style.display = 'block';
-            startGame();
+            document.getElementById('questionArea').classList.remove('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('startBtn').classList.remove('hidden');
         }
-
-        // Initialize
-        updateStats();
     </script>
 </body>
 </html>

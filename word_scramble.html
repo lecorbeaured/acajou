@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"> <link rel="icon" type="image/png" href="favicon-32x32.png">
+<!-- Favicons --> <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"> <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"> <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"> <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Scramble Challenge</title>
@@ -12,14 +14,68 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* FIXED: Changed body to work with fixed navigation */
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%);
             min-height: 100vh;
+            padding: 80px 10px 20px 10px; /* Top padding for fixed nav */
+        }
+
+        /* Navigation Styles */
+        .acajou-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 99999;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 10px;
+        }
+
+        .acajou-nav-logo {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .acajou-nav-logo:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .acajou-nav-back {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            transition: all 0.3s;
+        }
+
+        .acajou-nav-back:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-3px);
+        }
+
+        @media (max-width: 480px) {
+            .acajou-nav {
+                padding: 10px 15px;
+            }
+            .acajou-nav-logo span {
+                display: none;
+            }
         }
 
         .game-container {
@@ -30,6 +86,7 @@
             max-width: 700px;
             width: 100%;
             border: 4px solid #4facfe;
+            margin: 0 auto; /* Center the container */
         }
 
         h1 {
@@ -360,6 +417,10 @@
         }
 
         @media (max-width: 480px) {
+            body {
+                padding: 70px 10px 10px 10px;
+            }
+            
             .game-container {
                 padding: 20px;
             }
@@ -375,6 +436,16 @@
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="acajou-nav">
+        <a href="index.html" class="acajou-nav-logo">
+            🎮 <span>ACAJOU GAMES</span>
+        </a>
+        <a href="index.html" class="acajou-nav-back">
+            ← All Games
+        </a>
+    </nav>
+
     <div class="game-container">
         <h1>🔤 Word Scramble 🎯</h1>
         <div class="subtitle">Unscramble the letters to find the word!</div>

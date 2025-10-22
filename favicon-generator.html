@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACAJOU GAMES - Favicon Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #8B4513;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .favicon-preview {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .preview-box {
+            text-align: center;
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+        .preview-box img {
+            display: block;
+            margin: 10px auto;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .step {
+            background: #f0f4ff;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #8B4513;
+            border-radius: 5px;
+        }
+        .step h3 {
+            color: #8B4513;
+            margin-top: 0;
+        }
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+        .button {
+            background: #8B4513;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        .button:hover {
+            background: #D2691E;
+            transform: translateY(-2px);
+        }
+        .download-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 ACAJOU GAMES Favicon</h1>
+        
+        <div class="favicon-preview">
+            <div class="preview-box">
+                <h3>16x16 (Browser Tab)</h3>
+                <canvas id="favicon16" width="16" height="16"></canvas>
+                <p>Tiny</p>
+            </div>
+            <div class="preview-box">
+                <h3>32x32 (Standard)</h3>
+                <canvas id="favicon32" width="32" height="32"></canvas>
+                <p>Small</p>
+            </div>
+            <div class="preview-box">
+                <h3>64x64 (Retina)</h3>
+                <canvas id="favicon64" width="64" height="64"></canvas>
+                <p>Medium</p>
+            </div>
+            <div class="preview-box">
+                <h3>180x180 (Apple)</h3>
+                <canvas id="favicon180" width="180" height="180"></canvas>
+                <p>Large</p>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <button class="button" onclick="downloadFavicon(16)">⬇️ Download 16x16</button>
+            <button class="button" onclick="downloadFavicon(32)">⬇️ Download 32x32</button>
+            <button class="button" onclick="downloadFavicon(64)">⬇️ Download 64x64</button>
+            <button class="button" onclick="downloadFavicon(180)">⬇️ Download 180x180</button>
+            <button class="button" onclick="downloadAllSizes()">⬇️ Download All</button>
+        </div>
+
+        <div class="step">
+            <h3>📋 Step 1: Download the Favicons</h3>
+            <p>Click the download buttons above to get all the favicon sizes you need.</p>
+        </div>
+
+        <div class="step">
+            <h3>📁 Step 2: Add to Your Project</h3>
+            <p>Place the favicon files in your project root directory (same folder as index.html)</p>
+        </div>
+
+        <div class="step">
+            <h3>💻 Step 3: Add to HTML</h3>
+            <p>Add these lines inside the <code>&lt;head&gt;</code> section of ALL your HTML files:</p>
+            <div class="code-block">
+&lt;!-- Favicons --&gt;
+&lt;link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"&gt;
+&lt;link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"&gt;
+&lt;link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"&gt;
+&lt;link rel="icon" type="image/svg+xml" href="favicon.svg"&gt;
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>✅ Quick Copy-Paste</h3>
+            <p>For each of your game files, add this in the <code>&lt;head&gt;</code>:</p>
+            <div class="code-block" style="font-size: 14px;">
+&lt;link rel="icon" type="image/svg+xml" href="favicon.svg"&gt;
+&lt;link rel="icon" type="image/png" href="favicon-32x32.png"&gt;
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>🌐 For GitHub Pages</h3>
+            <p>If using GitHub Pages, the favicons will automatically work once you:</p>
+            <ol>
+                <li>Upload all favicon files to your repository root</li>
+                <li>Add the HTML code above to all your pages</li>
+                <li>Commit and push to GitHub</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>🎨 About Your Favicon</h3>
+            <p><strong>Design:</strong> Game controller icon with ACAJOU's brown/mahogany color scheme</p>
+            <p><strong>Colors:</strong> #8B4513 (Mahogany Brown) and #D2691E (Peru Orange)</p>
+            <p><strong>Style:</strong> Modern, colorful, gaming-themed</p>
+        </div>
+    </div>
+
+    <script>
+        // Draw favicon on canvas
+        function drawFavicon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            const scale = size / 100;
+            
+            ctx.scale(scale, scale);
+            
+            // Background circle
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.arc(50, 50, 48, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#D2691E';
+            ctx.beginPath();
+            ctx.arc(50, 50, 45, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Controller body
+            ctx.fillStyle = '#FFE4B5';
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(30, 40);
+            ctx.quadraticCurveTo(25, 45, 25, 52);
+            ctx.lineTo(25, 58);
+            ctx.quadraticCurveTo(25, 65, 30, 65);
+            ctx.lineTo(45, 65);
+            ctx.lineTo(45, 70);
+            ctx.quadraticCurveTo(45, 72, 47, 72);
+            ctx.lineTo(53, 72);
+            ctx.quadraticCurveTo(55, 72, 55, 70);
+            ctx.lineTo(55, 65);
+            ctx.lineTo(70, 65);
+            ctx.quadraticCurveTo(75, 65, 75, 58);
+            ctx.lineTo(75, 52);
+            ctx.quadraticCurveTo(75, 45, 70, 40);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
+            // D-pad
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(32, 48, 3, 8);
+            ctx.fillRect(29, 51, 9, 3);
+            
+            // Buttons
+            ctx.fillStyle = '#FF6B6B';
+            ctx.beginPath();
+            ctx.arc(62, 50, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#4ECDC4';
+            ctx.beginPath();
+            ctx.arc(68, 50, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#FFE66D';
+            ctx.beginPath();
+            ctx.arc(65, 47, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#95E1D3';
+            ctx.beginPath();
+            ctx.arc(65, 53, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Start button
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(47, 54, 6, 2);
+            
+            // Handles
+            ctx.fillStyle = '#D2691E';
+            ctx.beginPath();
+            ctx.ellipse(30, 65, 8, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.ellipse(70, 65, 8, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Shine
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.beginPath();
+            ctx.ellipse(35, 45, 8, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Draw all sizes
+        drawFavicon(document.getElementById('favicon16'), 16);
+        drawFavicon(document.getElementById('favicon32'), 32);
+        drawFavicon(document.getElementById('favicon64'), 64);
+        drawFavicon(document.getElementById('favicon180'), 180);
+
+        // Download function
+        function downloadFavicon(size) {
+            const canvas = document.getElementById(`favicon${size}`);
+            const link = document.createElement('a');
+            
+            let filename;
+            if (size === 180) {
+                filename = 'apple-touch-icon.png';
+            } else {
+                filename = `favicon-${size}x${size}.png`;
+            }
+            
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function downloadAllSizes() {
+            setTimeout(() => downloadFavicon(16), 100);
+            setTimeout(() => downloadFavicon(32), 300);
+            setTimeout(() => downloadFavicon(64), 500);
+            setTimeout(() => downloadFavicon(180), 700);
+            alert('Downloading all favicon sizes! Check your downloads folder.');
+        }
+    </script>
+</body>
+</html>
