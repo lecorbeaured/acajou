@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest of the Lost Kingdom</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .game-container {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            max-width: 900px;
+            width: 100%;
+            border: 3px solid #d4af37;
+        }
+
+        h1 {
+            text-align: center;
+            color: #d4af37;
+            font-size: clamp(1.8em, 5vw, 2.5em);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-family: 'Georgia', serif;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #bbb;
+            margin-bottom: 20px;
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+            font-style: italic;
+        }
+
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #d4af37;
+            font-size: clamp(0.7em, 2vw, 0.85em);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            color: #fff;
+            font-size: clamp(1.2em, 3vw, 1.5em);
+            font-weight: bold;
+        }
+
+        .health-bar {
+            width: 100%;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 100%);
+            transition: width 0.3s;
+        }
+
+        .story-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #555;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 250px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .story-text {
+            color: #e0e0e0;
+            font-size: clamp(1em, 2.5vw, 1.15em);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .story-text h3 {
+            color: #d4af37;
+            margin: 15px 0 10px 0;
+            font-size: clamp(1.2em, 3vw, 1.4em);
+        }
+
+        .choices {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .choice-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+            color: #1a1a1a;
+            border: none;
+            padding: 15px 20px;
+            font-size: clamp(0.95em, 2.5vw, 1.1em);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: left;
+            font-family: 'Georgia', serif;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .choice-btn:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 12px rgba(212, 175, 55, 0.5);
+        }
+
+        .choice-btn:active {
+            transform: translateX(3px);
+        }
+
+        .choice-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .inventory {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #555;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .inventory-title {
+            color: #d4af37;
+            font-size: clamp(1em, 2.5vw, 1.2em);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .inventory-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .inventory-item {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid #d4af37;
+            padding: 6px 12px;
+            border-radius: 5px;
+            color: #fff;
+            font-size: clamp(0.85em, 2vw, 0.95em);
+        }
+
+        .combat-panel {
+            background: rgba(139, 0, 0, 0.2);
+            border: 2px solid #dc143c;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .enemy-info {
+            color: #dc143c;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: clamp(1em, 2.5vw, 1.2em);
+        }
+
+        .combat-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+        }
+
+        .combat-btn {
+            background: linear-gradient(135deg, #dc143c 0%, #8b0000 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: clamp(0.9em, 2vw, 1em);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .combat-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(220, 20, 60, 0.5);
+        }
+
+        .message {
+            background: rgba(212, 175, 55, 0.15);
+            border-left: 4px solid #d4af37;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            color: #f0f0f0;
+            font-style: italic;
+        }
+
+        .message.damage {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .message.heal {
+            border-left-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .message.success {
+            border-left-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            flex: 1;
+            min-width: 120px;
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: clamp(0.9em, 2vw, 1em);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 15px;
+            }
+
+            .story-panel {
+                min-height: 200px;
+            }
+        }
+
+        /* Scrollbar styling */
+        .story-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .story-panel::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .story-panel::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 4px;
+        }
+
+        .death-screen {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .death-screen h2 {
+            color: #dc143c;
+            font-size: clamp(2em, 5vw, 3em);
+            margin-bottom: 20px;
+        }
+
+        .victory-screen {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .victory-screen h2 {
+            color: #d4af37;
+            font-size: clamp(2em, 5vw, 3em);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>⚔️ Quest of the Lost Kingdom ⚔️</h1>
+        <div class="subtitle">An Epic Adventure Awaits</div>
+
+        <div class="stats-panel">
+            <div class="stat-box">
+                <div class="stat-label">Health</div>
+                <div class="stat-value" id="health">100</div>
+                <div class="health-bar">
+                    <div class="health-fill" id="healthBar" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Gold</div>
+                <div class="stat-value" id="gold">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Attack</div>
+                <div class="stat-value" id="attack">10</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Level</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+        </div>
+
+        <div class="inventory" id="inventoryPanel">
+            <div class="inventory-title">📦 Inventory</div>
+            <div class="inventory-items" id="inventory">
+                <span style="color: #888; font-style: italic;">Empty</span>
+            </div>
+        </div>
+
+        <div id="combatPanel" class="combat-panel" style="display: none;">
+            <div class="enemy-info" id="enemyInfo"></div>
+            <div class="combat-actions" id="combatActions"></div>
+        </div>
+
+        <div class="story-panel" id="storyPanel">
+            <div class="story-text" id="storyText"></div>
+            <div class="choices" id="choices"></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" onclick="restartGame()">🔄 Restart</button>
+            <button class="control-btn" onclick="showStats()">📊 Stats</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            health: 100,
+            maxHealth: 100,
+            gold: 0,
+            attack: 10,
+            defense: 5,
+            level: 1,
+            xp: 0,
+            inventory: [],
+            location: 'start',
+            flags: {},
+            inCombat: false,
+            enemy: null
+        };
+
+        // Story data
+        const story = {
+            start: {
+                title: "The Beginning",
+                text: `You wake up in a small village inn, sunlight streaming through the window. The innkeeper rushes over with urgent news: "Adventurer! The kingdom is in peril! The Dark Lord has stolen the Crystal of Light from the Royal Castle. Without it, darkness will consume our lands!"
+
+You remember hearing tales of the Crystal - a powerful artifact that keeps evil at bay. The innkeeper hands you a rusty sword and a small pouch of gold.
+
+"Please, brave soul, you must venture forth and restore the Crystal! The fate of the kingdom rests on your shoulders."`,
+                choices: [
+                    { text: "🗺️ Accept the quest and head to the forest", next: 'forest', action: () => addItem('Rusty Sword') },
+                    { text: "🏪 Visit the village shop first", next: 'shop' },
+                    { text: "🍺 Refuse and stay at the inn", next: 'refuse' }
+                ]
+            },
+
+            refuse: {
+                title: "A Coward's End",
+                text: `You decide to stay at the inn, ordering another ale. Days pass, then weeks. The darkness spreads across the land. Eventually, it reaches your village.
+
+Without a hero to stop it, the Dark Lord's forces overwhelm the kingdom. You lived a few more comfortable days, but at what cost?
+
+THE END - You chose comfort over heroism.`,
+                choices: [
+                    { text: "↩️ Try again", next: 'start' }
+                ]
+            },
+
+            shop: {
+                title: "The Village Shop",
+                text: `The shop is filled with various items. The merchant, an elderly woman with kind eyes, greets you.
+
+"Ah, an adventurer! I have some items that might help you on your journey. Choose wisely, for the road ahead is dangerous."
+
+Available items:
+• Health Potion (30 gold) - Restores 50 health
+• Iron Sword (50 gold) - +5 attack
+• Leather Armor (40 gold) - +10 max health`,
+                choices: [
+                    { text: "💊 Buy Health Potion (30 gold)", next: 'shop', condition: () => gameState.gold >= 30, action: () => { gameState.gold -= 30; addItem('Health Potion'); addMessage('Purchased Health Potion!', 'success'); } },
+                    { text: "⚔️ Buy Iron Sword (50 gold)", next: 'shop', condition: () => gameState.gold >= 50 && !hasItem('Iron Sword'), action: () => { gameState.gold -= 50; addItem('Iron Sword'); gameState.attack += 5; addMessage('Attack increased by 5!', 'success'); } },
+                    { text: "🛡️ Buy Leather Armor (40 gold)", next: 'shop', condition: () => gameState.gold >= 40 && !hasItem('Leather Armor'), action: () => { gameState.gold -= 40; addItem('Leather Armor'); gameState.maxHealth += 10; gameState.health += 10; addMessage('Max health increased by 10!', 'success'); } },
+                    { text: "🚪 Leave shop and head to the forest", next: 'forest' }
+                ]
+            },
+
+            forest: {
+                title: "The Dark Forest",
+                text: `You enter the ancient forest. Gnarled trees loom overhead, their branches blocking out much of the sunlight. Strange sounds echo through the woods.
+
+As you walk deeper, you notice a fork in the path. To the left, you hear the sound of running water. To the right, you see smoke rising in the distance.
+
+Suddenly, you spot something glinting on the ground - a small pouch of gold!`,
+                choices: [
+                    { text: "💰 Take the gold pouch (+20 gold)", next: 'forest_after_gold', action: () => { gameState.gold += 20; addMessage('Found 20 gold!', 'success'); } },
+                    { text: "⬅️ Go left toward the water", next: 'river' },
+                    { text: "➡️ Go right toward the smoke", next: 'camp' }
+                ]
+            },
+
+            forest_after_gold: {
+                title: "The Dark Forest",
+                text: `You pocket the gold and continue. The forest grows denser ahead.`,
+                choices: [
+                    { text: "⬅️ Go left toward the water", next: 'river' },
+                    { text: "➡️ Go right toward the smoke", next: 'camp' }
+                ]
+            },
+
+            river: {
+                title: "The River Crossing",
+                text: `You arrive at a rushing river. The water is crystal clear and looks refreshing. On the opposite bank, you can see a path leading deeper into the forest.
+
+There's a rickety old bridge spanning the river, but it looks unstable. Alternatively, you could try to swim across, though the current is strong.`,
+                choices: [
+                    { text: "🌊 Drink from the river first", next: 'river_drink', action: () => { gameState.health = Math.min(gameState.maxHealth, gameState.health + 20); addMessage('Restored 20 health!', 'heal'); } },
+                    { text: "🌉 Cross the bridge", next: 'bridge' },
+                    { text: "🏊 Swim across", next: 'swim' },
+                    { text: "↩️ Go back", next: 'forest_after_gold' }
+                ]
+            },
+
+            river_drink: {
+                title: "The River Crossing",
+                text: `The cool water refreshes you. You feel your strength returning.`,
+                choices: [
+                    { text: "🌉 Cross the bridge", next: 'bridge' },
+                    { text: "🏊 Swim across", next: 'swim' },
+                    { text: "↩️ Go back", next: 'forest_after_gold' }
+                ]
+            },
+
+            bridge: {
+                title: "The Bridge",
+                text: `You step onto the old bridge. The wood creaks ominously beneath your feet. Halfway across, you hear a loud CRACK!
+
+The bridge is collapsing!`,
+                choices: [
+                    { text: "🏃 Sprint to the other side!", next: 'bridge_success', action: () => { if (Math.random() > 0.5) { gameState.health -= 15; addMessage('You made it but took 15 damage from falling debris!', 'damage'); } else { addMessage('You made it across safely!', 'success'); } } },
+                    { text: "⬅️ Run back!", next: 'river' }
+                ]
+            },
+
+            bridge_success: {
+                title: "Beyond the River",
+                text: `You make it across! The path ahead leads to a clearing where you can see the entrance to a cave.`,
+                choices: [
+                    { text: "🕳️ Enter the cave", next: 'cave' },
+                    { text: "🔍 Search the area first", next: 'clearing_search' }
+                ]
+            },
+
+            swim: {
+                title: "Swimming",
+                text: `You dive into the river. The current is stronger than you expected! You struggle against the water.`,
+                action: () => {
+                    if (Math.random() > 0.3) {
+                        gameState.health -= 25;
+                        addMessage('The current battered you! Lost 25 health!', 'damage');
+                        return 'bridge_success';
+                    } else {
+                        gameState.health -= 40;
+                        addMessage('You nearly drowned! Lost 40 health!', 'damage');
+                        return 'river';
+                    }
+                }
+            },
+
+            camp: {
+                title: "Mysterious Camp",
+                text: `You arrive at a small camp. A fire burns in the center, and a hooded figure sits nearby, roasting a rabbit.
+
+"Greetings, traveler," the figure says in a raspy voice. "I am a wandering merchant. Would you like to trade? Or perhaps... test your luck in a game of chance?"`,
+                choices: [
+                    { text: "🎲 Play a game of chance (50 gold)", next: 'gamble', condition: () => gameState.gold >= 50 },
+                    { text: "💬 Ask about the Dark Lord", next: 'camp_info' },
+                    { text: "⚔️ Attack the mysterious figure", next: 'combat_merchant' },
+                    { text: "🚶 Leave camp", next: 'forest_after_gold' }
+                ]
+            },
+
+            camp_info: {
+                title: "Merchant's Information",
+                text: `The merchant leans forward, firelight dancing across their hidden face.
+
+"Ah, the Dark Lord... He resides in the castle beyond the mountains. But to reach him, you must first pass through the Cave of Trials. Many have entered. Few have emerged."
+
+The merchant reaches into their cloak and pulls out a gleaming amulet.
+
+"This Amulet of Protection might help you. I'll sell it for 80 gold. It will reduce damage you take in combat."`,
+                choices: [
+                    { text: "💎 Buy Amulet of Protection (80 gold)", next: 'camp', condition: () => gameState.gold >= 80, action: () => { gameState.gold -= 80; addItem('Amulet of Protection'); gameState.defense += 5; addMessage('Defense increased by 5!', 'success'); } },
+                    { text: "🎲 Play a game of chance (50 gold)", next: 'gamble', condition: () => gameState.gold >= 50 },
+                    { text: "🚶 Leave camp", next: 'forest_after_gold' }
+                ]
+            },
+
+            gamble: {
+                title: "Game of Chance",
+                text: `The merchant pulls out three cups and a small stone.
+
+"Simple game. Guess which cup the stone is under. Win, and I'll double your gold. Lose, and I keep your 50 gold."
+
+The merchant shuffles the cups with surprising speed.`,
+                action: () => {
+                    gameState.gold -= 50;
+                    if (Math.random() > 0.5) {
+                        gameState.gold += 100;
+                        addMessage('You won! Gained 100 gold!', 'success');
+                    } else {
+                        addMessage('You lost 50 gold.', 'damage');
+                    }
+                    return 'camp';
+                }
+            },
+
+            combat_merchant: {
+                title: "Foolish Choice",
+                text: `The merchant stands, throwing back their hood to reveal a scarred face.
+
+"You dare attack me? Very well, fool. Let's see if you have what it takes!"`,
+                combat: {
+                    enemy: {
+                        name: 'Mysterious Merchant',
+                        health: 60,
+                        attack: 12,
+                        gold: 100,
+                        xp: 50
+                    },
+                    onVictory: 'camp_victory'
+                }
+            },
+
+            camp_victory: {
+                title: "Victory",
+                text: `The merchant falls to the ground, defeated. You search their belongings and find a substantial amount of gold and a map showing the way to the Cave of Trials.
+
+"You... are strong..." the merchant gasps. "The Dark Lord... will not be so easy..."`,
+                choices: [
+                    { text: "➡️ Follow the map to the cave", next: 'cave' },
+                    { text: "🔍 Search the area more", next: 'clearing_search' }
+                ]
+            },
+
+            clearing_search: {
+                title: "Searching the Clearing",
+                text: `You search the area carefully and find a hidden stash! Inside is a health potion and some gold.`,
+                choices: [
+                    { text: "💰 Take the items", next: 'items_found', action: () => { gameState.gold += 30; addItem('Health Potion'); addMessage('Found 30 gold and a Health Potion!', 'success'); } }
+                ]
+            },
+
+            items_found: {
+                title: "The Cave Entrance",
+                text: `With your new items secured, you approach the dark cave entrance. Cold air flows from within, and you can hear strange echoes.
+
+This is it - the Cave of Trials. Beyond it lies the path to the Dark Lord's castle.`,
+                choices: [
+                    { text: "🦇 Enter the cave", next: 'cave' }
+                ]
+            },
+
+            cave: {
+                title: "Cave of Trials",
+                text: `The cave is dark and damp. Your footsteps echo off the stone walls. Torches line the walls, casting flickering shadows.
+
+As you venture deeper, you hear a low growl. A massive cave troll emerges from the darkness, blocking your path!
+
+"None shall pass!" it roars.`,
+                combat: {
+                    enemy: {
+                        name: 'Cave Troll',
+                        health: 80,
+                        attack: 15,
+                        gold: 50,
+                        xp: 75
+                    },
+                    onVictory: 'cave_victory'
+                }
+            },
+
+            cave_victory: {
+                title: "The Troll is Defeated",
+                text: `The cave troll falls with a thunderous crash. Beyond its massive form, you see a passage leading deeper into the cave. Strange blue light emanates from within.
+
+You also notice a chest in the corner of the room.`,
+                choices: [
+                    { text: "📦 Open the chest", next: 'chest', action: () => { 
+                        gameState.gold += 75;
+                        addItem('Steel Sword');
+                        gameState.attack += 8;
+                        addMessage('Found 75 gold and a Steel Sword! Attack +8!', 'success');
+                    }},
+                    { text: "➡️ Continue deeper into the cave", next: 'cave_deep' }
+                ]
+            },
+
+            chest: {
+                title: "Treasure Found",
+                text: `You open the chest and find valuable items! Your attack power has increased significantly.
+
+Feeling stronger, you continue into the depths of the cave.`,
+                choices: [
+                    { text: "➡️ Continue", next: 'cave_deep' }
+                ]
+            },
+
+            cave_deep: {
+                title: "The Crystal Chamber",
+                text: `The passage opens into a vast underground chamber. In the center, suspended in mid-air by dark magic, is the Crystal of Light!
+
+But standing before it is the Dark Lord himself, a towering figure in black armor, eyes glowing red.
+
+"So, a hero has come," he laughs. "How... predictable. The Crystal will be mine, and with it, I shall plunge this world into eternal darkness!"
+
+He draws a massive sword that crackles with dark energy.
+
+"Face me, if you dare!"
+
+This is it - the final battle!`,
+                combat: {
+                    enemy: {
+                        name: 'The Dark Lord',
+                        health: 120,
+                        attack: 20,
+                        gold: 200,
+                        xp: 200
+                    },
+                    onVictory: 'victory',
+                    onDefeat: 'defeat'
+                }
+            },
+
+            victory: {
+                title: "Victory!",
+                text: `With a final, powerful strike, you defeat the Dark Lord! He falls to his knees, his dark magic dissipating into the air.
+
+"Impossible..." he gasps before vanishing in a cloud of shadow.
+
+The Crystal of Light descends gently into your hands. Its warmth fills you with hope and strength. As you carry it out of the cave, the darkness that plagued the land begins to recede.
+
+You return to the village as a hero. The kingdom is saved, and peace is restored!`,
+                choices: [
+                    { text: "🎉 Play Again", next: 'start', action: () => restartGame() }
+                ]
+            },
+
+            defeat: {
+                title: "Defeat",
+                text: `The Dark Lord's final blow strikes true. You fall to the ground, your vision fading.
+
+"Another failed hero," he sneers. "The darkness will reign eternal."
+
+As consciousness slips away, you see the Crystal of Light growing dimmer...
+
+THE END - But heroes never truly die. Try again?`,
+                choices: [
+                    { text: "🔄 Try Again", next: 'start', action: () => restartGame() }
+                ]
+            }
+        };
+
+        // Helper functions
+        function addItem(item) {
+            gameState.inventory.push(item);
+            updateInventory();
+        }
+
+        function hasItem(item) {
+            return gameState.inventory.includes(item);
+        }
+
+        function removeItem(item) {
+            const index = gameState.inventory.indexOf(item);
+            if (index > -1) {
+                gameState.inventory.splice(index, 1);
+                updateInventory();
+            }
+        }
+
+        function addMessage(text, type = '') {
+            const storyPanel = document.getElementById('storyText');
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            storyPanel.appendChild(message);
+            storyPanel.scrollTop = storyPanel.scrollHeight;
+        }
+
+        function updateStats() {
+            document.getElementById('health').textContent = Math.max(0, gameState.health);
+            document.getElementById('gold').textContent = gameState.gold;
+            document.getElementById('attack').textContent = gameState.attack;
+            document.getElementById('level').textContent = gameState.level;
+            
+            const healthPercent = Math.max(0, (gameState.health / gameState.maxHealth) * 100);
+            document.getElementById('healthBar').style.width = healthPercent + '%';
+        }
+
+        function updateInventory() {
+            const inv = document.getElementById('inventory');
+            if (gameState.inventory.length === 0) {
+                inv.innerHTML = '<span style="color: #888; font-style: italic;">Empty</span>';
+            } else {
+                inv.innerHTML = gameState.inventory.map(item => 
+                    `<div class="inventory-item">${item}</div>`
+                ).join('');
+            }
+        }
+
+        function showScene(sceneKey) {
+            const scene = story[sceneKey];
+            if (!scene) return;
+
+            gameState.location = sceneKey;
+
+            // Handle automatic actions (like swim result)
+            if (scene.action) {
+                const nextScene = scene.action();
+                if (nextScene) {
+                    setTimeout(() => showScene(nextScene), 100);
+                    return;
+                }
+            }
+
+            const storyText = document.getElementById('storyText');
+            const choices = document.getElementById('choices');
+
+            // Clear previous content
+            storyText.innerHTML = '';
+            choices.innerHTML = '';
+
+            // Add title and story
+            if (scene.title) {
+                const title = document.createElement('h3');
+                title.textContent = scene.title;
+                storyText.appendChild(title);
+            }
+
+            const text = document.createElement('p');
+            text.textContent = scene.text;
+            storyText.appendChild(text);
+
+            // Check if this is a combat scene
+            if (scene.combat) {
+                startCombat(scene.combat);
+                return;
+            }
+
+            // Add choices
+            scene.choices?.forEach(choice => {
+                if (choice.condition && !choice.condition()) return;
+
+                const button = document.createElement('button');
+                button.className = 'choice-btn';
+                button.textContent = choice.text;
+                button.onclick = () => {
+                    if (choice.action) choice.action();
+                    updateStats();
+                    setTimeout(() => showScene(choice.next), 100);
+                };
+                choices.appendChild(button);
+            });
+
+            storyText.scrollTop = 0;
+        }
+
+        // Combat system
+        function startCombat(combat) {
+            gameState.inCombat = true;
+            gameState.enemy = { ...combat.enemy };
+            
+            document.getElementById('combatPanel').style.display = 'block';
+            updateCombatDisplay();
+            
+            const choices = document.getElementById('choices');
+            choices.innerHTML = '';
+        }
+
+        function updateCombatDisplay() {
+            const enemyInfo = document.getElementById('enemyInfo');
+            const enemy = gameState.enemy;
+            
+            enemyInfo.innerHTML = `
+                ${enemy.name}<br>
+                HP: ${enemy.health} | ATK: ${enemy.attack}
+            `;
+
+            const actions = document.getElementById('combatActions');
+            actions.innerHTML = '';
+
+            // Attack button
+            const attackBtn = document.createElement('button');
+            attackBtn.className = 'combat-btn';
+            attackBtn.textContent = '⚔️ Attack';
+            attackBtn.onclick = combatAttack;
+            actions.appendChild(attackBtn);
+
+            // Use potion button
+            if (hasItem('Health Potion')) {
+                const potionBtn = document.createElement('button');
+                potionBtn.className = 'combat-btn';
+                potionBtn.textContent = '💊 Use Potion';
+                potionBtn.onclick = usePotion;
+                actions.appendChild(potionBtn);
+            }
+
+            // Defend button
+            const defendBtn = document.createElement('button');
+            defendBtn.className = 'combat-btn';
+            defendBtn.textContent = '🛡️ Defend';
+            defendBtn.onclick = combatDefend;
+            actions.appendChild(defendBtn);
+        }
+
+        function combatAttack() {
+            const damage = gameState.attack + Math.floor(Math.random() * 10);
+            gameState.enemy.health -= damage;
+            addMessage(`You attack for ${damage} damage!`, 'success');
+
+            if (gameState.enemy.health <= 0) {
+                combatVictory();
+                return;
+            }
+
+            enemyTurn();
+        }
+
+        function combatDefend() {
+            addMessage('You take a defensive stance!', 'success');
+            const damage = Math.max(1, Math.floor((gameState.enemy.attack - gameState.defense) / 2));
+            gameState.health -= damage;
+            addMessage(`${gameState.enemy.name} attacks! You block most of it, taking ${damage} damage.`, 'damage');
+            
+            if (gameState.health <= 0) {
+                combatDefeat();
+                return;
+            }
+
+            updateStats();
+            updateCombatDisplay();
+        }
+
+        function usePotion() {
+            if (!hasItem('Health Potion')) return;
+            
+            removeItem('Health Potion');
+            gameState.health = Math.min(gameState.maxHealth, gameState.health + 50);
+            addMessage('Used Health Potion! Restored 50 HP!', 'heal');
+            updateStats();
+            
+            enemyTurn();
+        }
+
+        function enemyTurn() {
+            const damage = Math.max(1, gameState.enemy.attack - gameState.defense + Math.floor(Math.random() * 5));
+            gameState.health -= damage;
+            addMessage(`${gameState.enemy.name} attacks for ${damage} damage!`, 'damage');
+
+            if (gameState.health <= 0) {
+                combatDefeat();
+                return;
+            }
+
+            updateStats();
+            updateCombatDisplay();
+        }
+
+        function combatVictory() {
+            gameState.inCombat = false;
+            gameState.gold += gameState.enemy.gold;
+            gameState.xp += gameState.enemy.xp;
+            
+            // Level up check
+            if (gameState.xp >= gameState.level * 100) {
+                gameState.level++;
+                gameState.maxHealth += 20;
+                gameState.health = gameState.maxHealth;
+                gameState.attack += 5;
+                addMessage(`LEVEL UP! You are now level ${gameState.level}!`, 'success');
+            }
+            
+            addMessage(`Victory! You gained ${gameState.enemy.gold} gold and ${gameState.enemy.xp} XP!`, 'success');
+            
+            document.getElementById('combatPanel').style.display = 'none';
+            updateStats();
+
+            const currentScene = story[gameState.location];
+            if (currentScene.combat?.onVictory) {
+                setTimeout(() => showScene(currentScene.combat.onVictory), 1500);
+            }
+        }
+
+        function combatDefeat() {
+            gameState.inCombat = false;
+            document.getElementById('combatPanel').style.display = 'none';
+            
+            const currentScene = story[gameState.location];
+            const defeatScene = currentScene.combat?.onDefeat || 'defeat';
+            setTimeout(() => showScene(defeatScene), 1000);
+        }
+
+        function showStats() {
+            addMessage(`📊 Stats: HP ${gameState.health}/${gameState.maxHealth} | Gold ${gameState.gold} | ATK ${gameState.attack} | DEF ${gameState.defense} | LVL ${gameState.level} | XP ${gameState.xp}`, 'success');
+        }
+
+        function restartGame() {
+            gameState = {
+                health: 100,
+                maxHealth: 100,
+                gold: 50,
+                attack: 10,
+                defense: 5,
+                level: 1,
+                xp: 0,
+                inventory: [],
+                location: 'start',
+                flags: {},
+                inCombat: false,
+                enemy: null
+            };
+            
+            document.getElementById('combatPanel').style.display = 'none';
+            updateStats();
+            updateInventory();
+            showScene('start');
+        }
+
+        // Start the game
+        gameState.gold = 50;
+        updateStats();
+        updateInventory();
+        showScene('start');
+    </script>
+</body>
+</html>

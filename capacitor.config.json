@@ -1,0 +1,30 @@
+{
+  "appId": "com.acajougames.app",
+  "appName": "ACAJOU GAMES",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "backgroundColor": "#8B4513",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": true,
+      "backgroundColor": "#8B4513",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false,
+      "androidSpinnerStyle": "large",
+      "iosSpinnerStyle": "small",
+      "spinnerColor": "#ffffff",
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
+    "StatusBar": {
+      "style": "dark",
+      "backgroundColor": "#8B4513"
+    }
+  },
+  "cordova": {}
+}

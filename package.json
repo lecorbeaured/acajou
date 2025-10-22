@@ -1,0 +1,31 @@
+{
+  "name": "acajou-games",
+  "version": "1.0.0",
+  "description": "Educational games for kids and families - ACAJOU GAMES",
+  "author": "ACAJOU GAMES",
+  "license": "MIT",
+  "keywords": [
+    "educational games",
+    "kids games",
+    "math games",
+    "learning",
+    "mobile app"
+  ],
+  "scripts": {
+    "build": "echo 'Building app...'",
+    "android": "cap sync android && cap open android",
+    "ios": "cap sync ios && cap open ios",
+    "sync": "cap sync",
+    "copy": "cap copy"
+  },
+  "dependencies": {
+    "@capacitor/android": "^5.5.1",
+    "@capacitor/core": "^5.5.1",
+    "@capacitor/ios": "^5.5.1",
+    "@capacitor/splash-screen": "^5.0.6",
+    "@capacitor/status-bar": "^5.0.6"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^5.5.1"
+  }
+}

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Blaster</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-width: 700px;
+            width: 100%;
+            border: 4px solid #667eea;
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: clamp(2em, 6vw, 3em);
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-label {
+            font-size: clamp(0.7em, 2vw, 0.85em);
+            opacity: 0.9;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            font-size: clamp(1.5em, 4vw, 2em);
+            font-weight: bold;
+        }
+
+        .level-indicator {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            color: white;
+            font-size: clamp(1.2em, 3vw, 1.5em);
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+        }
+
+        .question-panel {
+            background: linear-gradient(135deg, #e0f7ff 0%, #f0e7ff 100%);
+            border: 4px solid #667eea;
+            border-radius: 20px;
+            padding: 40px 20px;
+            margin-bottom: 25px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            font-size: clamp(2em, 6vw, 3.5em);
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        .timer-bar-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .timer-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+            transition: width 0.1s linear;
+            border-radius: 6px;
+        }
+
+        .answer-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 20px;
+            font-size: clamp(1.5em, 4vw, 2em);
+            text-align: center;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+            transform: scale(1.05);
+        }
+
+        .submit-btn {
+            width: 100%;
+            max-width: 300px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: clamp(1.2em, 3vw, 1.5em);
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            flex: 1;
+            min-width: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 12px;
+            font-size: clamp(1.1em, 3vw, 1.3em);
+            font-weight: bold;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            border: 3px solid #10b981;
+        }
+
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            border: 3px solid #ef4444;
+        }
+
+        .streak-indicator {
+            text-align: center;
+            font-size: clamp(1em, 2.5vw, 1.2em);
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .streak-indicator.hot {
+            color: #ef4444;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .game-over-screen {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .game-over-screen.show {
+            display: block;
+            animation: slideIn 0.5s;
+        }
+
+        .game-over-screen h2 {
+            color: #667eea;
+            font-size: clamp(2em, 5vw, 3em);
+            margin-bottom: 20px;
+        }
+
+        .final-stats {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: clamp(1em, 2.5vw, 1.2em);
+            line-height: 2;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-btn {
+            flex: 1;
+            padding: 12px;
+            border: 3px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: clamp(0.9em, 2vw, 1em);
+            transition: all 0.3s;
+        }
+
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .difficulty-btn:hover:not(.active) {
+            background: #f0f0f0;
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 20px;
+            }
+
+            .question-panel {
+                padding: 30px 15px;
+                min-height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🧮 Math Blaster 🚀</h1>
+        <div class="subtitle">Test your mental math skills!</div>
+
+        <div id="difficultyPanel">
+            <div class="difficulty-selector">
+                <button class="difficulty-btn active" onclick="setDifficulty('easy')">😊 Easy</button>
+                <button class="difficulty-btn" onclick="setDifficulty('medium')">😎 Medium</button>
+                <button class="difficulty-btn" onclick="setDifficulty('hard')">🔥 Hard</button>
+                <button class="difficulty-btn" onclick="setDifficulty('insane')">💀 Insane</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">Score</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Level</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Correct</div>
+                <div class="stat-value" id="correct">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Lives</div>
+                <div class="stat-value" id="lives">❤️❤️❤️</div>
+            </div>
+        </div>
+
+        <div class="streak-indicator" id="streak"></div>
+
+        <div class="level-indicator" id="levelIndicator">
+            Level 1: Addition (1-10)
+        </div>
+
+        <div id="gamePanel">
+            <div class="question-panel">
+                <div class="timer-bar-container">
+                    <div class="timer-bar" id="timerBar"></div>
+                </div>
+                <div class="question" id="question">Press Start to Begin!</div>
+                <input type="number" class="answer-input" id="answerInput" placeholder="?" disabled>
+                <button class="submit-btn" id="submitBtn" onclick="checkAnswer()" disabled>Submit Answer</button>
+            </div>
+
+            <div id="feedback"></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" id="startBtn" onclick="startGame()">🎮 Start Game</button>
+            <button class="control-btn" onclick="pauseGame()">⏸️ Pause</button>
+            <button class="control-btn" onclick="skipQuestion()">⏭️ Skip (-50 pts)</button>
+        </div>
+
+        <div class="game-over-screen" id="gameOverScreen">
+            <h2>🎯 Game Over!</h2>
+            <div class="final-stats" id="finalStats"></div>
+            <button class="control-btn" onclick="restartGame()" style="width: 200px; margin: 20px auto;">🔄 Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        let gameState = {
+            running: false,
+            paused: false,
+            score: 0,
+            level: 1,
+            correct: 0,
+            incorrect: 0,
+            lives: 3,
+            streak: 0,
+            maxStreak: 0,
+            currentQuestion: null,
+            correctAnswer: null,
+            timeLimit: 15,
+            timeRemaining: 15,
+            timerInterval: null,
+            difficulty: 'easy',
+            questionsInLevel: 5,
+            questionsAnswered: 0
+        };
+
+        const difficultySettings = {
+            easy: { timeLimit: 20, livesStart: 3 },
+            medium: { timeLimit: 15, livesStart: 3 },
+            hard: { timeLimit: 10, livesStart: 2 },
+            insane: { timeLimit: 8, livesStart: 1 }
+        };
+
+        function setDifficulty(diff) {
+            if (gameState.running) return;
+            
+            gameState.difficulty = diff;
+            const settings = difficultySettings[diff];
+            gameState.timeLimit = settings.timeLimit;
+            gameState.lives = settings.livesStart;
+            
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            updateStats();
+        }
+
+        function generateQuestion() {
+            let num1, num2, num3, operation, question, answer;
+            const level = gameState.level;
+
+            if (level <= 2) {
+                // Level 1-2: Simple addition
+                num1 = Math.floor(Math.random() * (10 * level)) + 1;
+                num2 = Math.floor(Math.random() * (10 * level)) + 1;
+                question = `${num1} + ${num2}`;
+                answer = num1 + num2;
+            } else if (level <= 4) {
+                // Level 3-4: Addition and subtraction
+                num1 = Math.floor(Math.random() * (15 * level)) + 10;
+                num2 = Math.floor(Math.random() * (10 * level)) + 1;
+                operation = Math.random() > 0.5 ? '+' : '-';
+                question = `${num1} ${operation} ${num2}`;
+                answer = operation === '+' ? num1 + num2 : num1 - num2;
+            } else if (level <= 6) {
+                // Level 5-6: Multiplication
+                num1 = Math.floor(Math.random() * (level + 5)) + 2;
+                num2 = Math.floor(Math.random() * (level + 5)) + 2;
+                question = `${num1} × ${num2}`;
+                answer = num1 * num2;
+            } else if (level <= 8) {
+                // Level 7-8: All operations
+                num1 = Math.floor(Math.random() * (10 * level)) + 10;
+                num2 = Math.floor(Math.random() * 15) + 2;
+                const operations = ['+', '-', '×'];
+                operation = operations[Math.floor(Math.random() * operations.length)];
+                question = `${num1} ${operation} ${num2}`;
+                if (operation === '+') answer = num1 + num2;
+                else if (operation === '-') answer = num1 - num2;
+                else answer = num1 * num2;
+            } else if (level <= 10) {
+                // Level 9-10: Division
+                num2 = Math.floor(Math.random() * 12) + 2;
+                answer = Math.floor(Math.random() * 15) + 2;
+                num1 = num2 * answer;
+                question = `${num1} ÷ ${num2}`;
+            } else if (level <= 15) {
+                // Level 11-15: Multi-step problems
+                num1 = Math.floor(Math.random() * 20) + 10;
+                num2 = Math.floor(Math.random() * 15) + 2;
+                num3 = Math.floor(Math.random() * 10) + 1;
+                const op1 = ['+', '-', '×'][Math.floor(Math.random() * 3)];
+                const op2 = ['+', '-'][Math.floor(Math.random() * 2)];
+                question = `${num1} ${op1} ${num2} ${op2} ${num3}`;
+                
+                // Calculate with order of operations
+                let temp;
+                if (op1 === '+') temp = num1 + num2;
+                else if (op1 === '-') temp = num1 - num2;
+                else temp = num1 * num2;
+                
+                if (op2 === '+') answer = temp + num3;
+                else answer = temp - num3;
+            } else {
+                // Level 16+: Complex problems
+                num1 = Math.floor(Math.random() * 30) + 20;
+                num2 = Math.floor(Math.random() * 20) + 5;
+                num3 = Math.floor(Math.random() * 15) + 2;
+                const ops = ['+', '-', '×', '÷'];
+                const op1 = ops[Math.floor(Math.random() * ops.length)];
+                const op2 = ['+', '-'][Math.floor(Math.random() * 2)];
+                
+                if (op1 === '÷') {
+                    num1 = num2 * (Math.floor(Math.random() * 10) + 5);
+                }
+                
+                question = `(${num1} ${op1} ${num2}) ${op2} ${num3}`;
+                
+                let temp;
+                if (op1 === '+') temp = num1 + num2;
+                else if (op1 === '-') temp = num1 - num2;
+                else if (op1 === '×') temp = num1 * num2;
+                else temp = Math.floor(num1 / num2);
+                
+                if (op2 === '+') answer = temp + num3;
+                else answer = temp - num3;
+            }
+
+            gameState.currentQuestion = question;
+            gameState.correctAnswer = answer;
+            
+            updateLevelIndicator();
+            document.getElementById('question').textContent = question + ' = ?';
+        }
+
+        function updateLevelIndicator() {
+            const level = gameState.level;
+            let description = '';
+            
+            if (level <= 2) description = `Level ${level}: Addition (1-${10 * level})`;
+            else if (level <= 4) description = `Level ${level}: Addition & Subtraction`;
+            else if (level <= 6) description = `Level ${level}: Multiplication`;
+            else if (level <= 8) description = `Level ${level}: Mixed Operations`;
+            else if (level <= 10) description = `Level ${level}: Division`;
+            else if (level <= 15) description = `Level ${level}: Multi-Step Problems`;
+            else description = `Level ${level}: Expert Challenge!`;
+            
+            document.getElementById('levelIndicator').textContent = description;
+        }
+
+        function startTimer() {
+            gameState.timeRemaining = gameState.timeLimit;
+            updateTimerBar();
+            
+            gameState.timerInterval = setInterval(() => {
+                if (gameState.paused) return;
+                
+                gameState.timeRemaining--;
+                updateTimerBar();
+                
+                if (gameState.timeRemaining <= 0) {
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerBar() {
+            const percent = (gameState.timeRemaining / gameState.timeLimit) * 100;
+            document.getElementById('timerBar').style.width = percent + '%';
+        }
+
+        function timeUp() {
+            clearInterval(gameState.timerInterval);
+            showFeedback(`⏰ Time's up! The answer was ${gameState.correctAnswer}`, false);
+            gameState.incorrect++;
+            gameState.lives--;
+            gameState.streak = 0;
+            updateStats();
+            
+            if (gameState.lives <= 0) {
+                gameOver();
+            } else {
+                setTimeout(nextQuestion, 2000);
+            }
+        }
+
+        function checkAnswer() {
+            if (!gameState.running || gameState.paused) return;
+            
+            const input = document.getElementById('answerInput');
+            const userAnswer = parseInt(input.value);
+            
+            if (isNaN(userAnswer)) return;
+            
+            clearInterval(gameState.timerInterval);
+            
+            if (userAnswer === gameState.correctAnswer) {
+                const timeBonus = Math.floor(gameState.timeRemaining * 10);
+                const streakBonus = gameState.streak * 5;
+                const points = 100 + timeBonus + streakBonus;
+                
+                gameState.score += points;
+                gameState.correct++;
+                gameState.streak++;
+                gameState.questionsAnswered++;
+                
+                if (gameState.streak > gameState.maxStreak) {
+                    gameState.maxStreak = gameState.streak;
+                }
+                
+                showFeedback(`✅ Correct! +${points} points (${timeBonus} time bonus, ${streakBonus} streak bonus)`, true);
+                
+                // Level up
+                if (gameState.questionsAnswered >= gameState.questionsInLevel) {
+                    gameState.level++;
+                    gameState.questionsAnswered = 0;
+                    gameState.questionsInLevel = Math.min(10, 5 + gameState.level);
+                    showFeedback(`🎉 LEVEL UP! Welcome to Level ${gameState.level}!`, true);
+                    
+                    // Reduce time slightly each level
+                    if (gameState.level % 3 === 0 && gameState.timeLimit > 5) {
+                        gameState.timeLimit = Math.max(5, gameState.timeLimit - 1);
+                    }
+                }
+            } else {
+                gameState.incorrect++;
+                gameState.lives--;
+                gameState.streak = 0;
+                gameState.score = Math.max(0, gameState.score - 50);
+                showFeedback(`❌ Wrong! The answer was ${gameState.correctAnswer}. -50 points`, false);
+                
+                if (gameState.lives <= 0) {
+                    setTimeout(gameOver, 2000);
+                    return;
+                }
+            }
+            
+            updateStats();
+            setTimeout(nextQuestion, 2000);
+        }
+
+        function skipQuestion() {
+            if (!gameState.running || gameState.paused) return;
+            
+            clearInterval(gameState.timerInterval);
+            gameState.score = Math.max(0, gameState.score - 50);
+            gameState.streak = 0;
+            showFeedback(`⏭️ Skipped! The answer was ${gameState.correctAnswer}. -50 points`, false);
+            updateStats();
+            setTimeout(nextQuestion, 1500);
+        }
+
+        function nextQuestion() {
+            document.getElementById('feedback').innerHTML = '';
+            document.getElementById('answerInput').value = '';
+            generateQuestion();
+            startTimer();
+            document.getElementById('answerInput').focus();
+        }
+
+        function showFeedback(message, isCorrect) {
+            const feedback = document.getElementById('feedback');
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.textContent = message;
+        }
+
+        function updateStats() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('correct').textContent = gameState.correct;
+            
+            const hearts = '❤️'.repeat(gameState.lives) + '🖤'.repeat(3 - gameState.lives);
+            document.getElementById('lives').textContent = hearts;
+            
+            const streak = document.getElementById('streak');
+            if (gameState.streak > 0) {
+                streak.textContent = `🔥 ${gameState.streak} Streak!`;
+                streak.className = gameState.streak >= 5 ? 'streak-indicator hot' : 'streak-indicator';
+            } else {
+                streak.textContent = '';
+            }
+        }
+
+        function startGame() {
+            gameState.running = true;
+            gameState.paused = false;
+            gameState.score = 0;
+            gameState.level = 1;
+            gameState.correct = 0;
+            gameState.incorrect = 0;
+            gameState.lives = difficultySettings[gameState.difficulty].livesStart;
+            gameState.streak = 0;
+            gameState.maxStreak = 0;
+            gameState.questionsAnswered = 0;
+            gameState.questionsInLevel = 5;
+            gameState.timeLimit = difficultySettings[gameState.difficulty].timeLimit;
+            
+            document.getElementById('answerInput').disabled = false;
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('gameOverScreen').classList.remove('show');
+            document.getElementById('gamePanel').style.display = 'block';
+            document.getElementById('startBtn').textContent = '🔄 Restart';
+            document.getElementById('difficultyPanel').style.opacity = '0.5';
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.disabled = true);
+            
+            updateStats();
+            nextQuestion();
+        }
+
+        function pauseGame() {
+            if (!gameState.running) return;
+            gameState.paused = !gameState.paused;
+            
+            if (gameState.paused) {
+                clearInterval(gameState.timerInterval);
+                showFeedback('⏸️ Game Paused', true);
+            } else {
+                startTimer();
+                document.getElementById('feedback').innerHTML = '';
+            }
+        }
+
+        function gameOver() {
+            gameState.running = false;
+            clearInterval(gameState.timerInterval);
+            
+            document.getElementById('answerInput').disabled = true;
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('difficultyPanel').style.opacity = '1';
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.disabled = false);
+            
+            const accuracy = gameState.correct + gameState.incorrect > 0 
+                ? Math.round((gameState.correct / (gameState.correct + gameState.incorrect)) * 100) 
+                : 0;
+            
+            document.getElementById('finalStats').innerHTML = `
+                <strong>Final Score:</strong> ${gameState.score}<br>
+                <strong>Level Reached:</strong> ${gameState.level}<br>
+                <strong>Questions Correct:</strong> ${gameState.correct}<br>
+                <strong>Accuracy:</strong> ${accuracy}%<br>
+                <strong>Max Streak:</strong> ${gameState.maxStreak}🔥<br>
+                <strong>Difficulty:</strong> ${gameState.difficulty.toUpperCase()}
+            `;
+            
+            document.getElementById('gamePanel').style.display = 'none';
+            document.getElementById('gameOverScreen').classList.add('show');
+        }
+
+        function restartGame() {
+            document.getElementById('gameOverScreen').classList.remove('show');
+            document.getElementById('gamePanel').style.display = 'block';
+            startGame();
+        }
+
+        // Enter key to submit
+        document.getElementById('answerInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Initialize
+        updateStats();
+        updateLevelIndicator();
+    </script>
+</body>
+</html>
