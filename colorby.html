@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color by Numbers - ACAJOU GAMES</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YH4Z66742N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YH4Z66742N');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 80px 20px 20px 20px;
+        }
+
+        /* Navigation Styles */
+        .acajou-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 99999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .acajou-nav-logo {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .acajou-nav-logo:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .acajou-nav-back {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            transition: all 0.3s;
+        }
+
+        .acajou-nav-back:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-3px);
+        }
+
+        .game-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            margin-bottom: 30px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #fff 100%);
+            padding: 20px;
+            border-radius: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .setup-panel {
+            margin-bottom: 30px;
+        }
+
+        .design-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .design-selector {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            }
+        }
+
+        .design-btn {
+            padding: 15px;
+            border: 3px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .design-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .design-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            align-items: center;
+            justify-items: center;
+            grid-auto-rows: auto;
+            width: 100%;
+        }
+
+        .canvas-container {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            padding: clamp(10px, 2vw, 20px);
+            border-radius: 20px;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            overflow-x: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+        }
+
+        .pixel-canvas {
+            display: grid;
+            gap: clamp(1px, 1.5vw, 3px);
+            background: #f9f9f9;
+            padding: clamp(8px, 2vw, 15px);
+            border-radius: 10px;
+            width: min(90vw, 100%);
+            height: min(90vw, 90vh);
+            max-width: none;
+            margin: 0 auto;
+            aspect-ratio: 1 / 1;
+        }
+
+        .pixel {
+            aspect-ratio: 1;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(0.4rem, 3vw, 0.8rem);
+            font-weight: bold;
+            color: #999;
+            min-width: 0;
+        }
+
+        .pixel:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .pixel.colored {
+            color: white;
+            font-weight: bold;
+            animation: pixelPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes pixelPop {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .completion-message {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .completion-message.complete {
+            animation: pulse 1s infinite;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .design-btn.active {
+            animation: pulse 0.6s ease-out;
+        }
+
+        .progress-fill {
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .confetti {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: confettiFall 2s forwards;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3) rotateX(45deg);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.05) rotateX(0deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotateX(0deg);
+            }
+        }
+
+        .completion-modal {
+            perspective: 1000px;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .color-palette::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .color-palette::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .color-palette::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .color-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .color-option:hover {
+            transform: translateX(5px);
+            border-color: #667eea;
+        }
+
+        .color-option.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+        }
+
+        .color-box {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            border: 2px solid rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .color-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .color-option.active .color-label {
+            color: white;
+        }
+
+        .color-option.active .color-box {
+            transform: scale(1.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .completion-message {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            animation: slideDown 0.5s;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popOut {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotateX(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3) rotateX(45deg);
+            }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 0.5; }
+            to { opacity: 0; }
+        }
+
+        .completion-message.complete {
+            background: linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%);
+            color: #065f46;
+            border: 4px solid #10b981;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .instructions {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 70px 10px 20px 10px;
+            }
+
+            .game-container {
+                padding: 15px;
+                border-radius: 20px;
+                max-width: 100%;
+            }
+
+            .acajou-nav-logo span {
+                display: none;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .color-palette {
+                grid-template-columns: repeat(4, 1fr);
+                max-height: 200px;
+                gap: 8px;
+            }
+
+            .color-option {
+                padding: 8px;
+                gap: 6px;
+            }
+
+            .color-box {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+
+            .color-label {
+                font-size: 0.8rem;
+            }
+
+            .pixel-canvas {
+                max-width: none;
+                gap: 1px;
+                padding: 10px;
+                width: 95vw;
+                height: 95vw;
+            }
+
+            .canvas-container {
+                min-height: 100vh;
+            }
+
+            .pixel {
+                font-size: 0.5rem;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+                flex: 1;
+                min-width: 100px;
+            }
+
+            .controls {
+                gap: 8px;
+            }
+
+            .stats-bar {
+                gap: 10px;
+            }
+
+            .stat-item {
+                min-width: 80px;
+            }
+
+            .design-selector {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .design-btn {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 65px 8px 20px 8px;
+            }
+
+            .game-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .stats-bar {
+                padding: 12px;
+                gap: 8px;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.75rem;
+            }
+
+            .color-palette {
+                grid-template-columns: repeat(3, 1fr);
+                max-height: 180px;
+                gap: 6px;
+            }
+
+            .color-option {
+                padding: 6px;
+                gap: 5px;
+            }
+
+            .color-box {
+                width: 25px;
+                height: 25px;
+                font-size: 0.7rem;
+            }
+
+            .color-label {
+                font-size: 0.7rem;
+            }
+
+            .pixel-canvas {
+                max-width: none;
+                gap: 0.5px;
+                padding: 8px;
+                width: 95vw;
+                height: 95vw;
+            }
+
+            .canvas-container {
+                min-height: auto;
+            }
+
+            .pixel {
+                font-size: 0.4rem;
+                min-width: 0;
+            }
+
+            .btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+                flex: 1;
+            }
+
+            .design-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .design-btn {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+
+            .instructions {
+                font-size: 0.85rem;
+            }
+
+            .instructions p {
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="acajou-nav">
+        <a href="index.html" class="acajou-nav-logo">
+            🎮 <span>ACAJOU GAMES</span>
+        </a>
+        <a href="index.html" class="acajou-nav-back">
+            ← All Games
+        </a>
+    </nav>
+
+    <div class="game-container">
+        <h1>🎨 Color by Numbers</h1>
+        <p class="subtitle">Relax and create pixel art by numbers!</p>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-label">Colored</div>
+                <div class="stat-value" id="coloredCount">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Progress</div>
+                <div class="stat-value" id="progressPercent">0%</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Design</div>
+                <div class="stat-value" id="designName">Mandala</div>
+            </div>
+        </div>
+
+        <!-- Setup Panel -->
+        <div id="setupPanel" class="setup-panel">
+            <h3 style="text-align: center; color: #667eea; margin-bottom: 15px;">Choose a Design:</h3>
+            <div class="design-selector">
+                <button class="design-btn active" onclick="colorGame.selectDesign(0)">✨ Mandala</button>
+                <button class="design-btn" onclick="colorGame.selectDesign(1)">🔥 Phoenix</button>
+                <button class="design-btn" onclick="colorGame.selectDesign(2)">🌹 Flower</button>
+                <button class="design-btn" onclick="colorGame.selectDesign(3)">🔷 Pattern</button>
+                <button class="design-btn" onclick="colorGame.selectDesign(4)">🐉 Dragon</button>
+                <button class="design-btn" onclick="colorGame.selectDesign(5)">🌊 Wave</button>
+                <button class="design-btn" onclick="colorGame.selectDesign(6)">🌈 Rainbow</button>
+                <button class="design-btn" onclick="colorGame.selectDesign(7)">🎄 Tree</button>
+                <button class="design-btn" onclick="colorGame.selectDesign(8)">🌙 Moon</button>
+            </div>
+        </div>
+
+        <!-- Color Palette (Always Visible) -->
+        <div style="margin-bottom: 30px;">
+            <h3 style="text-align: center; color: #667eea; margin-bottom: 15px;">📋 Color Legend:</h3>
+            <div class="color-palette" id="colorPalette"></div>
+        </div>
+
+        <!-- Completion Message -->
+        <div id="completionMessage" class="completion-message complete hidden">
+            🎉 Congratulations! You've completed the artwork!
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Canvas -->
+            <div class="canvas-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="pixel-canvas" id="pixelCanvas"></div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-primary" onclick="colorGame.startGame()">
+                🎨 Start Coloring
+            </button>
+            <button class="btn btn-secondary" onclick="colorGame.clearCanvas()">
+                🗑️ Clear All
+            </button>
+            <button class="btn btn-secondary" onclick="colorGame.resetGame()">
+                🔄 New Design
+            </button>
+            <button class="btn btn-secondary" onclick="colorGame.toggleSound()" id="soundBtn" title="Toggle sound">
+                🔊 Sound On
+            </button>
+        </div>
+
+        <div class="instructions">
+            <h3 style="color: #667eea; margin-bottom: 15px;">🎨 How to Play:</h3>
+            <p><strong>1.</strong> Choose a design from the options above</p>
+            <p><strong>2.</strong> Click "Start Coloring" to begin</p>
+            <p><strong>3.</strong> Select a color by clicking on one of the color cards (each has a number)</p>
+            <p><strong>4.</strong> Click on the numbered pixels in the canvas that match that color number</p>
+            <p><strong>5.</strong> Watch your artwork come to life as you color!</p>
+            <p><strong>6.</strong> Complete all pixels to finish the design 🎉</p>
+        </div>
+    </div>
+
+    <script>
+        const designs = [
+            {
+                name: 'Mandala',
+                emoji: '✨',
+                size: 16,
+                pixels: [
+                    // Center circle
+                    { x: 7, y: 7, color: 1 }, { x: 8, y: 7, color: 1 }, { x: 7, y: 8, color: 1 }, { x: 8, y: 8, color: 1 },
+                    // Inner ring
+                    { x: 6, y: 6, color: 2 }, { x: 9, y: 6, color: 2 }, { x: 6, y: 9, color: 2 }, { x: 9, y: 9, color: 2 },
+                    { x: 5, y: 7, color: 2 }, { x: 10, y: 7, color: 2 }, { x: 7, y: 5, color: 2 }, { x: 8, y: 5, color: 2 },
+                    { x: 7, y: 10, color: 2 }, { x: 8, y: 10, color: 2 }, { x: 6, y: 7, color: 2 }, { x: 6, y: 8, color: 2 },
+                    { x: 9, y: 7, color: 2 }, { x: 9, y: 8, color: 2 },
+                    // Middle ring
+                    { x: 4, y: 4, color: 3 }, { x: 11, y: 4, color: 3 }, { x: 4, y: 11, color: 3 }, { x: 11, y: 11, color: 3 },
+                    { x: 4, y: 7, color: 3 }, { x: 4, y: 8, color: 3 }, { x: 11, y: 7, color: 3 }, { x: 11, y: 8, color: 3 },
+                    { x: 7, y: 3, color: 3 }, { x: 8, y: 3, color: 3 }, { x: 7, y: 12, color: 3 }, { x: 8, y: 12, color: 3 },
+                    { x: 3, y: 6, color: 3 }, { x: 3, y: 9, color: 3 }, { x: 12, y: 6, color: 3 }, { x: 12, y: 9, color: 3 },
+                    // Outer petals
+                    { x: 2, y: 2, color: 4 }, { x: 13, y: 2, color: 4 }, { x: 2, y: 13, color: 4 }, { x: 13, y: 13, color: 4 },
+                    { x: 2, y: 7, color: 4 }, { x: 2, y: 8, color: 4 }, { x: 13, y: 7, color: 4 }, { x: 13, y: 8, color: 4 },
+                    { x: 7, y: 1, color: 4 }, { x: 8, y: 1, color: 4 }, { x: 7, y: 14, color: 4 }, { x: 8, y: 14, color: 4 },
+                    { x: 1, y: 6, color: 4 }, { x: 1, y: 7, color: 4 }, { x: 1, y: 8, color: 4 }, { x: 1, y: 9, color: 4 },
+                    { x: 14, y: 6, color: 4 }, { x: 14, y: 7, color: 4 }, { x: 14, y: 8, color: 4 }, { x: 14, y: 9, color: 4 },
+                    // Border
+                    { x: 0, y: 7, color: 5 }, { x: 0, y: 8, color: 5 }, { x: 15, y: 7, color: 5 }, { x: 15, y: 8, color: 5 },
+                    { x: 7, y: 0, color: 5 }, { x: 8, y: 0, color: 5 }, { x: 7, y: 15, color: 5 }, { x: 8, y: 15, color: 5 }
+                ]
+            },
+            {
+                name: 'Phoenix',
+                emoji: '🔥',
+                size: 18,
+                pixels: [
+                    // Head
+                    { x: 12, y: 2, color: 2 }, { x: 13, y: 2, color: 2 }, { x: 11, y: 3, color: 2 }, { x: 14, y: 3, color: 2 },
+                    { x: 10, y: 4, color: 2 }, { x: 15, y: 4, color: 2 },
+                    // Body
+                    { x: 10, y: 5, color: 1 }, { x: 11, y: 5, color: 1 }, { x: 12, y: 5, color: 1 }, { x: 13, y: 5, color: 1 },
+                    { x: 14, y: 5, color: 1 }, { x: 15, y: 5, color: 1 }, { x: 9, y: 6, color: 1 }, { x: 16, y: 6, color: 1 },
+                    { x: 8, y: 7, color: 1 }, { x: 17, y: 7, color: 1 }, { x: 8, y: 8, color: 1 }, { x: 17, y: 8, color: 1 },
+                    { x: 9, y: 9, color: 1 }, { x: 16, y: 9, color: 1 },
+                    // Tail feathers
+                    { x: 1, y: 4, color: 3 }, { x: 2, y: 5, color: 3 }, { x: 3, y: 6, color: 3 }, { x: 4, y: 7, color: 3 },
+                    { x: 5, y: 8, color: 3 }, { x: 1, y: 8, color: 3 }, { x: 2, y: 9, color: 3 }, { x: 3, y: 10, color: 3 },
+                    { x: 4, y: 11, color: 3 }, { x: 5, y: 12, color: 3 },
+                    // Flames
+                    { x: 1, y: 12, color: 4 }, { x: 2, y: 13, color: 4 }, { x: 3, y: 14, color: 4 }, { x: 4, y: 15, color: 4 },
+                    { x: 6, y: 3, color: 4 }, { x: 7, y: 2, color: 4 }, { x: 8, y: 1, color: 4 },
+                    // Wings
+                    { x: 10, y: 10, color: 1 }, { x: 11, y: 11, color: 1 }, { x: 12, y: 12, color: 1 },
+                    { x: 15, y: 10, color: 1 }, { x: 14, y: 11, color: 1 }, { x: 13, y: 12, color: 1 }
+                ]
+            },
+            {
+                name: 'Intricate Flower',
+                emoji: '🌹',
+                size: 18,
+                pixels: [
+                    // Center
+                    { x: 8, y: 8, color: 1 }, { x: 9, y: 8, color: 1 }, { x: 8, y: 9, color: 1 }, { x: 9, y: 9, color: 1 },
+                    // Inner petals
+                    { x: 7, y: 5, color: 2 }, { x: 8, y: 4, color: 2 }, { x: 9, y: 4, color: 2 }, { x: 10, y: 5, color: 2 },
+                    { x: 12, y: 7, color: 2 }, { x: 13, y: 8, color: 2 }, { x: 13, y: 9, color: 2 }, { x: 12, y: 10, color: 2 },
+                    { x: 10, y: 12, color: 2 }, { x: 9, y: 13, color: 2 }, { x: 8, y: 13, color: 2 }, { x: 7, y: 12, color: 2 },
+                    { x: 5, y: 10, color: 2 }, { x: 4, y: 9, color: 2 }, { x: 4, y: 8, color: 2 }, { x: 5, y: 7, color: 2 },
+                    // Outer petals
+                    { x: 6, y: 2, color: 3 }, { x: 7, y: 1, color: 3 }, { x: 8, y: 0, color: 3 }, { x: 9, y: 0, color: 3 },
+                    { x: 10, y: 1, color: 3 }, { x: 11, y: 2, color: 3 }, { x: 14, y: 4, color: 3 }, { x: 15, y: 5, color: 3 },
+                    { x: 16, y: 6, color: 3 }, { x: 17, y: 7, color: 3 }, { x: 17, y: 8, color: 3 }, { x: 17, y: 9, color: 3 },
+                    { x: 16, y: 10, color: 3 }, { x: 15, y: 11, color: 3 }, { x: 14, y: 13, color: 3 }, { x: 11, y: 15, color: 3 },
+                    // Stem
+                    { x: 8, y: 14, color: 4 }, { x: 9, y: 14, color: 4 }, { x: 8, y: 15, color: 4 }, { x: 9, y: 15, color: 4 },
+                    { x: 8, y: 16, color: 4 }, { x: 9, y: 16, color: 4 },
+                    // Leaves
+                    { x: 5, y: 14, color: 5 }, { x: 4, y: 15, color: 5 }, { x: 3, y: 16, color: 5 },
+                    { x: 12, y: 14, color: 5 }, { x: 13, y: 15, color: 5 }, { x: 14, y: 16, color: 5 }
+                ]
+            },
+            {
+                name: 'Geometric Pattern',
+                emoji: '🔷',
+                size: 16,
+                pixels: [
+                    // Center diamond
+                    { x: 7, y: 7, color: 1 }, { x: 8, y: 7, color: 1 }, { x: 7, y: 8, color: 1 }, { x: 8, y: 8, color: 1 },
+                    // First ring
+                    { x: 5, y: 5, color: 2 }, { x: 10, y: 5, color: 2 }, { x: 5, y: 10, color: 2 }, { x: 10, y: 10, color: 2 },
+                    { x: 5, y: 7, color: 2 }, { x: 5, y: 8, color: 2 }, { x: 10, y: 7, color: 2 }, { x: 10, y: 8, color: 2 },
+                    { x: 7, y: 5, color: 2 }, { x: 8, y: 5, color: 2 }, { x: 7, y: 10, color: 2 }, { x: 8, y: 10, color: 2 },
+                    // Second ring
+                    { x: 3, y: 3, color: 3 }, { x: 12, y: 3, color: 3 }, { x: 3, y: 12, color: 3 }, { x: 12, y: 12, color: 3 },
+                    { x: 3, y: 7, color: 3 }, { x: 3, y: 8, color: 3 }, { x: 12, y: 7, color: 3 }, { x: 12, y: 8, color: 3 },
+                    { x: 7, y: 3, color: 3 }, { x: 8, y: 3, color: 3 }, { x: 7, y: 12, color: 3 }, { x: 8, y: 12, color: 3 },
+                    // Corners
+                    { x: 1, y: 1, color: 4 }, { x: 2, y: 1, color: 4 }, { x: 1, y: 2, color: 4 },
+                    { x: 14, y: 1, color: 4 }, { x: 13, y: 1, color: 4 }, { x: 14, y: 2, color: 4 },
+                    { x: 1, y: 14, color: 4 }, { x: 2, y: 14, color: 4 }, { x: 1, y: 13, color: 4 },
+                    { x: 14, y: 14, color: 4 }, { x: 13, y: 14, color: 4 }, { x: 14, y: 13, color: 4 },
+                    // Border
+                    { x: 0, y: 7, color: 5 }, { x: 0, y: 8, color: 5 }, { x: 15, y: 7, color: 5 }, { x: 15, y: 8, color: 5 },
+                    { x: 7, y: 0, color: 5 }, { x: 8, y: 0, color: 5 }, { x: 7, y: 15, color: 5 }, { x: 8, y: 15, color: 5 }
+                ]
+            },
+            {
+                name: 'Dragon',
+                emoji: '🐉',
+                size: 20,
+                pixels: [
+                    // Head
+                    { x: 15, y: 4, color: 1 }, { x: 16, y: 3, color: 1 }, { x: 17, y: 3, color: 1 }, { x: 18, y: 4, color: 1 },
+                    { x: 15, y: 5, color: 1 }, { x: 18, y: 5, color: 1 },
+                    // Horn
+                    { x: 16, y: 1, color: 2 }, { x: 17, y: 1, color: 2 }, { x: 16, y: 2, color: 2 }, { x: 17, y: 2, color: 2 },
+                    // Body
+                    { x: 13, y: 6, color: 1 }, { x: 14, y: 6, color: 1 }, { x: 15, y: 6, color: 1 }, { x: 16, y: 6, color: 1 },
+                    { x: 17, y: 6, color: 1 }, { x: 18, y: 6, color: 1 }, { x: 12, y: 7, color: 1 }, { x: 19, y: 7, color: 1 },
+                    { x: 11, y: 8, color: 1 }, { x: 20, y: 8, color: 1 }, { x: 10, y: 9, color: 1 }, { x: 19, y: 9, color: 1 },
+                    // Scales
+                    { x: 13, y: 8, color: 3 }, { x: 14, y: 8, color: 3 }, { x: 15, y: 8, color: 3 }, { x: 16, y: 8, color: 3 },
+                    { x: 17, y: 8, color: 3 }, { x: 18, y: 8, color: 3 },
+                    // Tail
+                    { x: 8, y: 11, color: 1 }, { x: 7, y: 12, color: 1 }, { x: 6, y: 13, color: 1 }, { x: 5, y: 14, color: 1 },
+                    { x: 8, y: 12, color: 4 }, { x: 7, y: 13, color: 4 }, { x: 6, y: 14, color: 4 }, { x: 5, y: 15, color: 4 },
+                    // Wings
+                    { x: 11, y: 6, color: 2 }, { x: 10, y: 7, color: 2 }, { x: 9, y: 8, color: 2 }, { x: 8, y: 9, color: 2 },
+                    { x: 19, y: 6, color: 2 }, { x: 20, y: 7, color: 2 }, { x: 21, y: 8, color: 2 }, { x: 22, y: 9, color: 2 }
+                ]
+            },
+            {
+                name: 'Ocean Wave',
+                emoji: '🌊',
+                size: 20,
+                pixels: [
+                    // Wave peaks
+                    { x: 3, y: 3, color: 2 }, { x: 4, y: 2, color: 2 }, { x: 5, y: 1, color: 2 }, { x: 6, y: 2, color: 2 },
+                    { x: 7, y: 3, color: 2 }, { x: 10, y: 2, color: 2 }, { x: 11, y: 1, color: 2 }, { x: 12, y: 2, color: 2 },
+                    // Wave body
+                    { x: 2, y: 4, color: 1 }, { x: 3, y: 4, color: 1 }, { x: 4, y: 3, color: 1 }, { x: 5, y: 2, color: 1 },
+                    { x: 6, y: 3, color: 1 }, { x: 7, y: 4, color: 1 }, { x: 8, y: 5, color: 1 }, { x: 9, y: 6, color: 1 },
+                    { x: 10, y: 3, color: 1 }, { x: 11, y: 2, color: 1 }, { x: 12, y: 3, color: 1 }, { x: 13, y: 4, color: 1 },
+                    // Foam
+                    { x: 1, y: 5, color: 3 }, { x: 2, y: 5, color: 3 }, { x: 3, y: 5, color: 3 }, { x: 4, y: 4, color: 3 },
+                    { x: 5, y: 3, color: 3 }, { x: 6, y: 4, color: 3 }, { x: 7, y: 5, color: 3 }, { x: 8, y: 6, color: 3 },
+                    // Base water
+                    { x: 0, y: 12, color: 5 }, { x: 1, y: 12, color: 5 }, { x: 2, y: 12, color: 5 }, { x: 3, y: 12, color: 5 },
+                    { x: 4, y: 12, color: 5 }, { x: 5, y: 12, color: 5 }, { x: 6, y: 12, color: 5 }, { x: 7, y: 12, color: 5 },
+                    { x: 8, y: 12, color: 5 }, { x: 9, y: 12, color: 5 }, { x: 10, y: 12, color: 5 }, { x: 11, y: 12, color: 5 },
+                    { x: 12, y: 12, color: 5 }, { x: 13, y: 12, color: 5 }
+                ]
+            },
+            {
+                name: 'Rainbow',
+                emoji: '🌈',
+                size: 16,
+                pixels: [
+                    // Red arc
+                    { x: 8, y: 0, color: 1 },
+                    { x: 9, y: 0, color: 1 },
+                    { x: 7, y: 1, color: 1 },
+                    { x: 10, y: 1, color: 1 },
+                    { x: 6, y: 2, color: 1 },
+                    { x: 11, y: 2, color: 1 },
+                    { x: 5, y: 3, color: 1 },
+                    { x: 12, y: 3, color: 1 },
+                    { x: 4, y: 4, color: 1 },
+                    { x: 13, y: 4, color: 1 },
+                    // Orange arc
+                    { x: 7, y: 2, color: 2 },
+                    { x: 10, y: 2, color: 2 },
+                    { x: 6, y: 3, color: 2 },
+                    { x: 11, y: 3, color: 2 },
+                    { x: 5, y: 4, color: 2 },
+                    { x: 12, y: 4, color: 2 },
+                    { x: 4, y: 5, color: 2 },
+                    { x: 13, y: 5, color: 2 },
+                    // Yellow arc
+                    { x: 8, y: 3, color: 3 },
+                    { x: 9, y: 3, color: 3 },
+                    { x: 7, y: 4, color: 3 },
+                    { x: 10, y: 4, color: 3 },
+                    { x: 6, y: 5, color: 3 },
+                    { x: 11, y: 5, color: 3 },
+                    { x: 5, y: 6, color: 3 },
+                    { x: 12, y: 6, color: 3 },
+                    // Blue arc
+                    { x: 8, y: 5, color: 4 },
+                    { x: 9, y: 5, color: 4 },
+                    { x: 7, y: 6, color: 4 },
+                    { x: 10, y: 6, color: 4 },
+                    { x: 6, y: 7, color: 4 },
+                    { x: 11, y: 7, color: 4 },
+                    { x: 5, y: 8, color: 4 },
+                    { x: 12, y: 8, color: 4 },
+                    // Green arc
+                    { x: 8, y: 7, color: 5 },
+                    { x: 9, y: 7, color: 5 },
+                    { x: 7, y: 8, color: 5 },
+                    { x: 10, y: 8, color: 5 },
+                    { x: 6, y: 9, color: 5 },
+                    { x: 11, y: 9, color: 5 },
+                    { x: 5, y: 10, color: 5 },
+                    { x: 12, y: 10, color: 5 },
+                    { x: 4, y: 11, color: 5 },
+                    { x: 13, y: 11, color: 5 }
+                ]
+            },
+            {
+                name: 'Christmas Tree',
+                emoji: '🎄',
+                size: 18,
+                pixels: [
+                    // Top triangle - Color 1 (Green)
+                    { x: 8, y: 0, color: 1 }, { x: 9, y: 0, color: 1 },
+                    { x: 7, y: 1, color: 1 }, { x: 8, y: 1, color: 1 }, { x: 9, y: 1, color: 1 }, { x: 10, y: 1, color: 1 },
+                    { x: 6, y: 2, color: 1 }, { x: 7, y: 2, color: 1 }, { x: 8, y: 2, color: 1 }, { x: 9, y: 2, color: 1 }, { x: 10, y: 2, color: 1 }, { x: 11, y: 2, color: 1 },
+                    { x: 5, y: 3, color: 1 }, { x: 6, y: 3, color: 1 }, { x: 7, y: 3, color: 1 }, { x: 8, y: 3, color: 1 }, { x: 9, y: 3, color: 1 }, { x: 10, y: 3, color: 1 }, { x: 11, y: 3, color: 1 }, { x: 12, y: 3, color: 1 },
+                    // Middle section - Color 1
+                    { x: 6, y: 4, color: 1 }, { x: 7, y: 4, color: 1 }, { x: 8, y: 4, color: 1 }, { x: 9, y: 4, color: 1 }, { x: 10, y: 4, color: 1 }, { x: 11, y: 4, color: 1 },
+                    { x: 5, y: 5, color: 1 }, { x: 6, y: 5, color: 1 }, { x: 7, y: 5, color: 1 }, { x: 8, y: 5, color: 1 }, { x: 9, y: 5, color: 1 }, { x: 10, y: 5, color: 1 }, { x: 11, y: 5, color: 1 }, { x: 12, y: 5, color: 1 },
+                    { x: 4, y: 6, color: 1 }, { x: 5, y: 6, color: 1 }, { x: 6, y: 6, color: 1 }, { x: 7, y: 6, color: 1 }, { x: 8, y: 6, color: 1 }, { x: 9, y: 6, color: 1 }, { x: 10, y: 6, color: 1 }, { x: 11, y: 6, color: 1 }, { x: 12, y: 6, color: 1 }, { x: 13, y: 6, color: 1 },
+                    { x: 5, y: 7, color: 1 }, { x: 6, y: 7, color: 1 }, { x: 7, y: 7, color: 1 }, { x: 8, y: 7, color: 1 }, { x: 9, y: 7, color: 1 }, { x: 10, y: 7, color: 1 }, { x: 11, y: 7, color: 1 }, { x: 12, y: 7, color: 1 },
+                    // Bottom section - Color 1
+                    { x: 4, y: 8, color: 1 }, { x: 5, y: 8, color: 1 }, { x: 6, y: 8, color: 1 }, { x: 7, y: 8, color: 1 }, { x: 8, y: 8, color: 1 }, { x: 9, y: 8, color: 1 }, { x: 10, y: 8, color: 1 }, { x: 11, y: 8, color: 1 }, { x: 12, y: 8, color: 1 }, { x: 13, y: 8, color: 1 },
+                    // Ornaments - Color 2 (Red)
+                    { x: 7, y: 2, color: 2 }, { x: 11, y: 2, color: 2 },
+                    { x: 6, y: 3, color: 2 }, { x: 10, y: 3, color: 2 },
+                    { x: 8, y: 4, color: 2 }, { x: 11, y: 4, color: 2 },
+                    { x: 7, y: 5, color: 2 }, { x: 10, y: 5, color: 2 },
+                    { x: 6, y: 6, color: 2 }, { x: 9, y: 6, color: 2 }, { x: 12, y: 6, color: 2 },
+                    { x: 8, y: 7, color: 2 }, { x: 11, y: 7, color: 2 },
+                    { x: 6, y: 8, color: 2 }, { x: 10, y: 8, color: 2 },
+                    // More ornaments - Color 5 (Blue)
+                    { x: 8, y: 3, color: 5 }, { x: 12, y: 3, color: 5 },
+                    { x: 9, y: 5, color: 5 }, { x: 12, y: 5, color: 5 },
+                    { x: 7, y: 7, color: 5 }, { x: 11, y: 8, color: 5 },
+                    // Star - Color 3 (Gold)
+                    { x: 8, y: 0, color: 3 }, { x: 9, y: 0, color: 3 },
+                    { x: 7, y: 1, color: 3 }, { x: 10, y: 1, color: 3 },
+                    // Trunk - Color 4 (Brown)
+                    { x: 8, y: 10, color: 4 }, { x: 9, y: 10, color: 4 },
+                    { x: 7, y: 11, color: 4 }, { x: 8, y: 11, color: 4 }, { x: 9, y: 11, color: 4 }, { x: 10, y: 11, color: 4 },
+                    { x: 8, y: 12, color: 4 }, { x: 9, y: 12, color: 4 },
+                    // Gift boxes
+                    { x: 5, y: 13, color: 2 }, { x: 6, y: 13, color: 2 }, { x: 11, y: 13, color: 2 }, { x: 12, y: 13, color: 2 },
+                    { x: 5, y: 14, color: 2 }, { x: 6, y: 14, color: 2 }, { x: 11, y: 14, color: 2 }, { x: 12, y: 14, color: 2 }
+                ]
+            },
+            {
+                name: 'Crescent Moon',
+                emoji: '🌙',
+                size: 16,
+                pixels: [
+                    // Moon outline - Color 2 (Light Blue)
+                    { x: 4, y: 2, color: 2 },
+                    { x: 5, y: 1, color: 2 },
+                    { x: 6, y: 1, color: 2 },
+                    { x: 7, y: 1, color: 2 },
+                    { x: 8, y: 2, color: 2 },
+                    { x: 9, y: 3, color: 2 },
+                    { x: 10, y: 4, color: 2 },
+                    { x: 10, y: 5, color: 2 },
+                    { x: 10, y: 6, color: 2 },
+                    { x: 9, y: 7, color: 2 },
+                    { x: 8, y: 8, color: 2 },
+                    { x: 7, y: 9, color: 2 },
+                    { x: 6, y: 9, color: 2 },
+                    { x: 5, y: 9, color: 2 },
+                    { x: 4, y: 8, color: 2 },
+                    { x: 3, y: 7, color: 2 },
+                    { x: 2, y: 6, color: 2 },
+                    { x: 2, y: 5, color: 2 },
+                    { x: 2, y: 4, color: 2 },
+                    { x: 3, y: 3, color: 2 },
+                    // Moon fill - Color 3 (Purple)
+                    { x: 5, y: 2, color: 3 },
+                    { x: 6, y: 2, color: 3 },
+                    { x: 7, y: 2, color: 3 },
+                    { x: 4, y: 3, color: 3 },
+                    { x: 5, y: 3, color: 3 },
+                    { x: 6, y: 3, color: 3 },
+                    { x: 7, y: 3, color: 3 },
+                    { x: 8, y: 3, color: 3 },
+                    { x: 4, y: 4, color: 3 },
+                    { x: 5, y: 4, color: 3 },
+                    { x: 6, y: 4, color: 3 },
+                    { x: 7, y: 4, color: 3 },
+                    { x: 8, y: 4, color: 3 },
+                    { x: 9, y: 4, color: 3 },
+                    { x: 4, y: 5, color: 3 },
+                    { x: 5, y: 5, color: 3 },
+                    { x: 6, y: 5, color: 3 },
+                    { x: 7, y: 5, color: 3 },
+                    { x: 8, y: 5, color: 3 },
+                    { x: 9, y: 5, color: 3 },
+                    { x: 4, y: 6, color: 3 },
+                    { x: 5, y: 6, color: 3 },
+                    { x: 6, y: 6, color: 3 },
+                    { x: 7, y: 6, color: 3 },
+                    { x: 8, y: 6, color: 3 },
+                    { x: 5, y: 7, color: 3 },
+                    { x: 6, y: 7, color: 3 },
+                    { x: 7, y: 7, color: 3 },
+                    { x: 8, y: 7, color: 3 },
+                    { x: 6, y: 8, color: 3 },
+                    { x: 7, y: 8, color: 3 },
+                    // Stars - Color 4 (Yellow)
+                    { x: 1, y: 2, color: 4 },
+                    { x: 12, y: 3, color: 4 },
+                    { x: 0, y: 6, color: 4 },
+                    { x: 13, y: 7, color: 4 },
+                    { x: 2, y: 10, color: 4 },
+                    { x: 11, y: 9, color: 4 }
+                ]
+            },
+            {
+                name: 'Detailed Lobster',
+                emoji: '🦞',
+                size: 18,
+                pixels: [
+                    // Body - Color 1 (Red)
+                    { x: 8, y: 4, color: 1 },
+                    { x: 9, y: 4, color: 1 },
+                    { x: 7, y: 5, color: 1 },
+                    { x: 8, y: 5, color: 1 },
+                    { x: 9, y: 5, color: 1 },
+                    { x: 10, y: 5, color: 1 },
+                    { x: 6, y: 6, color: 1 },
+                    { x: 7, y: 6, color: 1 },
+                    { x: 8, y: 6, color: 1 },
+                    { x: 9, y: 6, color: 1 },
+                    { x: 10, y: 6, color: 1 },
+                    { x: 11, y: 6, color: 1 },
+                    { x: 5, y: 7, color: 1 },
+                    { x: 6, y: 7, color: 1 },
+                    { x: 7, y: 7, color: 1 },
+                    { x: 8, y: 7, color: 1 },
+                    { x: 9, y: 7, color: 1 },
+                    { x: 10, y: 7, color: 1 },
+                    { x: 11, y: 7, color: 1 },
+                    { x: 12, y: 7, color: 1 },
+                    { x: 4, y: 8, color: 1 },
+                    { x: 5, y: 8, color: 1 },
+                    { x: 6, y: 8, color: 1 },
+                    { x: 7, y: 8, color: 1 },
+                    { x: 8, y: 8, color: 1 },
+                    { x: 9, y: 8, color: 1 },
+                    { x: 10, y: 8, color: 1 },
+                    { x: 11, y: 8, color: 1 },
+                    { x: 12, y: 8, color: 1 },
+                    { x: 13, y: 8, color: 1 },
+                    // Left Claw - Color 2 (Orange)
+                    { x: 2, y: 6, color: 2 },
+                    { x: 3, y: 6, color: 2 },
+                    { x: 4, y: 6, color: 2 },
+                    { x: 1, y: 7, color: 2 },
+                    { x: 2, y: 7, color: 2 },
+                    { x: 3, y: 7, color: 2 },
+                    { x: 4, y: 7, color: 2 },
+                    { x: 0, y: 8, color: 2 },
+                    { x: 1, y: 8, color: 2 },
+                    { x: 2, y: 8, color: 2 },
+                    { x: 3, y: 8, color: 2 },
+                    // Right Claw - Color 2
+                    { x: 13, y: 6, color: 2 },
+                    { x: 14, y: 6, color: 2 },
+                    { x: 15, y: 6, color: 2 },
+                    { x: 14, y: 7, color: 2 },
+                    { x: 15, y: 7, color: 2 },
+                    { x: 16, y: 7, color: 2 },
+                    { x: 17, y: 7, color: 2 },
+                    { x: 15, y: 8, color: 2 },
+                    { x: 16, y: 8, color: 2 },
+                    { x: 17, y: 8, color: 2 },
+                    // Tail - Color 3 (Yellow)
+                    { x: 6, y: 9, color: 3 },
+                    { x: 7, y: 9, color: 3 },
+                    { x: 8, y: 9, color: 3 },
+                    { x: 9, y: 9, color: 3 },
+                    { x: 10, y: 9, color: 3 },
+                    { x: 11, y: 9, color: 3 },
+                    { x: 5, y: 10, color: 3 },
+                    { x: 6, y: 10, color: 3 },
+                    { x: 7, y: 10, color: 3 },
+                    { x: 8, y: 10, color: 3 },
+                    { x: 9, y: 10, color: 3 },
+                    { x: 10, y: 10, color: 3 },
+                    { x: 11, y: 10, color: 3 },
+                    { x: 12, y: 10, color: 3 },
+                    { x: 6, y: 11, color: 3 },
+                    { x: 7, y: 11, color: 3 },
+                    { x: 8, y: 11, color: 3 },
+                    { x: 9, y: 11, color: 3 },
+                    { x: 10, y: 11, color: 3 },
+                    { x: 11, y: 11, color: 3 },
+                    // Eyes - Color 4 (Black/Dark)
+                    { x: 8, y: 4, color: 4 },
+                    { x: 9, y: 4, color: 4 }
+                ]
+            }
+        ];
+
+        const colors = [
+            { name: '1', hex: '#FF69B4', label: 'Pink' },
+            { name: '2', hex: '#FF6347', label: 'Red' },
+            { name: '3', hex: '#FFD700', label: 'Gold' },
+            { name: '4', hex: '#87CEEB', label: 'Sky' },
+            { name: '5', hex: '#32CD32', label: 'Green' }
+        ];
+
+        // Create audio context for sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Sound effect functions
+        const sounds = {
+            click: function() {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.frequency.value = 600;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                osc.start(audioContext.currentTime);
+                osc.stop(audioContext.currentTime + 0.1);
+            },
+            success: function() {
+                const notes = [523.25, 659.25, 783.99]; // C, E, G
+                notes.forEach((freq, i) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    osc.frequency.value = freq;
+                    osc.type = 'sine';
+                    const startTime = audioContext.currentTime + (i * 0.1);
+                    gain.gain.setValueAtTime(0.1, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.2);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.2);
+                });
+            },
+            completion: function() {
+                const baseFreq = 440;
+                for (let i = 0; i < 3; i++) {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    osc.frequency.value = baseFreq * (1 + i * 0.2);
+                    osc.type = 'sine';
+                    const startTime = audioContext.currentTime + (i * 0.15);
+                    gain.gain.setValueAtTime(0.15, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.3);
+                }
+            }
+        };
+
+        const colorGame = {
+            currentDesign: 0,
+            selectedColor: 0,
+            canvas: [],
+            gameActive: false,
+            soundEnabled: true,
+
+            selectDesign(index) {
+                this.currentDesign = index;
+                document.querySelectorAll('.design-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+                document.getElementById('designName').textContent = designs[index].name;
+                this.initializeCanvas();
+            },
+
+            initializeCanvas() {
+                const design = designs[this.currentDesign];
+                this.canvas = Array(design.size * design.size).fill(0);
+                this.renderCanvas();
+                this.updateProgress();
+            },
+
+            startGame() {
+                this.gameActive = true;
+                this.gameStartTime = Date.now();
+                this.initializeCanvas();
+                this.renderColorPalette();
+                document.getElementById('setupPanel').style.opacity = '0.5';
+                document.querySelectorAll('.design-btn').forEach(btn => {
+                    btn.disabled = true;
+                });
+                document.getElementById('completionMessage').classList.add('hidden');
+            },
+
+            selectColorNumber(colorIndex) {
+                this.selectedColor = colorIndex;
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('active');
+                });
+                document.querySelectorAll('.color-option')[colorIndex].classList.add('active');
+            },
+
+            renderColorPalette() {
+                const palette = document.getElementById('colorPalette');
+                palette.innerHTML = '';
+
+                colors.forEach((color, index) => {
+                    const option = document.createElement('div');
+                    option.className = 'color-option' + (index === 0 ? ' active' : '');
+                    option.onclick = () => this.selectColorNumber(index);
+                    
+                    option.innerHTML = `
+                        <div class="color-box" style="background-color: ${color.hex}">${index + 1}</div>
+                        <div class="color-label">${color.label}</div>
+                    `;
+                    
+                    palette.appendChild(option);
+                });
+            },
+
+            colorPixel(index) {
+                if (!this.gameActive) return;
+                
+                const design = designs[this.currentDesign];
+                const pixel = design.pixels.find(p => {
+                    const pixelIndex = p.y * design.size + p.x;
+                    return pixelIndex === index;
+                });
+
+                if (pixel && pixel.color === this.selectedColor + 1) {
+                    this.canvas[index] = this.selectedColor + 1;
+                    if (this.soundEnabled) sounds.click();
+                    this.renderCanvas();
+                    this.updateProgress();
+                    this.checkCompletion();
+                }
+            },
+
+            renderCanvas() {
+                const design = designs[this.currentDesign];
+                const canvas = document.getElementById('pixelCanvas');
+                canvas.style.gridTemplateColumns = `repeat(${design.size}, 1fr)`;
+                canvas.innerHTML = '';
+
+                this.canvas.forEach((colorNum, index) => {
+                    const pixel = document.createElement('div');
+                    pixel.className = 'pixel' + (colorNum > 0 ? ' colored' : '');
+                    
+                    const pixelData = design.pixels.find(p => {
+                        const pixelIndex = p.y * design.size + p.x;
+                        return pixelIndex === index;
+                    });
+
+                    if (pixelData) {
+                        if (colorNum > 0) {
+                            const color = colors[colorNum - 1];
+                            pixel.style.backgroundColor = color.hex;
+                            pixel.textContent = colorNum;
+                        } else {
+                            pixel.textContent = pixelData.color;
+                        }
+                        pixel.onclick = () => this.colorPixel(index);
+                    }
+
+                    canvas.appendChild(pixel);
+                });
+            },
+
+            updateProgress() {
+                const design = designs[this.currentDesign];
+                const colored = this.canvas.filter(c => c > 0).length;
+                const total = design.pixels.length;
+                const percentage = Math.round((colored / total) * 100);
+
+                document.getElementById('coloredCount').textContent = colored;
+                document.getElementById('progressPercent').textContent = percentage + '%';
+                document.getElementById('progressFill').style.width = percentage + '%';
+            },
+
+            checkCompletion() {
+                const design = designs[this.currentDesign];
+                const colored = this.canvas.filter(c => c > 0).length;
+                
+                if (colored === design.pixels.length) {
+                    this.gameActive = false;
+                    
+                    // Play sound
+                    if (this.soundEnabled) sounds.completion();
+                    
+                    // Show message
+                    const msg = document.getElementById('completionMessage');
+                    msg.classList.remove('hidden');
+                    msg.classList.add('complete');
+                    
+                    // Create confetti
+                    this.createConfetti();
+                    
+                    // Show completion stats
+                    setTimeout(() => this.showCompletionStats(), 500);
+                }
+            },
+
+            createConfetti() {
+                const emojis = ['🎨', '✨', '🎉', '🌟', '💫', '🎊', '🏆', '👏'];
+                
+                for (let i = 0; i < 25; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-20px';
+                    confetti.style.animationDelay = (i * 0.05) + 's';
+                    confetti.style.opacity = Math.random() * 0.5 + 0.5;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 2500);
+                }
+            },
+
+            showCompletionStats() {
+                const design = designs[this.currentDesign];
+                const completionTime = Math.floor((Date.now() - this.gameStartTime) / 1000);
+                const minutes = Math.floor(completionTime / 60);
+                const seconds = completionTime % 60;
+                const timeStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+                
+                // Create overlay
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 9999;
+                    animation: fadeIn 0.3s ease-out;
+                    backdrop-filter: blur(2px);
+                `;
+                
+                const statsDiv = document.createElement('div');
+                statsDiv.className = 'completion-modal';
+                statsDiv.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    padding: 40px 50px;
+                    border-radius: 25px;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+                    text-align: center;
+                    z-index: 10000;
+                    animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                    color: white;
+                    max-width: 90vw;
+                    width: 400px;
+                `;
+                
+                statsDiv.innerHTML = `
+                    <h2 style="font-size: 2.5rem; margin-bottom: 25px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">🎉 Design Complete! 🎉</h2>
+                    <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 15px; margin-bottom: 25px; backdrop-filter: blur(10px);">
+                        <p style="font-size: 1.2rem; margin: 10px 0;"><strong>⏱️ Time:</strong> <span style="color: #FFD700; font-weight: bold;">${timeStr}</span></p>
+                        <p style="font-size: 1.2rem; margin: 10px 0;"><strong>🎨 Design:</strong> ${design.name} ${design.emoji}</p>
+                        <p style="font-size: 1.2rem; margin: 10px 0;"><strong>🖌️ Pixels:</strong> <span style="color: #FFD700; font-weight: bold;">${design.pixels.length}</span></p>
+                    </div>
+                    <button class="close-modal-btn" style="
+                        margin-top: 20px;
+                        padding: 14px 40px;
+                        background: white;
+                        color: #667eea;
+                        border: none;
+                        border-radius: 12px;
+                        cursor: pointer;
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    " onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.2)'">
+                        Continue ✨
+                    </button>
+                `;
+                
+                // Close function
+                const closeModal = () => {
+                    overlay.style.animation = 'fadeOut 0.3s ease-out forwards';
+                    statsDiv.style.animation = 'popOut 0.3s ease-out forwards';
+                    setTimeout(() => {
+                        overlay.remove();
+                        statsDiv.remove();
+                    }, 300);
+                };
+                
+                // Add click handlers
+                overlay.onclick = closeModal;
+                statsDiv.querySelector('.close-modal-btn').onclick = closeModal;
+                
+                // Prevent clicks on modal from closing it
+                statsDiv.onclick = (e) => e.stopPropagation();
+                
+                document.body.appendChild(overlay);
+                document.body.appendChild(statsDiv);
+            },
+
+            clearCanvas() {
+                const design = designs[this.currentDesign];
+                this.canvas = Array(design.size * design.size).fill(0);
+                this.renderCanvas();
+                this.updateProgress();
+                document.getElementById('completionMessage').classList.add('hidden');
+            },
+
+            resetGame() {
+                this.gameActive = false;
+                this.selectedColor = 0;
+                this.clearCanvas();
+                document.getElementById('setupPanel').style.opacity = '1';
+                document.querySelectorAll('.design-btn').forEach(btn => {
+                    btn.disabled = false;
+                });
+            },
+
+            toggleSound() {
+                this.soundEnabled = !this.soundEnabled;
+                const btn = document.getElementById('soundBtn');
+                btn.textContent = this.soundEnabled ? '🔊 Sound On' : '🔇 Sound Off';
+                if (this.soundEnabled) sounds.click();
+            }
+        };
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            colorGame.initializeCanvas();
+            colorGame.renderColorPalette();
+        });
+    </script>
+</body>
+</html>

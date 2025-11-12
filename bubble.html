@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Bubble Shooter - Match and pop colorful bubbles! Aim, shoot, and clear the board in this addictive puzzle game.">
+    <meta name="keywords" content="bubble shooter, puzzle game, match bubbles, pop bubbles, casual game">
+    <meta name="author" content="ACAJOU GAMES">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <title>Bubble Shooter - ACAJOU GAMES</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YH4Z66742N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YH4Z66742N');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            height: 100%;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding-top: 60px;
+            padding-bottom: 20px;
+        }
+
+        .acajou-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            padding: 12px 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .acajou-nav-logo {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .acajou-nav-back {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 6px 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .game-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: clamp(2rem, 6vw, 2.5rem);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            margin-bottom: 15px;
+        }
+
+        /* Game Stats */
+        .game-stats {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .stat-box {
+            text-align: center;
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-value.score {
+            color: #f39c12;
+        }
+
+        .stat-value.shots {
+            color: #e74c3c;
+        }
+
+        /* Canvas Container */
+        .canvas-container {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            display: block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            touch-action: none;
+        }
+
+        .aim-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Controls */
+        .game-controls {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            min-width: 44px;
+            min-height: 44px;
+            flex: 1;
+            max-width: 160px;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Power-ups */
+        .powerups {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffe6e6 100%);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .powerups-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .powerup-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .powerup-btn {
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .powerup-btn:active {
+            transform: scale(0.95);
+        }
+
+        .powerup-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .powerup-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .powerup-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .powerup-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .powerup-count {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .powerup-btn.active .powerup-count {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px 25px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-message {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal-stats {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .modal-stat {
+            font-size: 1rem;
+            margin: 8px 0;
+            color: #666;
+        }
+
+        .modal-stat strong {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        /* Instructions */
+        .instructions {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .instructions h3 {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .instructions ul {
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+
+        .instructions li {
+            margin-bottom: 6px;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px 0;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .footer-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Mobile hint */
+        .mobile-hint {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding-top: 55px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .game-stats {
+                padding: 12px;
+                gap: 8px;
+            }
+
+            .stat-box {
+                padding: 10px;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .powerup-icon {
+                font-size: 1.5rem;
+            }
+
+            .modal-emoji {
+                font-size: 3rem;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding-top: 80px;
+                padding-bottom: 30px;
+            }
+
+            .game-container {
+                padding: 25px;
+            }
+
+            .powerup-btn:hover:not(.disabled) {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+            }
+        }
+
+        /* Particle effects */
+        @keyframes particle {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="acajou-nav">
+        <a href="index.html" class="acajou-nav-logo">
+            🎯 ACAJOU GAMES
+        </a>
+        <a href="index.html" class="acajou-nav-back">
+            ← Back
+        </a>
+    </nav>
+
+    <div class="game-container">
+        <h1>🎯 Bubble Shooter</h1>
+        <p class="subtitle">Match 3+ bubbles to pop them!</p>
+
+        <div class="mobile-hint">
+            💡 Tap anywhere to aim and shoot bubbles!
+        </div>
+
+        <!-- Game Stats -->
+        <div class="game-stats">
+            <div class="stat-box">
+                <div class="stat-label">Level</div>
+                <div class="stat-value" id="levelDisplay">1</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Score</div>
+                <div class="stat-value score" id="scoreDisplay">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Shots</div>
+                <div class="stat-value shots" id="shotsDisplay">20</div>
+            </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="canvas-container">
+            <canvas id="gameCanvas" width="600" height="800"></canvas>
+        </div>
+
+        <!-- Power-ups -->
+        <div class="powerups">
+            <div class="powerups-title">🎁 Power-Ups</div>
+            <div class="powerup-grid">
+                <div class="powerup-btn" onclick="game.activatePowerup('bomb')" id="powerup-bomb">
+                    <div class="powerup-icon">💣</div>
+                    <div class="powerup-label">Bomb</div>
+                    <div class="powerup-count">x<span id="bomb-count">3</span></div>
+                </div>
+                <div class="powerup-btn" onclick="game.activatePowerup('color')" id="powerup-color">
+                    <div class="powerup-icon">🌈</div>
+                    <div class="powerup-label">Rainbow</div>
+                    <div class="powerup-count">x<span id="color-count">2</span></div>
+                </div>
+                <div class="powerup-btn" onclick="game.activatePowerup('laser')" id="powerup-laser">
+                    <div class="powerup-icon">⚡</div>
+                    <div class="powerup-label">Laser</div>
+                    <div class="powerup-count">x<span id="laser-count">2</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="game-controls">
+            <button class="btn btn-primary" onclick="game.newLevel()">
+                🎮 New Level
+            </button>
+            <button class="btn btn-secondary" onclick="game.toggleSound()" id="soundBtn">
+                🔊 Sound ON
+            </button>
+            <button class="btn btn-secondary" onclick="game.showInstructions()">
+                ❓ Help
+            </button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>🎯 How to Play:</h3>
+            <ul>
+                <li><strong>Aim:</strong> Tap anywhere on screen to aim</li>
+                <li><strong>Shoot:</strong> Your bubble will launch automatically</li>
+                <li><strong>Match:</strong> Connect 3+ bubbles of same color to pop</li>
+                <li><strong>Clear:</strong> Pop all bubbles to advance to next level</li>
+                <li><strong>Power-ups:</strong>
+                    <ul>
+                        <li>💣 <strong>Bomb:</strong> Explodes nearby bubbles</li>
+                        <li>🌈 <strong>Rainbow:</strong> Matches any color</li>
+                        <li>⚡ <strong>Laser:</strong> Destroys entire row</li>
+                    </ul>
+                </li>
+                <li><strong>Win:</strong> Clear the board before running out of shots!</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            🎮 More <a href="index.html" class="footer-link">ACAJOU GAMES</a>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content">
+            <div class="modal-emoji">😢</div>
+            <div class="modal-title">Game Over!</div>
+            <div class="modal-message">You ran out of shots!</div>
+            <div class="modal-stats">
+                <div class="modal-stat">Level Reached: <strong id="finalLevel">1</strong></div>
+                <div class="modal-stat">Final Score: <strong id="finalScore">0</strong></div>
+            </div>
+            <button class="btn btn-primary" onclick="game.restart()" style="width: 100%;">
+                🔄 Play Again
+            </button>
+        </div>
+    </div>
+
+    <!-- Level Complete Modal -->
+    <div class="modal" id="levelCompleteModal">
+        <div class="modal-content">
+            <div class="modal-emoji">🎉</div>
+            <div class="modal-title">Level Complete!</div>
+            <div class="modal-message">Amazing! Ready for the next challenge?</div>
+            <div class="modal-stats">
+                <div class="modal-stat">Shots Remaining: <strong id="bonusShots">0</strong></div>
+                <div class="modal-stat">Bonus Points: <strong id="bonusPoints">0</strong></div>
+            </div>
+            <button class="btn btn-primary" onclick="game.nextLevel()" style="width: 100%;">
+                ➡️ Next Level
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Sound System using Web Audio API
+        const AudioSystem = {
+            context: null,
+            enabled: true,
+            
+            init() {
+                try {
+                    this.context = new (window.AudioContext || window.webkitAudioContext)();
+                } catch(e) {
+                    console.log('Web Audio API not supported');
+                    this.enabled = false;
+                }
+            },
+
+            // Shoot sound - Pop/Blip
+            playShoot() {
+                if (!this.enabled || !this.context) return;
+                
+                const oscillator = this.context.createOscillator();
+                const gainNode = this.context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.context.destination);
+                
+                oscillator.frequency.setValueAtTime(800, this.context.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(400, this.context.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.1);
+                
+                oscillator.start(this.context.currentTime);
+                oscillator.stop(this.context.currentTime + 0.1);
+            },
+
+            // Pop sound - Bubble popping
+            playPop(count = 1) {
+                if (!this.enabled || !this.context) return;
+                
+                const oscillator = this.context.createOscillator();
+                const gainNode = this.context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.context.destination);
+                
+                const baseFreq = 600 + (count * 50);
+                oscillator.frequency.setValueAtTime(baseFreq, this.context.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(200, this.context.currentTime + 0.15);
+                
+                gainNode.gain.setValueAtTime(0.4, this.context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.15);
+                
+                oscillator.type = 'sine';
+                oscillator.start(this.context.currentTime);
+                oscillator.stop(this.context.currentTime + 0.15);
+            },
+
+            // Bounce sound - Wall collision
+            playBounce() {
+                if (!this.enabled || !this.context) return;
+                
+                const oscillator = this.context.createOscillator();
+                const gainNode = this.context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.context.destination);
+                
+                oscillator.frequency.setValueAtTime(300, this.context.currentTime);
+                
+                gainNode.gain.setValueAtTime(0.2, this.context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.05);
+                
+                oscillator.type = 'square';
+                oscillator.start(this.context.currentTime);
+                oscillator.stop(this.context.currentTime + 0.05);
+            },
+
+            // Snap sound - Bubble attaching
+            playSnap() {
+                if (!this.enabled || !this.context) return;
+                
+                const oscillator = this.context.createOscillator();
+                const gainNode = this.context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.context.destination);
+                
+                oscillator.frequency.setValueAtTime(1000, this.context.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(500, this.context.currentTime + 0.08);
+                
+                gainNode.gain.setValueAtTime(0.25, this.context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.08);
+                
+                oscillator.type = 'triangle';
+                oscillator.start(this.context.currentTime);
+                oscillator.stop(this.context.currentTime + 0.08);
+            },
+
+            // Powerup sound
+            playPowerup() {
+                if (!this.enabled || !this.context) return;
+                
+                const oscillator = this.context.createOscillator();
+                const gainNode = this.context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.context.destination);
+                
+                oscillator.frequency.setValueAtTime(400, this.context.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(800, this.context.currentTime + 0.2);
+                
+                gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.2);
+                
+                oscillator.type = 'sawtooth';
+                oscillator.start(this.context.currentTime);
+                oscillator.stop(this.context.currentTime + 0.2);
+            },
+
+            // Explosion sound - Bomb powerup
+            playExplosion() {
+                if (!this.enabled || !this.context) return;
+                
+                const oscillator = this.context.createOscillator();
+                const gainNode = this.context.createGain();
+                const filter = this.context.createBiquadFilter();
+                
+                oscillator.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(this.context.destination);
+                
+                oscillator.frequency.setValueAtTime(200, this.context.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(50, this.context.currentTime + 0.3);
+                
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(2000, this.context.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(100, this.context.currentTime + 0.3);
+                
+                gainNode.gain.setValueAtTime(0.5, this.context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.3);
+                
+                oscillator.type = 'sawtooth';
+                oscillator.start(this.context.currentTime);
+                oscillator.stop(this.context.currentTime + 0.3);
+            },
+
+            // Laser sound
+            playLaser() {
+                if (!this.enabled || !this.context) return;
+                
+                const oscillator = this.context.createOscillator();
+                const gainNode = this.context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.context.destination);
+                
+                oscillator.frequency.setValueAtTime(1500, this.context.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, this.context.currentTime + 0.25);
+                
+                gainNode.gain.setValueAtTime(0.4, this.context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.25);
+                
+                oscillator.type = 'sawtooth';
+                oscillator.start(this.context.currentTime);
+                oscillator.stop(this.context.currentTime + 0.25);
+            },
+
+            // Win sound - Level complete
+            playWin() {
+                if (!this.enabled || !this.context) return;
+                
+                // Play ascending notes
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C, E, G, C
+                
+                notes.forEach((freq, i) => {
+                    const oscillator = this.context.createOscillator();
+                    const gainNode = this.context.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.context.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, this.context.currentTime + i * 0.15);
+                    
+                    gainNode.gain.setValueAtTime(0, this.context.currentTime + i * 0.15);
+                    gainNode.gain.linearRampToValueAtTime(0.3, this.context.currentTime + i * 0.15 + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + i * 0.15 + 0.25);
+                    
+                    oscillator.type = 'sine';
+                    oscillator.start(this.context.currentTime + i * 0.15);
+                    oscillator.stop(this.context.currentTime + i * 0.15 + 0.25);
+                });
+            },
+
+            // Lose sound - Game over
+            playLose() {
+                if (!this.enabled || !this.context) return;
+                
+                // Play descending notes
+                const notes = [523.25, 392.00, 329.63, 261.63]; // C, G, E, C
+                
+                notes.forEach((freq, i) => {
+                    const oscillator = this.context.createOscillator();
+                    const gainNode = this.context.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.context.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, this.context.currentTime + i * 0.2);
+                    
+                    gainNode.gain.setValueAtTime(0, this.context.currentTime + i * 0.2);
+                    gainNode.gain.linearRampToValueAtTime(0.3, this.context.currentTime + i * 0.2 + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + i * 0.2 + 0.3);
+                    
+                    oscillator.type = 'sine';
+                    oscillator.start(this.context.currentTime + i * 0.2);
+                    oscillator.stop(this.context.currentTime + i * 0.2 + 0.3);
+                });
+            },
+
+            // Toggle sound on/off
+            toggle() {
+                this.enabled = !this.enabled;
+                return this.enabled;
+            }
+        };
+
+        // Initialize audio on first user interaction
+        let audioInitialized = false;
+        function initAudio() {
+            if (!audioInitialized) {
+                AudioSystem.init();
+                audioInitialized = true;
+            }
+        }
+
+        // Resize canvas
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const containerWidth = container.clientWidth - 20;
+            const aspectRatio = 600 / 800;
+            
+            canvas.style.width = containerWidth + 'px';
+            canvas.style.height = (containerWidth / aspectRatio) + 'px';
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 100));
+
+        const game = {
+            bubbleRadius: 20,
+            rows: 10,
+            cols: 11,
+            bubbles: [],
+            shooter: { x: 300, y: 750, color: null },
+            nextBubble: { color: null },
+            aimAngle: -Math.PI / 2,
+            shooting: false,
+            projectile: null,
+            colors: ['#e74c3c', '#3498db', '#f39c12', '#2ecc71', '#9b59b6', '#e67e22'],
+            level: 1,
+            score: 0,
+            shots: 20,
+            maxShots: 20,
+            gameOver: false,
+            powerups: {
+                bomb: 3,
+                color: 2,
+                laser: 2
+            },
+            activePowerup: null,
+
+            init() {
+                resizeCanvas();
+                this.loadProgress();
+                this.setupLevel();
+                this.gameLoop();
+                
+                // Touch/click events
+                canvas.addEventListener('click', (e) => this.handleClick(e));
+                canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    this.handleClick(touch);
+                }, {passive: false});
+
+                canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+                canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    this.handleMouseMove(touch);
+                }, {passive: false});
+            },
+
+            setupLevel() {
+                this.bubbles = [];
+                this.shooting = false;
+                this.projectile = null;
+                this.shots = this.maxShots + (this.level - 1) * 5;
+                this.gameOver = false;
+
+                // Create initial bubbles (fewer rows = easier)
+                const initialRows = Math.min(5 + Math.floor(this.level / 2), 8);
+                
+                for (let row = 0; row < initialRows; row++) {
+                    for (let col = 0; col < this.cols; col++) {
+                        // Offset every other row
+                        const offsetX = (row % 2) * this.bubbleRadius;
+                        const x = col * this.bubbleRadius * 2 + this.bubbleRadius + offsetX;
+                        const y = row * this.bubbleRadius * 2 + this.bubbleRadius + 50;
+
+                        // Random color
+                        const color = this.colors[Math.floor(Math.random() * Math.min(4 + Math.floor(this.level / 3), this.colors.length))];
+                        
+                        this.bubbles.push({
+                            x, y,
+                            color,
+                            radius: this.bubbleRadius,
+                            row, col
+                        });
+                    }
+                }
+
+                // Set shooter bubble
+                this.shooter.color = this.getRandomColor();
+                this.nextBubble.color = this.getRandomColor();
+                
+                this.updateDisplay();
+            },
+
+            getRandomColor() {
+                // Get colors that exist on board (filter out emojis)
+                const boardColors = [...new Set(this.bubbles.map(b => b.color).filter(c => c.startsWith('#')))];
+                if (boardColors.length > 0 && this.bubbles.length > 0) {
+                    return boardColors[Math.floor(Math.random() * boardColors.length)];
+                }
+                // Fallback to random color from palette
+                const maxColors = Math.min(4 + Math.floor(this.level / 3), this.colors.length);
+                return this.colors[Math.floor(Math.random() * maxColors)];
+            },
+
+            handleClick(e) {
+                initAudio(); // Initialize audio on first click
+                
+                if (this.shooting || this.gameOver) return;
+
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+
+                this.shoot(x, y);
+            },
+
+            handleMouseMove(e) {
+                if (this.shooting || this.gameOver) return;
+
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+
+                // Calculate aim angle
+                const dx = x - this.shooter.x;
+                const dy = y - this.shooter.y;
+                this.aimAngle = Math.atan2(dy, dx);
+            },
+
+            shoot(targetX, targetY) {
+                const dx = targetX - this.shooter.x;
+                const dy = targetY - this.shooter.y;
+                const angle = Math.atan2(dy, dx);
+
+                // Prevent shooting downward or too far sideways
+                if (dy > -20) {
+                    return; // Don't shoot if aiming downward
+                }
+
+                this.projectile = {
+                    x: this.shooter.x,
+                    y: this.shooter.y,
+                    vx: Math.cos(angle) * 10,
+                    vy: Math.sin(angle) * 10,
+                    color: this.activePowerup === 'bomb' ? '💣' : 
+                           this.activePowerup === 'color' ? '🌈' : 
+                           this.shooter.color,
+                    radius: this.bubbleRadius,
+                    powerup: this.activePowerup
+                };
+
+                this.shooting = true;
+                this.shots--;
+                
+                // Play appropriate sound
+                if (this.activePowerup === 'bomb') {
+                    AudioSystem.playExplosion();
+                } else if (this.activePowerup === 'laser') {
+                    AudioSystem.playLaser();
+                } else if (this.activePowerup === 'color') {
+                    AudioSystem.playPowerup();
+                } else {
+                    AudioSystem.playShoot();
+                }
+                
+                if (this.activePowerup) {
+                    this.powerups[this.activePowerup]--;
+                    this.activePowerup = null;
+                    this.updatePowerupDisplay();
+                }
+
+                // Haptic feedback
+                if (navigator.vibrate) navigator.vibrate(30);
+
+                this.updateDisplay();
+            },
+
+            updateProjectile() {
+                if (!this.projectile) return;
+
+                // Move projectile
+                this.projectile.x += this.projectile.vx;
+                this.projectile.y += this.projectile.vy;
+
+                // Bounds check - if projectile goes way off screen, reset
+                if (this.projectile.y < -50 || this.projectile.y > canvas.height + 50) {
+                    this.endShot();
+                    return;
+                }
+
+                // Wall collision
+                if (this.projectile.x - this.projectile.radius <= 0 || 
+                    this.projectile.x + this.projectile.radius >= canvas.width) {
+                    this.projectile.vx *= -1;
+                    this.projectile.x = Math.max(this.projectile.radius, 
+                                                 Math.min(canvas.width - this.projectile.radius, this.projectile.x));
+                    AudioSystem.playBounce();
+                }
+
+                // Check collision with bubbles
+                for (let bubble of this.bubbles) {
+                    const dist = Math.hypot(bubble.x - this.projectile.x, bubble.y - this.projectile.y);
+                    if (dist < this.bubbleRadius * 2) {
+                        this.handleCollision(bubble);
+                        return;
+                    }
+                }
+
+                // Check if reached top
+                if (this.projectile.y - this.projectile.radius <= 50) {
+                    this.snapToGrid();
+                }
+            },
+
+            handleCollision(hitBubble) {
+                if (this.projectile.powerup === 'laser') {
+                    // Remove entire row
+                    this.bubbles = this.bubbles.filter(b => b.row !== hitBubble.row);
+                    this.score += 100;
+                } else if (this.projectile.powerup === 'bomb') {
+                    // Explode nearby bubbles
+                    this.bubbles = this.bubbles.filter(b => {
+                        const dist = Math.hypot(b.x - hitBubble.x, b.y - hitBubble.y);
+                        if (dist < this.bubbleRadius * 5) {
+                            this.score += 10;
+                            return false;
+                        }
+                        return true;
+                    });
+                } else {
+                    // Normal collision - snap to grid
+                    this.snapToGrid(hitBubble);
+                    return;
+                }
+
+                this.endShot();
+            },
+
+            snapToGrid(nearBubble = null) {
+                // Find nearest grid position
+                let targetRow, targetCol, offsetX;
+
+                if (nearBubble) {
+                    // Snap near the hit bubble
+                    const dx = this.projectile.x - nearBubble.x;
+                    const dy = this.projectile.y - nearBubble.y;
+                    
+                    targetRow = nearBubble.row;
+                    targetCol = nearBubble.col;
+
+                    if (Math.abs(dy) > Math.abs(dx)) {
+                        targetRow += dy > 0 ? 1 : -1;
+                    } else {
+                        targetCol += dx > 0 ? 1 : -1;
+                    }
+                } else {
+                    // Snap to top
+                    targetRow = 0;
+                    offsetX = (targetRow % 2) * this.bubbleRadius;
+                    targetCol = Math.round((this.projectile.x - this.bubbleRadius - offsetX) / (this.bubbleRadius * 2));
+                }
+
+                // Clamp to valid range
+                targetRow = Math.max(0, targetRow);
+                offsetX = (targetRow % 2) * this.bubbleRadius;
+                targetCol = Math.max(0, Math.min(this.cols - 1, targetCol));
+
+                const x = targetCol * this.bubbleRadius * 2 + this.bubbleRadius + offsetX;
+                const y = targetRow * this.bubbleRadius * 2 + this.bubbleRadius + 50;
+
+                // Check if position is already occupied
+                const existingBubble = this.bubbles.find(b => b.row === targetRow && b.col === targetCol);
+                if (existingBubble) {
+                    // Position occupied, end shot without adding bubble
+                    this.endShot();
+                    return;
+                }
+
+                // Add new bubble
+                const isRainbow = this.projectile.powerup === 'color';
+                const newBubble = {
+                    x, y,
+                    color: isRainbow ? '🌈' : this.projectile.color,
+                    radius: this.bubbleRadius,
+                    row: targetRow,
+                    col: targetCol,
+                    rainbow: isRainbow
+                };
+
+                this.bubbles.push(newBubble);
+
+                // Play snap sound
+                AudioSystem.playSnap();
+
+                // Check for matches
+                if (isRainbow) {
+                    // Rainbow matches any adjacent color
+                    this.removeAdjacentBubbles(newBubble);
+                } else {
+                    this.checkMatches(newBubble);
+                }
+
+                // Remove floating bubbles
+                this.removeFloatingBubbles();
+
+                this.endShot();
+            },
+
+            checkMatches(bubble) {
+                const matches = this.findMatches(bubble);
+                
+                if (matches.length >= 3) {
+                    // Remove matched bubbles
+                    this.bubbles = this.bubbles.filter(b => !matches.includes(b));
+                    this.score += matches.length * 10;
+                    
+                    // Play pop sound based on match count
+                    AudioSystem.playPop(matches.length);
+                    
+                    // Haptic feedback
+                    if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+
+                    // Create pop effect
+                    this.createPopEffect(matches);
+                }
+            },
+
+            findMatches(bubble, visited = new Set()) {
+                const matches = [bubble];
+                visited.add(bubble);
+
+                const neighbors = this.getNeighbors(bubble);
+                
+                for (let neighbor of neighbors) {
+                    if (!visited.has(neighbor) && 
+                        (neighbor.color === bubble.color || neighbor.rainbow || bubble.rainbow)) {
+                        visited.add(neighbor);
+                        matches.push(...this.findMatches(neighbor, visited));
+                    }
+                }
+
+                return matches;
+            },
+
+            removeAdjacentBubbles(bubble) {
+                const neighbors = this.getNeighbors(bubble);
+                const toRemove = [bubble, ...neighbors];
+                
+                this.bubbles = this.bubbles.filter(b => !toRemove.includes(b));
+                this.score += toRemove.length * 20;
+                
+                this.createPopEffect(toRemove);
+            },
+
+            getNeighbors(bubble) {
+                const neighbors = [];
+                const directions = bubble.row % 2 === 0 ? 
+                    [[-1, -1], [-1, 0], [0, -1], [0, 1], [1, -1], [1, 0]] :
+                    [[-1, 0], [-1, 1], [0, -1], [0, 1], [1, 0], [1, 1]];
+
+                for (let [dr, dc] of directions) {
+                    const found = this.bubbles.find(b => 
+                        b.row === bubble.row + dr && b.col === bubble.col + dc
+                    );
+                    if (found) neighbors.push(found);
+                }
+
+                return neighbors;
+            },
+
+            removeFloatingBubbles() {
+                // Mark bubbles connected to top
+                const connected = new Set();
+                const queue = this.bubbles.filter(b => b.row === 0);
+                
+                queue.forEach(b => connected.add(b));
+
+                while (queue.length > 0) {
+                    const bubble = queue.shift();
+                    const neighbors = this.getNeighbors(bubble);
+                    
+                    for (let neighbor of neighbors) {
+                        if (!connected.has(neighbor)) {
+                            connected.add(neighbor);
+                            queue.push(neighbor);
+                        }
+                    }
+                }
+
+                // Remove unconnected bubbles
+                const floating = this.bubbles.filter(b => !connected.has(b));
+                if (floating.length > 0) {
+                    this.bubbles = this.bubbles.filter(b => connected.has(b));
+                    this.score += floating.length * 20;
+                    this.createPopEffect(floating);
+                    
+                    // Play pop sound for floating bubbles
+                    AudioSystem.playPop(Math.min(floating.length, 10));
+                }
+            },
+
+            createPopEffect(bubbles) {
+                // Visual feedback for popped bubbles
+                // In a full implementation, this would create particle effects
+            },
+
+            endShot() {
+                this.shooting = false;
+                this.projectile = null;
+
+                // Check win condition
+                if (this.bubbles.length === 0) {
+                    this.levelComplete();
+                    return;
+                }
+
+                // Check lose condition
+                if (this.shots <= 0) {
+                    this.gameOver = true;
+                    setTimeout(() => this.showGameOver(), 500);
+                    return;
+                }
+
+                // Next bubble - ensure we always have valid colors
+                if (this.nextBubble.color) {
+                    this.shooter.color = this.nextBubble.color;
+                } else {
+                    this.shooter.color = this.getRandomColor();
+                }
+                this.nextBubble.color = this.getRandomColor();
+                
+                this.updateDisplay();
+            },
+
+            levelComplete() {
+                const bonusPoints = this.shots * 50;
+                this.score += bonusPoints;
+
+                document.getElementById('bonusShots').textContent = this.shots;
+                document.getElementById('bonusPoints').textContent = bonusPoints;
+                
+                // Play win sound
+                AudioSystem.playWin();
+                
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+                
+                setTimeout(() => {
+                    document.getElementById('levelCompleteModal').classList.add('show');
+                }, 500);
+            },
+
+            nextLevel() {
+                document.getElementById('levelCompleteModal').classList.remove('show');
+                this.level++;
+                this.setupLevel();
+            },
+
+            newLevel() {
+                if (confirm('Start a new level? Current progress will be lost.')) {
+                    this.setupLevel();
+                }
+            },
+
+            showGameOver() {
+                document.getElementById('finalLevel').textContent = this.level;
+                document.getElementById('finalScore').textContent = this.score;
+                document.getElementById('gameOverModal').classList.add('show');
+                
+                // Play lose sound
+                AudioSystem.playLose();
+            },
+
+            restart() {
+                document.getElementById('gameOverModal').classList.remove('show');
+                this.level = 1;
+                this.score = 0;
+                this.powerups = { bomb: 3, color: 2, laser: 2 };
+                this.setupLevel();
+                this.updatePowerupDisplay();
+            },
+
+            activatePowerup(type) {
+                if (this.powerups[type] > 0 && !this.shooting) {
+                    // Deactivate current
+                    document.querySelectorAll('.powerup-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+
+                    // Toggle
+                    if (this.activePowerup === type) {
+                        this.activePowerup = null;
+                    } else {
+                        this.activePowerup = type;
+                        document.getElementById(`powerup-${type}`).classList.add('active');
+                        
+                        // Play powerup activation sound
+                        AudioSystem.playPowerup();
+                    }
+
+                    if (navigator.vibrate) navigator.vibrate(50);
+                }
+            },
+
+            updatePowerupDisplay() {
+                document.getElementById('bomb-count').textContent = this.powerups.bomb;
+                document.getElementById('color-count').textContent = this.powerups.color;
+                document.getElementById('laser-count').textContent = this.powerups.laser;
+
+                // Update disabled state
+                for (let type in this.powerups) {
+                    const btn = document.getElementById(`powerup-${type}`);
+                    if (this.powerups[type] <= 0) {
+                        btn.classList.add('disabled');
+                    } else {
+                        btn.classList.remove('disabled');
+                    }
+                }
+            },
+
+            draw() {
+                // Clear canvas with solid color
+                ctx.fillStyle = '#0f3460';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw bubbles
+                for (let bubble of this.bubbles) {
+                    if (bubble.rainbow) {
+                        ctx.fillStyle = 'white';
+                        ctx.beginPath();
+                        ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.font = '28px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('🌈', bubble.x, bubble.y);
+                    } else {
+                        // Draw bubble
+                        const gradient = ctx.createRadialGradient(
+                            bubble.x - 5, bubble.y - 5, 0,
+                            bubble.x, bubble.y, bubble.radius
+                        );
+                        gradient.addColorStop(0, this.lightenColor(bubble.color, 40));
+                        gradient.addColorStop(1, bubble.color);
+                        
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        // Shine effect
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                        ctx.beginPath();
+                        ctx.arc(bubble.x - 7, bubble.y - 7, 6, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        // Border
+                        ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+                }
+
+                // Draw projectile
+                if (this.projectile) {
+                    if (typeof this.projectile.color === 'string' && this.projectile.color.startsWith('#')) {
+                        const gradient = ctx.createRadialGradient(
+                            this.projectile.x - 5, this.projectile.y - 5, 0,
+                            this.projectile.x, this.projectile.y, this.projectile.radius
+                        );
+                        gradient.addColorStop(0, this.lightenColor(this.projectile.color, 40));
+                        gradient.addColorStop(1, this.projectile.color);
+                        
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(this.projectile.x, this.projectile.y, this.projectile.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else {
+                        // Power-up projectile
+                        ctx.fillStyle = 'white';
+                        ctx.beginPath();
+                        ctx.arc(this.projectile.x, this.projectile.y, this.projectile.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.font = '32px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(this.projectile.color, this.projectile.x, this.projectile.y);
+                    }
+                }
+
+                // Draw shooter
+                if (!this.shooting) {
+                    const gradient = ctx.createRadialGradient(
+                        this.shooter.x - 5, this.shooter.y - 5, 0,
+                        this.shooter.x, this.shooter.y, this.bubbleRadius
+                    );
+                    gradient.addColorStop(0, this.lightenColor(this.shooter.color, 40));
+                    gradient.addColorStop(1, this.shooter.color);
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(this.shooter.x, this.shooter.y, this.bubbleRadius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Aim line
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([5, 5]);
+                    ctx.beginPath();
+                    ctx.moveTo(this.shooter.x, this.shooter.y);
+                    ctx.lineTo(
+                        this.shooter.x + Math.cos(this.aimAngle) * 100,
+                        this.shooter.y + Math.sin(this.aimAngle) * 100
+                    );
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+
+                // Draw next bubble
+                const nextX = 550;
+                const nextY = 750;
+                const gradient = ctx.createRadialGradient(
+                    nextX - 3, nextY - 3, 0,
+                    nextX, nextY, 15
+                );
+                gradient.addColorStop(0, this.lightenColor(this.nextBubble.color, 40));
+                gradient.addColorStop(1, this.nextBubble.color);
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(nextX, nextY, 15, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = 'white';
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Next', nextX, nextY + 30);
+            },
+
+            lightenColor(color, percent) {
+                const num = parseInt(color.replace('#', ''), 16);
+                const amt = Math.round(2.55 * percent);
+                const R = (num >> 16) + amt;
+                const G = (num >> 8 & 0x00FF) + amt;
+                const B = (num & 0x0000FF) + amt;
+                return '#' + (
+                    0x1000000 +
+                    (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+                    (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+                    (B < 255 ? (B < 1 ? 0 : B) : 255)
+                ).toString(16).slice(1);
+            },
+
+            gameLoop() {
+                if (!this.gameOver) {
+                    if (this.shooting) {
+                        this.updateProjectile();
+                    }
+                }
+
+                this.draw();
+                requestAnimationFrame(() => this.gameLoop());
+            },
+
+            updateDisplay() {
+                document.getElementById('levelDisplay').textContent = this.level;
+                document.getElementById('scoreDisplay').textContent = this.score;
+                document.getElementById('shotsDisplay').textContent = this.shots;
+            },
+
+            showInstructions() {
+                alert('🎯 HOW TO PLAY\n\n' +
+                      '• Tap anywhere to aim and shoot\n' +
+                      '• Match 3+ bubbles to pop them\n' +
+                      '• Clear all bubbles to win\n' +
+                      '• Use power-ups strategically!\n\n' +
+                      'Power-ups:\n' +
+                      '💣 Bomb - Explodes nearby bubbles\n' +
+                      '🌈 Rainbow - Matches any color\n' +
+                      '⚡ Laser - Destroys entire row');
+            },
+
+            toggleSound() {
+                initAudio(); // Ensure audio is initialized
+                const enabled = AudioSystem.toggle();
+                const btn = document.getElementById('soundBtn');
+                btn.textContent = enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+                
+                // Play a test sound when enabling
+                if (enabled) {
+                    AudioSystem.playPop(1);
+                }
+            },
+
+            saveProgress() {
+                localStorage.setItem('bubbleShooter_progress', JSON.stringify({
+                    level: this.level,
+                    score: this.score,
+                    powerups: this.powerups
+                }));
+            },
+
+            loadProgress() {
+                const saved = localStorage.getItem('bubbleShooter_progress');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.level = data.level || 1;
+                    this.score = data.score || 0;
+                    this.powerups = data.powerups || { bomb: 3, color: 2, laser: 2 };
+                }
+                this.updatePowerupDisplay();
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            game.init();
+        });
+
+        // Prevent zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Auto-save progress
+        setInterval(() => {
+            if (!game.gameOver) {
+                game.saveProgress();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

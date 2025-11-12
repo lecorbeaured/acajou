@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Runner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            font-size: clamp(1.8em, 5vw, 2.5em);
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            color: white;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .stat-label {
+            font-size: clamp(0.7em, 2.5vw, 0.85em);
+            opacity: 0.9;
+            margin-bottom: 3px;
+        }
+
+        .stat-value {
+            font-size: clamp(1.2em, 4vw, 1.8em);
+            font-weight: bold;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 500px;
+            max-height: 60vh;
+            background: linear-gradient(180deg, #87ceeb 0%, #e0f6ff 100%);
+            border-radius: 15px;
+            display: block;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 4px solid #667eea;
+            touch-action: none;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 120px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            touch-action: manipulation;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        @media (hover: hover) {
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+            }
+        }
+
+        .instructions {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: clamp(0.8em, 2.5vw, 0.95em);
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .instructions strong {
+            color: #667eea;
+        }
+
+        .game-over-screen {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.8);
+            text-align: center;
+            z-index: 1000;
+            max-width: 90%;
+            border: 3px solid white;
+        }
+
+        .game-over-screen.show {
+            display: block;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .game-over-screen h2 {
+            font-size: clamp(1.8em, 5vw, 2.5em);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .final-stats {
+            font-size: clamp(1em, 3vw, 1.3em);
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            #gameCanvas {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #gameCanvas {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🏃 Sky Runner ☁️</h1>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-label">Score</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Distance</div>
+                <div class="stat-value" id="distance">0m</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Coins</div>
+                <div class="stat-value" id="coins">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Speed</div>
+                <div class="stat-value" id="speed">1x</div>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <div class="controls">
+            <button id="startBtn" onclick="startGame()">🎮 Start Game</button>
+            <button onclick="togglePause()">⏸️ Pause</button>
+            <button onclick="changeSpeed(-0.5)">🐌 Slower</button>
+            <button onclick="changeSpeed(0.5)">🚀 Faster</button>
+        </div>
+
+        <div class="instructions">
+            <strong>Desktop:</strong> SPACE/UP to jump, Double-tap for double jump, ←/→ or +/- to change speed<br>
+            <strong>Mobile:</strong> Tap to jump, Double-tap for double jump, Use buttons to adjust speed<br>
+            ⭐ Collect stars • 🪙 Grab coins • 🚀 Dodge obstacles • 🐌 Slow down or 🚀 Speed up anytime!
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="game-over-screen" id="gameOverScreen">
+        <h2>🏁 Game Over! 🏁</h2>
+        <div class="final-stats">
+            <strong>Final Stats:</strong><br>
+            Score: <span id="finalScore">0</span><br>
+            Distance: <span id="finalDistance">0</span>m<br>
+            Coins: <span id="finalCoins">0</span>
+        </div>
+        <button onclick="restartGame()" style="width: 200px; margin-top: 20px;">🔄 Play Again</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth - 40;
+            canvas.height = Math.min(500, window.innerHeight * 0.6);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Game state
+        let gameState = {
+            running: false,
+            paused: false,
+            player: {
+                x: 100,
+                y: 0,
+                width: 40,
+                height: 40,
+                velocityY: 0,
+                onGround: false,
+                jumpsLeft: 2,
+                maxJumps: 2
+            },
+            obstacles: [],
+            platforms: [],
+            coins: [],
+            stars: [],
+            clouds: [],
+            particles: [],
+            score: 0,
+            distance: 0,
+            coinsCollected: 0,
+            speed: 6,
+            baseSpeed: 6,
+            gravity: 0.8,
+            jumpPower: -15,
+            groundY: canvas.height - 60,
+            lastObstacleSpawn: 0,
+            lastCoinSpawn: 0,
+            lastStarSpawn: 0,
+            obstacleSpawnInterval: 1500,
+            cameraX: 0
+        };
+
+        // Initialize clouds
+        for (let i = 0; i < 8; i++) {
+            gameState.clouds.push({
+                x: Math.random() * canvas.width * 2,
+                y: Math.random() * (canvas.height * 0.5),
+                width: 60 + Math.random() * 40,
+                height: 30 + Math.random() * 20,
+                speed: 0.5 + Math.random() * 1
+            });
+        }
+
+        // Keyboard controls
+        let spacePressed = false;
+        let lastJumpTime = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === ' ' || e.key === 'ArrowUp') && !spacePressed) {
+                spacePressed = true;
+                jump();
+            }
+            // Speed controls with arrow keys
+            if (e.key === 'ArrowLeft' || e.key === '-') {
+                changeSpeed(-0.5);
+            }
+            if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
+                changeSpeed(0.5);
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === ' ' || e.key === 'ArrowUp') {
+                spacePressed = false;
+            }
+        });
+
+        // Change game speed
+        function changeSpeed(delta) {
+            gameState.baseSpeed = Math.max(2, Math.min(15, gameState.baseSpeed + delta));
+            gameState.speed = Math.max(2, Math.min(15, gameState.speed + delta));
+            updateStats();
+        }
+
+        // Touch controls
+        let lastTapTime = 0;
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const currentTime = Date.now();
+            if (currentTime - lastTapTime < 300) {
+                // Double tap
+                if (gameState.player.jumpsLeft > 0) {
+                    jump();
+                }
+            } else {
+                // Single tap
+                jump();
+            }
+            lastTapTime = currentTime;
+        });
+
+        canvas.addEventListener('click', () => {
+            jump();
+        });
+
+        // Jump function
+        function jump() {
+            if (!gameState.running || gameState.paused) return;
+            
+            if (gameState.player.jumpsLeft > 0) {
+                gameState.player.velocityY = gameState.jumpPower;
+                gameState.player.jumpsLeft--;
+                gameState.player.onGround = false;
+                
+                // Jump particles
+                createParticles(
+                    gameState.player.x + gameState.player.width / 2,
+                    gameState.player.y + gameState.player.height,
+                    '#667eea',
+                    8
+                );
+            }
+        }
+
+        // Draw player
+        function drawPlayer() {
+            const p = gameState.player;
+            
+            // Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.ellipse(
+                p.x + p.width / 2,
+                gameState.groundY - 5,
+                p.width / 2,
+                8,
+                0, 0, Math.PI * 2
+            );
+            ctx.fill();
+
+            // Player body with gradient
+            const gradient = ctx.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            
+            // Rounded rectangle
+            ctx.beginPath();
+            ctx.roundRect(p.x, p.y, p.width, p.height, 10);
+            ctx.fill();
+
+            // Face
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(p.x + 12, p.y + 15, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(p.x + 28, p.y + 15, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Smile
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(p.x + p.width / 2, p.y + 20, 8, 0.2, Math.PI - 0.2);
+            ctx.stroke();
+
+            // Jump indicator (remaining jumps)
+            for (let i = 0; i < gameState.player.jumpsLeft; i++) {
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(p.x + 10 + i * 10, p.y - 10, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Draw clouds
+        function drawClouds() {
+            gameState.clouds.forEach(cloud => {
+                cloud.x -= cloud.speed;
+                
+                if (cloud.x + cloud.width < 0) {
+                    cloud.x = canvas.width + Math.random() * 200;
+                    cloud.y = Math.random() * (canvas.height * 0.5);
+                }
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.ellipse(cloud.x, cloud.y, cloud.width / 2, cloud.height / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(cloud.x + cloud.width * 0.3, cloud.y, cloud.width / 2.5, cloud.height / 2.5, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(cloud.x - cloud.width * 0.3, cloud.y, cloud.width / 2.5, cloud.height / 2.5, 0, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        // Draw ground
+        function drawGround() {
+            // Grass
+            const gradient = ctx.createLinearGradient(0, gameState.groundY, 0, canvas.height);
+            gradient.addColorStop(0, '#90EE90');
+            gradient.addColorStop(1, '#228B22');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, gameState.groundY, canvas.width, canvas.height - gameState.groundY);
+
+            // Grass details
+            ctx.strokeStyle = '#2d5016';
+            ctx.lineWidth = 2;
+            for (let x = 0; x < canvas.width; x += 15) {
+                const offset = (x + gameState.distance) % 30;
+                ctx.beginPath();
+                ctx.moveTo(x - offset, gameState.groundY);
+                ctx.lineTo(x - offset + 3, gameState.groundY - 8);
+                ctx.stroke();
+            }
+        }
+
+        // Spawn obstacle
+        function spawnObstacle() {
+            const now = Date.now();
+            if (now - gameState.lastObstacleSpawn < gameState.obstacleSpawnInterval) return;
+            
+            gameState.lastObstacleSpawn = now;
+
+            const types = ['spike', 'box', 'tall'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            
+            let obstacle = {
+                x: canvas.width + 50,
+                type: type
+            };
+
+            if (type === 'spike') {
+                obstacle.width = 30;
+                obstacle.height = 40;
+                obstacle.y = gameState.groundY - obstacle.height;
+                obstacle.color = '#ef4444';
+            } else if (type === 'box') {
+                obstacle.width = 40;
+                obstacle.height = 40;
+                obstacle.y = gameState.groundY - obstacle.height;
+                obstacle.color = '#f59e0b';
+            } else if (type === 'tall') {
+                obstacle.width = 35;
+                obstacle.height = 70;
+                obstacle.y = gameState.groundY - obstacle.height;
+                obstacle.color = '#8b5cf6';
+            }
+
+            gameState.obstacles.push(obstacle);
+        }
+
+        // Update obstacles
+        function updateObstacles() {
+            gameState.obstacles = gameState.obstacles.filter(obs => {
+                obs.x -= gameState.speed;
+
+                if (obs.x + obs.width < 0) return false;
+
+                // Draw obstacle
+                ctx.fillStyle = obs.color;
+                if (obs.type === 'spike') {
+                    // Triangle spike
+                    ctx.beginPath();
+                    ctx.moveTo(obs.x + obs.width / 2, obs.y);
+                    ctx.lineTo(obs.x, obs.y + obs.height);
+                    ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.strokeStyle = '#dc2626';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                } else {
+                    // Box
+                    ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
+                }
+
+                // Collision detection
+                if (checkCollision(gameState.player, obs)) {
+                    gameOver();
+                }
+
+                return true;
+            });
+        }
+
+        // Spawn coin
+        function spawnCoin() {
+            const now = Date.now();
+            if (now - gameState.lastCoinSpawn < 800) return;
+            
+            gameState.lastCoinSpawn = now;
+
+            // Random height
+            const heights = [
+                gameState.groundY - 80,
+                gameState.groundY - 140,
+                gameState.groundY - 200
+            ];
+
+            gameState.coins.push({
+                x: canvas.width + 50,
+                y: heights[Math.floor(Math.random() * heights.length)],
+                radius: 12,
+                rotation: 0
+            });
+        }
+
+        // Update coins
+        function updateCoins() {
+            gameState.coins = gameState.coins.filter(coin => {
+                coin.x -= gameState.speed;
+                coin.rotation += 0.1;
+
+                if (coin.x + coin.radius < 0) return false;
+
+                // Draw coin
+                ctx.save();
+                ctx.translate(coin.x, coin.y);
+                ctx.rotate(coin.rotation);
+                
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(0, 0, coin.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.strokeStyle = '#FFA500';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.fillStyle = '#FFA500';
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('$', 0, 5);
+                
+                ctx.restore();
+
+                // Collision with player
+                const p = gameState.player;
+                const dx = (p.x + p.width / 2) - coin.x;
+                const dy = (p.y + p.height / 2) - coin.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < coin.radius + 20) {
+                    gameState.coinsCollected++;
+                    gameState.score += 50;
+                    createParticles(coin.x, coin.y, '#FFD700', 10);
+                    updateStats();
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        // Spawn star
+        function spawnStar() {
+            const now = Date.now();
+            if (now - gameState.lastStarSpawn < 3000) return;
+            
+            gameState.lastStarSpawn = now;
+
+            gameState.stars.push({
+                x: canvas.width + 50,
+                y: gameState.groundY - 150 - Math.random() * 100,
+                radius: 15,
+                rotation: 0,
+                collected: false
+            });
+        }
+
+        // Update stars
+        function updateStars() {
+            gameState.stars = gameState.stars.filter(star => {
+                star.x -= gameState.speed;
+                star.rotation += 0.05;
+
+                if (star.x + star.radius < 0) return false;
+
+                // Draw star
+                ctx.save();
+                ctx.translate(star.x, star.y);
+                ctx.rotate(star.rotation);
+
+                ctx.fillStyle = '#FFD700';
+                ctx.strokeStyle = '#FFA500';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                for (let i = 0; i < 5; i++) {
+                    const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+                    const x = Math.cos(angle) * star.radius;
+                    const y = Math.sin(angle) * star.radius;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+                
+                ctx.restore();
+
+                // Collision with player
+                const p = gameState.player;
+                const dx = (p.x + p.width / 2) - star.x;
+                const dy = (p.y + p.height / 2) - star.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < star.radius + 20) {
+                    gameState.score += 200;
+                    gameState.speed += 1;
+                    createParticles(star.x, star.y, '#FFD700', 20);
+                    updateStats();
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        // Check collision
+        function checkCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+
+        // Create particles
+        function createParticles(x, y, color, count) {
+            for (let i = 0; i < count; i++) {
+                gameState.particles.push({
+                    x: x,
+                    y: y,
+                    velocityX: (Math.random() - 0.5) * 8,
+                    velocityY: (Math.random() - 0.5) * 8 - 2,
+                    life: 40,
+                    color: color,
+                    size: 4 + Math.random() * 4
+                });
+            }
+        }
+
+        // Draw particles
+        function drawParticles() {
+            gameState.particles = gameState.particles.filter(p => {
+                p.x += p.velocityX;
+                p.y += p.velocityY;
+                p.velocityY += 0.3;
+                p.life--;
+
+                ctx.globalAlpha = p.life / 40;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+                ctx.globalAlpha = 1;
+
+                return p.life > 0;
+            });
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('distance').textContent = Math.floor(gameState.distance / 10) + 'm';
+            document.getElementById('coins').textContent = gameState.coinsCollected;
+            
+            const speedMultiplier = (gameState.speed / 6).toFixed(1);
+            const speedElement = document.getElementById('speed');
+            speedElement.textContent = speedMultiplier + 'x';
+            
+            // Color code speed indicator
+            if (speedMultiplier < 1.0) {
+                speedElement.style.color = '#60a5fa'; // Blue for slow
+            } else if (speedMultiplier > 1.5) {
+                speedElement.style.color = '#ef4444'; // Red for fast
+            } else {
+                speedElement.style.color = 'white'; // White for normal
+            }
+        }
+
+        // Game loop
+        function gameLoop() {
+            if (!gameState.running || gameState.paused) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87ceeb');
+            gradient.addColorStop(1, '#e0f6ff');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawClouds();
+            drawGround();
+
+            // Update player
+            gameState.player.velocityY += gameState.gravity;
+            gameState.player.y += gameState.player.velocityY;
+
+            // Ground collision
+            if (gameState.player.y + gameState.player.height >= gameState.groundY) {
+                gameState.player.y = gameState.groundY - gameState.player.height;
+                gameState.player.velocityY = 0;
+                gameState.player.onGround = true;
+                gameState.player.jumpsLeft = gameState.player.maxJumps;
+            } else {
+                gameState.player.onGround = false;
+            }
+
+            spawnObstacle();
+            spawnCoin();
+            spawnStar();
+            
+            updateObstacles();
+            updateCoins();
+            updateStars();
+            drawParticles();
+            drawPlayer();
+
+            // Update distance and score
+            gameState.distance += gameState.speed;
+            gameState.score += 1;
+
+            // Gradually increase speed (but respect manual adjustments)
+            if (Math.floor(gameState.distance) % 500 === 0 && gameState.speed < gameState.baseSpeed + 6) {
+                gameState.speed = Math.min(gameState.baseSpeed + 6, gameState.speed + 0.1);
+            }
+
+            updateStats();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start game
+        function startGame() {
+            gameState.running = true;
+            gameState.paused = false;
+            document.getElementById('startBtn').textContent = '🔄 Restart';
+            document.getElementById('gameOverScreen').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+            gameLoop();
+        }
+
+        // Toggle pause
+        function togglePause() {
+            if (!gameState.running) return;
+            gameState.paused = !gameState.paused;
+            if (!gameState.paused) {
+                gameLoop();
+            }
+        }
+
+        // Game over
+        function gameOver() {
+            gameState.running = false;
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalDistance').textContent = Math.floor(gameState.distance / 10);
+            document.getElementById('finalCoins').textContent = gameState.coinsCollected;
+            document.getElementById('gameOverScreen').classList.add('show');
+            document.getElementById('overlay').classList.add('show');
+        }
+
+        // Restart game
+        function restartGame() {
+            gameState = {
+                running: false,
+                paused: false,
+                player: {
+                    x: 100,
+                    y: 0,
+                    width: 40,
+                    height: 40,
+                    velocityY: 0,
+                    onGround: false,
+                    jumpsLeft: 2,
+                    maxJumps: 2
+                },
+                obstacles: [],
+                platforms: [],
+                coins: [],
+                stars: [],
+                clouds: gameState.clouds,
+                particles: [],
+                score: 0,
+                distance: 0,
+                coinsCollected: 0,
+                speed: 6,
+                baseSpeed: 6,
+                gravity: 0.8,
+                jumpPower: -15,
+                groundY: canvas.height - 60,
+                lastObstacleSpawn: 0,
+                lastCoinSpawn: 0,
+                lastStarSpawn: 0,
+                obstacleSpawnInterval: 1500,
+                cameraX: 0
+            };
+            updateStats();
+            startGame();
+        }
+
+        // Initialize
+        updateStats();
+    </script>
+</body>
+</html>

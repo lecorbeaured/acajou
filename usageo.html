@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USA States & Capitals - ACAJOU GAMES</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YH4Z66742N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YH4Z66742N');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 80px 20px 20px 20px;
+        }
+
+        /* Navigation Styles */
+        .acajou-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 99999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .acajou-nav-logo {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .acajou-nav-logo:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .acajou-nav-back {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            transition: all 0.3s;
+        }
+
+        .acajou-nav-back:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-3px);
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            margin-bottom: 30px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #fff 100%);
+            padding: 20px;
+            border-radius: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .setup-panel {
+            margin-bottom: 30px;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mode-btn, .difficulty-btn {
+            padding: 15px;
+            border: 3px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-btn:hover, .difficulty-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .mode-btn.active, .difficulty-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .game-info {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #fff 100%);
+            border-radius: 12px;
+        }
+
+        .question-section {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .answer-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .answer-btn {
+            padding: 15px;
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .answer-btn:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .answer-btn.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-color: #10b981;
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            animation: slideDown 0.5s;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.win {
+            background: linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%);
+            color: #065f46;
+            border: 4px solid #10b981;
+        }
+
+        .message.lose {
+            background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
+            color: #991b1b;
+            border: 4px solid #ef4444;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .results-screen {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .results-screen h2 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .results-screen p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .result-stat {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 70px 10px 20px 10px;
+            }
+
+            .game-container {
+                padding: 25px;
+            }
+
+            .acajou-nav-logo span {
+                display: none;
+            }
+
+            .question-section {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .answer-btn {
+                padding: 12px;
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="acajou-nav">
+        <a href="index.html" class="acajou-nav-logo">
+            🎮 <span>ACAJOU GAMES</span>
+        </a>
+        <a href="index.html" class="acajou-nav-back">
+            ← All Games
+        </a>
+    </nav>
+
+    <div class="game-container">
+        <h1>🗺️ USA States & Capitals</h1>
+        <p class="subtitle">Test your geography knowledge!</p>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-label">Correct</div>
+                <div class="stat-value" id="correctCount">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Score</div>
+                <div class="stat-value" id="scoreDisplay">0%</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Question</div>
+                <div class="stat-value" id="questionCount">0/50</div>
+            </div>
+        </div>
+
+        <!-- Setup Panel -->
+        <div id="setupPanel" class="setup-panel">
+            <h3 style="text-align: center; color: #667eea; margin-bottom: 15px;">Choose Game Mode:</h3>
+            <div class="mode-selector">
+                <button class="mode-btn active" onclick="gameState.setMode('capitals')">🏛️ Find Capital</button>
+                <button class="mode-btn" onclick="gameState.setMode('states')">🗺️ Find State</button>
+            </div>
+        </div>
+
+        <!-- Game Info -->
+        <div class="game-info" id="gameInfo">Select a mode and click START!</div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <!-- Question Section -->
+        <div id="questionSection" class="question-section hidden">
+            <div class="question-text" id="questionText"></div>
+            <div class="answer-options" id="answerOptions"></div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="results-screen hidden">
+            <h2 id="resultTitle"></h2>
+            <div class="result-stat" id="resultScore"></div>
+            <p id="resultMessage"></p>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn" onclick="gameState.startGame()">
+                🎮 Start Game
+            </button>
+            <button class="btn btn-secondary" id="nextBtn" onclick="gameState.nextQuestion()" disabled>
+                Next Question →
+            </button>
+            <button class="btn btn-secondary" onclick="gameState.resetGame()">
+                🔄 New Game
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const statesAndCapitals = [
+            { state: 'Alabama', capital: 'Montgomery' },
+            { state: 'Alaska', capital: 'Juneau' },
+            { state: 'Arizona', capital: 'Phoenix' },
+            { state: 'Arkansas', capital: 'Little Rock' },
+            { state: 'California', capital: 'Sacramento' },
+            { state: 'Colorado', capital: 'Denver' },
+            { state: 'Connecticut', capital: 'Hartford' },
+            { state: 'Delaware', capital: 'Dover' },
+            { state: 'Florida', capital: 'Tallahassee' },
+            { state: 'Georgia', capital: 'Atlanta' },
+            { state: 'Hawaii', capital: 'Honolulu' },
+            { state: 'Idaho', capital: 'Boise' },
+            { state: 'Illinois', capital: 'Springfield' },
+            { state: 'Indiana', capital: 'Indianapolis' },
+            { state: 'Iowa', capital: 'Des Moines' },
+            { state: 'Kansas', capital: 'Topeka' },
+            { state: 'Kentucky', capital: 'Frankfort' },
+            { state: 'Louisiana', capital: 'Baton Rouge' },
+            { state: 'Maine', capital: 'Augusta' },
+            { state: 'Maryland', capital: 'Annapolis' },
+            { state: 'Massachusetts', capital: 'Boston' },
+            { state: 'Michigan', capital: 'Lansing' },
+            { state: 'Minnesota', capital: 'Saint Paul' },
+            { state: 'Mississippi', capital: 'Jackson' },
+            { state: 'Missouri', capital: 'Jefferson City' },
+            { state: 'Montana', capital: 'Helena' },
+            { state: 'Nebraska', capital: 'Lincoln' },
+            { state: 'Nevada', capital: 'Carson City' },
+            { state: 'New Hampshire', capital: 'Concord' },
+            { state: 'New Jersey', capital: 'Trenton' },
+            { state: 'New Mexico', capital: 'Santa Fe' },
+            { state: 'New York', capital: 'Albany' },
+            { state: 'North Carolina', capital: 'Raleigh' },
+            { state: 'North Dakota', capital: 'Bismarck' },
+            { state: 'Ohio', capital: 'Columbus' },
+            { state: 'Oklahoma', capital: 'Oklahoma City' },
+            { state: 'Oregon', capital: 'Salem' },
+            { state: 'Pennsylvania', capital: 'Harrisburg' },
+            { state: 'Rhode Island', capital: 'Providence' },
+            { state: 'South Carolina', capital: 'Columbia' },
+            { state: 'South Dakota', capital: 'Pierre' },
+            { state: 'Tennessee', capital: 'Nashville' },
+            { state: 'Texas', capital: 'Austin' },
+            { state: 'Utah', capital: 'Salt Lake City' },
+            { state: 'Vermont', capital: 'Montpelier' },
+            { state: 'Virginia', capital: 'Richmond' },
+            { state: 'Washington', capital: 'Olympia' },
+            { state: 'West Virginia', capital: 'Charleston' },
+            { state: 'Wisconsin', capital: 'Madison' },
+            { state: 'Wyoming', capital: 'Cheyenne' }
+        ];
+
+        const gameState = {
+            mode: 'capitals', // 'capitals' or 'states'
+            questions: [],
+            currentQuestion: 0,
+            correct: 0,
+            total: 50,
+            gameActive: false,
+            answered: false,
+
+            setMode(mode) {
+                this.mode = mode;
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            },
+
+            startGame() {
+                this.correct = 0;
+                this.currentQuestion = 0;
+                this.answered = false;
+                this.gameActive = true;
+
+                // Generate shuffled questions
+                this.questions = statesAndCapitals
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 50);
+
+                document.getElementById('setupPanel').style.opacity = '0.5';
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.disabled = true;
+                });
+
+                document.getElementById('questionSection').classList.remove('hidden');
+                document.getElementById('resultsScreen').classList.add('hidden');
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('nextBtn').disabled = true;
+
+                this.loadQuestion();
+            },
+
+            loadQuestion() {
+                if (this.currentQuestion >= this.total) {
+                    this.endGame();
+                    return;
+                }
+
+                this.answered = false;
+                const question = this.questions[this.currentQuestion];
+                let questionText, answers;
+
+                if (this.mode === 'capitals') {
+                    questionText = `What is the capital of ${question.state}?`;
+                    answers = this.generateAnswers(question.capital, 'capital');
+                } else {
+                    questionText = `${question.capital} is the capital of which state?`;
+                    answers = this.generateAnswers(question.state, 'state');
+                }
+
+                document.getElementById('questionText').textContent = questionText;
+                this.renderAnswers(answers, question);
+                this.updateProgress();
+            },
+
+            generateAnswers(correct, type) {
+                const answers = [correct];
+                const used = new Set([correct]);
+
+                while (answers.length < 4) {
+                    const item = type === 'capital' 
+                        ? statesAndCapitals[Math.floor(Math.random() * statesAndCapitals.length)].capital
+                        : statesAndCapitals[Math.floor(Math.random() * statesAndCapitals.length)].state;
+
+                    if (!used.has(item)) {
+                        answers.push(item);
+                        used.add(item);
+                    }
+                }
+
+                return answers.sort(() => Math.random() - 0.5);
+            },
+
+            renderAnswers(answers, question) {
+                const container = document.getElementById('answerOptions');
+                container.innerHTML = '';
+
+                answers.forEach((answer, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'answer-btn';
+                    btn.textContent = answer;
+                    btn.onclick = () => this.checkAnswer(answer, question, btn);
+                    container.appendChild(btn);
+                });
+            },
+
+            checkAnswer(selected, question, btn) {
+                if (this.answered) return;
+
+                this.answered = true;
+                const correct = this.mode === 'capitals' ? question.capital : question.state;
+                const isCorrect = selected === correct;
+
+                if (isCorrect) {
+                    this.correct++;
+                    btn.classList.add('correct');
+                } else {
+                    btn.classList.add('incorrect');
+                    // Highlight the correct answer
+                    document.querySelectorAll('.answer-btn').forEach(b => {
+                        if (b.textContent === correct) {
+                            b.classList.add('correct');
+                        }
+                    });
+                }
+
+                document.getElementById('nextBtn').disabled = false;
+                this.updateStats();
+            },
+
+            nextQuestion() {
+                this.currentQuestion++;
+                this.loadQuestion();
+            },
+
+            updateProgress() {
+                const progress = (this.currentQuestion / this.total) * 100;
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('questionCount').textContent = 
+                    `${this.currentQuestion + 1}/${this.total}`;
+            },
+
+            updateStats() {
+                const score = Math.round((this.correct / (this.currentQuestion + 1)) * 100);
+                document.getElementById('correctCount').textContent = this.correct;
+                document.getElementById('scoreDisplay').textContent = score + '%';
+            },
+
+            endGame() {
+                this.gameActive = false;
+                const percentage = Math.round((this.correct / this.total) * 100);
+                let title, message;
+
+                if (percentage === 100) {
+                    title = '🏆 Perfect Score!';
+                    message = 'You are a USA Geography Master!';
+                } else if (percentage >= 80) {
+                    title = '🎉 Excellent!';
+                    message = 'You know your states well!';
+                } else if (percentage >= 60) {
+                    title = '👍 Good Job!';
+                    message = 'You are getting better!';
+                } else if (percentage >= 40) {
+                    title = '📚 Keep Learning!';
+                    message = 'Practice makes perfect!';
+                } else {
+                    title = '💪 Try Again!';
+                    message = 'You will do better next time!';
+                }
+
+                document.getElementById('resultTitle').textContent = title;
+                document.getElementById('resultScore').textContent = 
+                    `${this.correct}/${this.total} Correct (${percentage}%)`;
+                document.getElementById('resultMessage').textContent = message;
+
+                document.getElementById('questionSection').classList.add('hidden');
+                document.getElementById('resultsScreen').classList.remove('hidden');
+
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('nextBtn').disabled = true;
+            },
+
+            resetGame() {
+                this.gameActive = false;
+                this.currentQuestion = 0;
+                this.correct = 0;
+                this.answered = false;
+
+                document.getElementById('setupPanel').style.opacity = '1';
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.disabled = false;
+                });
+
+                document.getElementById('questionSection').classList.add('hidden');
+                document.getElementById('resultsScreen').classList.add('hidden');
+                document.getElementById('startBtn').disabled = false;
+
+                document.getElementById('correctCount').textContent = '0';
+                document.getElementById('scoreDisplay').textContent = '0%';
+                document.getElementById('questionCount').textContent = '0/50';
+                document.getElementById('progressFill').style.width = '0%';
+            }
+        };
+    </script>
+</body>
+</html>
