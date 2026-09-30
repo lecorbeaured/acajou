@@ -4,29 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACAJOU GAMES - Fun Educational Games for Kids & Families</title>
-    
+
     <!-- SEO Meta Tags -->
     <meta name="description" content="Free educational games for kids and families. Math challenges, word puzzles, brain teasers, and more!">
     <meta name="keywords" content="educational games, kids games, math games, word games, family games, learning games">
     <meta name="author" content="ACAJOU GAMES">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://yourdomain.com/">
     <meta property="og:title" content="ACAJOU GAMES - Fun Educational Games">
     <meta property="og:description" content="Free educational games for kids and families. Play now!">
     <meta property="og:image" content="https://yourdomain.com/acajou-preview.png">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://yourdomain.com/">
     <meta property="twitter:title" content="ACAJOU GAMES - Fun Educational Games">
     <meta property="twitter:description" content="Free educational games for kids and families. Play now!">
     <meta property="twitter:image" content="https://yourdomain.com/acajou-preview.png">
-    
+
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
-    
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#14121C">
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YH4Z66742N"></script>
     <script>
@@ -36,467 +40,244 @@
       gtag('config', 'G-YH4Z66742N');
     </script>
 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Press+Start+2P&display=swap">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
         }
 
-        :root {
-            --primary: #8B4513;
-            --secondary: #D2691E;
-            --accent: #FF6B35;
-            --dark: #2C1810;
-            --light: #FFF8DC;
+        html,body{ background:var(--void); }
+        body{
+            font-family:'Chakra Petch', sans-serif;
+            color:var(--ink);
+            line-height:1.6;
+            overflow-x:hidden;
+        }
+        a{ color:inherit; }
+        .pixel{ font-family:'Press Start 2P', monospace; }
+
+        /* Scanline atmosphere across the whole hall */
+        body::before{
+            content:'';
+            position:fixed; inset:0; pointer-events:none; z-index:2000;
+            background:repeating-linear-gradient(0deg, #ffffff05 0 2px, transparent 2px 4px);
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
+        /* Header / marquee strip */
+        header{
+            position:fixed; width:100%; top:0; z-index:1000;
+            background:var(--void);
+            border-bottom:1px solid var(--line);
+            box-shadow:0 2px 20px rgba(0,0,0,.4);
+        }
+        header::after{
+            content:''; display:block; height:4px;
+            background-image:repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+        nav{
+            max-width:1200px; margin:0 auto; padding:16px 24px;
+            display:flex; align-items:center; justify-content:space-between;
+        }
+        .logo{ display:flex; align-items:center; gap:10px; }
+        .logo-badge{
+            width:34px; height:34px; border-radius:8px; background:var(--panel);
+            border:2px solid var(--line); display:flex; align-items:center; justify-content:center;
+            font-size:16px; flex:none;
+        }
+        .logo-word{ font-family:'Press Start 2P', monospace; font-size:14px; color:var(--yellow); text-shadow:0 0 10px #ffd23f70; letter-spacing:.02em; }
+
+        .nav-links{ display:flex; gap:30px; list-style:none; }
+        .nav-links a{
+            text-decoration:none; font-weight:600; text-transform:uppercase; font-size:13px; letter-spacing:.06em;
+            color:var(--dim); transition:color .2s;
+            padding-bottom:4px; border-bottom:2px solid transparent;
+        }
+        .nav-links a:hover{ color:var(--cyan); border-color:var(--cyan); }
+
+        .mobile-menu-btn{ display:none; background:none; border:none; color:var(--yellow); font-size:1.5rem; cursor:pointer; }
+
+        @media (max-width:820px){
+            .nav-links{
+                display:none; position:absolute; top:100%; left:0; right:0;
+                background:var(--panel); flex-direction:column; padding:1.2rem 1.5rem; gap:1.1rem;
+                border-bottom:1px solid var(--line);
+            }
+            .nav-links.active{ display:flex; }
+            .mobile-menu-btn{ display:block; }
         }
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        /* Hero — the marquee cabinet */
+        .hero{
+            padding:150px 24px 80px; max-width:1200px; margin:0 auto;
+            display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:center;
+        }
+        @media (max-width:860px){ .hero{ grid-template-columns:1fr; padding-top:130px; } }
+        .hero-kicker{
+            font-family:'Press Start 2P', monospace; font-size:11px; color:var(--cyan);
+            display:inline-block; margin-bottom:22px;
+        }
+        .hero h1{
+            font-family:'Chakra Petch', sans-serif; font-weight:700; text-transform:uppercase;
+            font-size:clamp(2.1rem, 5vw, 3.6rem); line-height:1.08; text-wrap:balance;
+            color:#fff; text-shadow:0 0 26px #ff3d7f45; margin-bottom:20px;
+        }
+        .hero h1 span{ color:var(--pink); }
+        .hero-sub{ font-size:17px; color:var(--dim); max-width:48ch; margin-bottom:32px; }
+        .hero-actions{ display:flex; align-items:center; gap:32px; flex-wrap:wrap; }
+        .cta-button{
+            font-family:'Press Start 2P', monospace; font-size:13px; color:var(--void);
+            background:var(--yellow); padding:18px 26px; border-radius:8px; text-decoration:none;
+            box-shadow:0 0 0 3px var(--void), 0 0 0 5px var(--yellow), 0 8px 24px #ffd23f35;
+            transition:transform .15s;
+        }
+        .cta-button:hover{ transform:translateY(-3px); }
+        .hero-stat b{ font-family:'Press Start 2P', monospace; font-size:26px; color:var(--pink); display:block; margin-bottom:6px; }
+        .hero-stat span{ font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--dim); }
+        .hero-stat small{ display:block; font-size:11.5px; color:#5f5c78; margin-top:4px; }
+
+        .hero-cabinet{
+            width:220px; height:220px; margin:0 auto; border-radius:18px; position:relative; overflow:hidden;
+            background:radial-gradient(circle at 35% 30%, #2a2740, #14121C 72%);
+            border:3px solid var(--line);
+            display:flex; align-items:center; justify-content:center;
+        }
+        .hero-cabinet::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg, #ffffff08 0 2px, transparent 2px 4px); }
+        .hero-cabinet span{ font-size:84px; filter:drop-shadow(0 0 20px #33e6c470); }
+
+        /* Section headings, shared */
+        .section-inner{ max-width:1200px; margin:0 auto; padding:0 24px; }
+        .section-title{
+            font-family:'Chakra Petch', sans-serif; font-weight:700; text-transform:uppercase;
+            font-size:clamp(1.6rem, 3.6vw, 2.3rem); color:#fff; text-align:center; margin-bottom:14px; letter-spacing:.02em;
+        }
+        .section-kicker{
+            font-family:'Press Start 2P', monospace; font-size:10px; color:var(--dim); text-align:center;
+            display:block; margin-bottom:16px;
         }
 
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
+        /* Control panel — features */
+        .panel-section{ padding:70px 0 80px; }
+        .panel-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:26px; margin-top:44px; }
+        .panel-item{ text-align:center; }
+        .panel-button{
+            width:76px; height:76px; border-radius:50%; margin:0 auto 18px;
+            display:flex; align-items:center; justify-content:center; font-size:32px;
+            background:var(--panel); border:3px solid var(--line);
+            box-shadow:inset 0 -4px 0 rgba(0,0,0,.35), 0 0 0 4px var(--void);
         }
+        .panel-item:nth-child(6n+1) .panel-button{ border-color:var(--pink); }
+        .panel-item:nth-child(6n+2) .panel-button{ border-color:var(--cyan); }
+        .panel-item:nth-child(6n+3) .panel-button{ border-color:var(--yellow); }
+        .panel-item:nth-child(6n+4) .panel-button{ border-color:var(--pink); }
+        .panel-item:nth-child(6n+5) .panel-button{ border-color:var(--cyan); }
+        .panel-item:nth-child(6n+6) .panel-button{ border-color:var(--yellow); }
+        .panel-item h3{ font-size:15px; text-transform:uppercase; letter-spacing:.05em; color:#fff; margin-bottom:8px; }
+        .panel-item p{ font-size:14px; color:var(--dim); }
 
-        .logo {
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+        /* Cabinet row — games */
+        .games-section{ padding:20px 0 90px; }
+        .games-heading{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:40px; flex-wrap:wrap; }
+        .games-heading h2{ font-family:'Chakra Petch', sans-serif; font-weight:700; text-transform:uppercase; font-size:1.9rem; color:#fff; }
+        .games-heading .count{ font-family:'Press Start 2P', monospace; font-size:10px; color:var(--dim); }
+        .game-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:24px; }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
+        .cabinet{ background:var(--panel); border:2px solid var(--line); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; transition:transform .18s, border-color .18s; }
+        .cabinet:hover{ transform:translateY(-6px); border-color:#4a4568; }
+        .marquee-strip{ height:8px; }
+        .game-grid .cabinet:nth-child(7n+1) .marquee-strip{ background:var(--pink); }
+        .game-grid .cabinet:nth-child(7n+2) .marquee-strip{ background:var(--cyan); }
+        .game-grid .cabinet:nth-child(7n+3) .marquee-strip{ background:var(--yellow); }
+        .game-grid .cabinet:nth-child(7n+4) .marquee-strip{ background:var(--pink); }
+        .game-grid .cabinet:nth-child(7n+5) .marquee-strip{ background:var(--cyan); }
+        .game-grid .cabinet:nth-child(7n+6) .marquee-strip{ background:var(--yellow); }
+        .game-grid .cabinet:nth-child(7n+7) .marquee-strip{ background:var(--pink); }
+        .screen{
+            margin:16px 16px 0; height:92px; border-radius:8px; background:#0f0e17; border:1px solid var(--line);
+            display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
         }
+        .screen::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg,#ffffff06 0 2px, transparent 2px 4px); }
+        .screen span{ font-size:40px; filter:drop-shadow(0 0 10px #ffffff30); }
+        .cabinet-body{ padding:16px 18px 20px; display:flex; flex-direction:column; flex:1; }
+        .cabinet-body h3{ font-size:17px; font-weight:700; text-transform:uppercase; letter-spacing:.02em; color:#fff; margin-bottom:5px; }
+        .cabinet-body .kicker{ font-size:13px; color:var(--dim); margin-bottom:14px; }
+        .cabinet-tags{ list-style:none; display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+        .cabinet-tags li{ font-size:10px; text-transform:uppercase; letter-spacing:.04em; background:var(--void); border:1px solid var(--line); color:#a9a6c4; padding:4px 8px; border-radius:5px; }
+        .cabinet-cta{
+            margin-top:auto; font-family:'Press Start 2P', monospace; font-size:10.5px; text-align:center;
+            text-decoration:none; color:var(--void); background:var(--cyan); padding:12px; border-radius:6px;
+        }
+        .cabinet.locked{ opacity:.6; }
+        .cabinet.locked .screen span{ filter:grayscale(1) opacity(.6); }
+        .cabinet.locked .cabinet-cta{
+            background:none; border:1px dashed #4a4568; color:var(--dim); cursor:not-allowed;
+            animation:blink 1.8s steps(2,jump-none) infinite;
+        }
+        @keyframes blink{ 50%{ opacity:.4; } }
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-            font-size: clamp(0.9rem, 2vw, 1.1rem);
-        }
+        /* High score ticker — stats */
+        .ticker-section{ padding:60px 0 70px; background:var(--panel-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+        .ticker-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr)); gap:30px; margin-top:40px; }
+        .ticker-item{ text-align:center; }
+        .ticker-item b{ font-family:'Press Start 2P', monospace; font-size:clamp(1.6rem,3.4vw,2.2rem); color:var(--yellow); display:block; margin-bottom:10px; }
+        .ticker-item span{ font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); }
 
-        .nav-links a:hover {
-            color: var(--accent);
-            transform: translateY(-2px);
+        /* Continue screen — download */
+        .continue-section{ padding:80px 24px; text-align:center; }
+        .continue-section .section-title{ margin-bottom:10px; }
+        .continue-sub{ color:var(--dim); font-size:15.5px; margin-bottom:6px; }
+        .continue-note{ color:#635f80; font-size:13px; margin-bottom:34px; }
+        .store-buttons{ display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:28px; }
+        .store-btn{
+            display:inline-flex; align-items:center; gap:12px; background:var(--panel); border:2px solid var(--line);
+            color:var(--ink); padding:14px 26px; border-radius:10px; text-decoration:none; font-weight:600;
+            transition:border-color .2s;
         }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            padding: 120px 20px 80px;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '🎮';
-            position: absolute;
-            font-size: 20rem;
-            opacity: 0.1;
-            top: -50px;
-            right: -100px;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            margin-bottom: 1rem;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-        }
-
-        .hero p {
-            font-size: clamp(1.1rem, 3vw, 1.5rem);
-            margin-bottom: 2rem;
-            opacity: 0.95;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: var(--accent);
-            color: white;
-            padding: 15px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(0,0,0,0.3);
-            background: #ff8555;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 80px 20px;
-            background: white;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: clamp(2rem, 5vw, 3rem);
-            margin-bottom: 3rem;
-            color: var(--primary);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: linear-gradient(135deg, #f6f9fc 0%, #fff 100%);
-            padding: 2rem;
-            border-radius: 20px;
-            text-align: center;
-            transition: all 0.3s;
-            border: 2px solid #e0e0e0;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-color: var(--accent);
-        }
-
-        .feature-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-
-        /* Games Section */
-        .games {
-            padding: 80px 20px;
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .game-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-
-        .game-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .game-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .game-icon {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .game-header h3 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .game-body {
-            padding: 1.5rem;
-        }
-
-        .game-body p {
-            color: #666;
-            margin-bottom: 1rem;
-            line-height: 1.8;
-        }
-
-        .game-features {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .game-features li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #f0f0f0;
-            color: #555;
-        }
-
-        .game-features li:before {
-            content: '✓ ';
-            color: var(--accent);
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-
-        .play-button {
-            display: block;
-            width: 100%;
-            background: linear-gradient(135deg, var(--accent) 0%, #ff8555 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-        }
-
-        .play-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
-        }
-
-        /* Stats Section */
-        .stats {
-            padding: 80px 20px;
-            background: var(--dark);
-            color: white;
-            text-align: center;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .stat-item h3 {
-            font-size: clamp(3rem, 6vw, 4rem);
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-item p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        /* Download Section */
-        .download {
-            padding: 80px 20px;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            text-align: center;
-        }
-
-        .download-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 1rem;
-            background: white;
-            color: var(--dark);
-            padding: 15px 30px;
-            border-radius: 15px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .download-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .download-btn span {
-            font-size: 2rem;
-        }
+        .store-btn:hover{ border-color:var(--cyan); }
+        .store-btn span.icon{ font-size:1.8rem; }
+        .store-btn .lines div:first-child{ font-size:.72rem; color:var(--dim); text-transform:uppercase; letter-spacing:.05em; }
+        .browser-note{ color:var(--dim); font-size:14px; }
 
         /* Footer */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 3rem 20px 2rem;
+        footer{ background:var(--void); border-top:1px solid var(--line); padding:56px 24px 30px; }
+        .footer-grid{ max-width:1200px; margin:0 auto 40px; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:32px; }
+        .footer-col h3{ font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--yellow); margin-bottom:14px; }
+        .footer-col p{ color:var(--dim); font-size:14px; }
+        .footer-col ul{ list-style:none; }
+        .footer-col ul li{ margin-bottom:9px; }
+        .footer-col ul a{ color:var(--dim); text-decoration:none; font-size:14px; transition:color .2s; }
+        .footer-col ul a:hover{ color:var(--cyan); }
+        .socials{ display:flex; gap:10px; margin-top:16px; }
+        .socials a{
+            width:36px; height:36px; border-radius:8px; background:var(--panel); border:1px solid var(--line);
+            display:flex; align-items:center; justify-content:center; font-size:1.1rem; text-decoration:none;
+            transition:border-color .2s;
         }
+        .socials a:hover{ border-color:var(--pink); }
+        .copyright{ max-width:1200px; margin:0 auto; padding-top:24px; border-top:1px solid var(--line); text-align:center; color:#5f5c78; font-size:12.5px; }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-section a {
-            color: white;
-            text-decoration: none;
-            opacity: 0.8;
-            transition: all 0.3s;
-        }
-
-        .footer-section a:hover {
-            opacity: 1;
-            color: var(--accent);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-links a {
-            font-size: 1.5rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-
-        .social-links a:hover {
-            background: var(--accent);
-            transform: scale(1.1);
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            opacity: 0.7;
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--primary);
-                flex-direction: column;
-                padding: 1rem;
-                gap: 1rem;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .download-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out;
-        }
+        @media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; } }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
         <nav>
-            <div class="logo">🎮 ACAJOU GAMES</div>
+            <div class="logo">
+                <div class="logo-badge">🕹️</div>
+                <span class="logo-word">ACAJOU</span>
+            </div>
             <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home" onclick="trackEvent('Navigation', 'Click', 'Home')">Home</a></li>
@@ -508,46 +289,57 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero" id="home">
-        <h1 class="fade-in-up">Welcome to ACAJOU GAMES</h1>
-        <p class="fade-in-up">Where Learning Meets Fun! 🎯</p>
-        <p style="font-size: 1.1rem; margin-bottom: 2rem;">Educational games for kids, families, and educators</p>
-        <a href="#games" class="cta-button" onclick="trackEvent('CTA', 'Click', 'Play Now Hero')">🎮 Play Now - It's Free!</a>
+        <div>
+            <span class="hero-kicker pixel">NOW LOADING…</span>
+            <h1>Insert Coin.<br><span>Learn Something.</span></h1>
+            <p class="hero-sub">Twelve arcade cabinets of math, memory, logic and adventure — with two more warming up backstage. Free to play, no quarters required.</p>
+            <div class="hero-actions">
+                <a href="#games" class="cta-button" onclick="trackEvent('CTA', 'Click', 'Play Now Hero')">▸ PRESS START</a>
+                <div class="hero-stat">
+                    <b>12</b>
+                    <span>Cabinets live now</span>
+                    <small>+2 more in development</small>
+                </div>
+            </div>
+        </div>
+        <div class="hero-cabinet"><span>👾</span></div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <h2 class="section-title">Why Choose ACAJOU GAMES?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📚</div>
+    <!-- Features / control panel -->
+    <section class="panel-section" id="features">
+        <div class="section-inner">
+            <span class="section-kicker pixel">PLAYER OPTIONS</span>
+            <h2 class="section-title">Why Insert Coin?</h2>
+            <div class="panel-grid">
+                <div class="panel-item">
+                    <div class="panel-button">📚</div>
                     <h3>Educational</h3>
                     <p>All games designed to boost learning while having fun. Perfect for kids aged 6-14.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🆓</div>
+                <div class="panel-item">
+                    <div class="panel-button">🆓</div>
                     <h3>100% Free</h3>
                     <p>No hidden fees, no subscriptions. Play as much as you want, whenever you want.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
+                <div class="panel-item">
+                    <div class="panel-button">📱</div>
                     <h3>Cross-Platform</h3>
                     <p>Play on web, mobile, or tablet. Your progress syncs everywhere.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">👨‍👩‍👧‍👦</div>
+                <div class="panel-item">
+                    <div class="panel-button">👨‍👩‍👧‍👦</div>
                     <h3>Family Friendly</h3>
                     <p>Safe, ad-free experience designed for kids with parental peace of mind.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🏆</div>
+                <div class="panel-item">
+                    <div class="panel-button">🏆</div>
                     <h3>Track Progress</h3>
                     <p>Monitor improvement with stats, streaks, and achievements.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
+                <div class="panel-item">
+                    <div class="panel-button">🎨</div>
                     <h3>Beautiful Design</h3>
                     <p>Colorful, engaging interfaces that kids love and parents approve.</p>
                 </div>
@@ -555,309 +347,220 @@
         </div>
     </section>
 
-    <!-- Games Section -->
-    <section class="games" id="games">
-        <div class="container">
-            <h2 class="section-title">🎮 Our Games Collection</h2>
-            <div class="games-grid">
-                
-                <!-- Math Blaster -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">🧮</div>
+    <!-- Cabinet Row / games -->
+    <section class="games-section" id="games">
+        <div class="section-inner">
+            <div class="games-heading">
+                <h2>Cabinet Row</h2>
+                <span class="count pixel">14 MACHINES · 12 LIVE</span>
+            </div>
+            <div class="game-grid">
+
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>🧮</span></div>
+                    <div class="cabinet-body">
                         <h3>Math Blaster</h3>
-                        <p>Progressive difficulty math challenges</p>
+                        <p class="kicker">Progressive difficulty math challenges</p>
+                        <ul class="cabinet-tags"><li>20+ Levels</li><li>4 Modes</li><li>Streak Bonus</li></ul>
+                        <a href="math_blaster.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Math Blaster')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Answer math problems as fast as you can! Gets harder with each level.</p>
-                        <ul class="game-features">
-                            <li>20+ difficulty levels</li>
-                            <li>4 difficulty modes</li>
-                            <li>Streak bonuses</li>
-                            <li>Time pressure challenges</li>
-                        </ul>
-                        <a href="math_blaster.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Math Blaster')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Math Duel -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">⚔️</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>⚔️</span></div>
+                    <div class="cabinet-body">
                         <h3>Math Duel</h3>
-                        <p>2-player math competition</p>
+                        <p class="kicker">2-player math competition</p>
+                        <ul class="cabinet-tags"><li>2-Player</li><li>Real-Time</li><li>Score Tracking</li></ul>
+                        <a href="math_duel.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Math Duel')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Battle your friend in epic math showdowns! Split-screen competition.</p>
-                        <ul class="game-features">
-                            <li>Two-player mode</li>
-                            <li>Real-time competition</li>
-                            <li>Multiple difficulty levels</li>
-                            <li>Score tracking</li>
-                        </ul>
-                        <a href="math_duel.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Math Duel')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Brain Quest -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">🧠</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>🧠</span></div>
+                    <div class="cabinet-body">
                         <h3>Brain Quest</h3>
-                        <p>Multi-subject trivia challenge</p>
+                        <p class="kicker">Multi-subject trivia challenge</p>
+                        <ul class="cabinet-tags"><li>5 Subjects</li><li>100+ Questions</li><li>Category Stats</li></ul>
+                        <a href="brain_quest.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Brain Quest')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Test knowledge across spelling, geography, science, history, and math!</p>
-                        <ul class="game-features">
-                            <li>5 different subjects</li>
-                            <li>100+ questions</li>
-                            <li>Category-specific stats</li>
-                            <li>Educational hints</li>
-                        </ul>
-                        <a href="brain_quest.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Brain Quest')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Connect Four -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">🔴🟡</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>🔴</span></div>
+                    <div class="cabinet-body">
                         <h3>Connect Four</h3>
-                        <p>Strategic board game</p>
+                        <p class="kicker">Strategic board game</p>
+                        <ul class="cabinet-tags"><li>vs AI</li><li>2-Player</li><li>Undo Move</li></ul>
+                        <a href="connect.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Connect Four')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Drop your pieces and connect four in a row to win! Challenge AI or a friend.</p>
-                        <ul class="game-features">
-                            <li>vs AI or vs Player</li>
-                            <li>Multiple difficulty levels</li>
-                            <li>Clean, intuitive interface</li>
-                            <li>Undo moves</li>
-                        </ul>
-                        <a href="connect.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Connect Four')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Sky Runner -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">✈️</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>✈️</span></div>
+                    <div class="cabinet-body">
                         <h3>Sky Runner</h3>
-                        <p>Endless flying adventure</p>
+                        <p class="kicker">Endless flying adventure</p>
+                        <ul class="cabinet-tags"><li>Endless Mode</li><li>Power-Ups</li><li>Leaderboard</li></ul>
+                        <a href="sky_runner.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Sky Runner')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Fly through the sky, avoid obstacles, and collect power-ups. How far can you go?</p>
-                        <ul class="game-features">
-                            <li>Endless gameplay</li>
-                            <li>Progressive difficulty</li>
-                            <li>Power-ups & bonuses</li>
-                            <li>Leaderboard</li>
-                        </ul>
-                        <a href="sky_runner.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Sky Runner')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Alien Memory Match -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">👽</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>👽</span></div>
+                    <div class="cabinet-body">
                         <h3>Alien Memory Match</h3>
-                        <p>Memory & concentration</p>
+                        <p class="kicker">Memory & concentration</p>
+                        <ul class="cabinet-tags"><li>4 Difficulty Levels</li><li>Cute Aliens</li><li>Score Tracking</li></ul>
+                        <a href="alien_memory_game.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Alien Memory Match')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Match pairs of aliens and test your memory skills. Multiple difficulty levels!</p>
-                        <ul class="game-features">
-                            <li>4 difficulty levels</li>
-                            <li>Cute alien characters</li>
-                            <li>Score tracking</li>
-                            <li>Relaxing gameplay</li>
-                        </ul>
-                        <a href="alien_memory_game.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Alien Memory Match')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- USA States & Capitals -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">🗺️</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>🗺️</span></div>
+                    <div class="cabinet-body">
                         <h3>USA States & Capitals</h3>
-                        <p>Geography learning game</p>
+                        <p class="kicker">Geography learning game</p>
+                        <ul class="cabinet-tags"><li>All 50 States</li><li>Multiple Modes</li><li>Quiz Mode</li></ul>
+                        <a href="usageo.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'USA States & Capitals')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Learn US states and their capitals. Educational and fun for all ages!</p>
-                        <ul class="game-features">
-                            <li>All 50 states included</li>
-                            <li>Multiple game modes</li>
-                            <li>Progress tracking</li>
-                            <li>Quiz mode</li>
-                        </ul>
-                        <a href="usageo.html" class="play-button" onclick="trackEvent('Game', 'Play', 'USA States & Capitals')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Bubble Shooter -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">🫧</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>🫧</span></div>
+                    <div class="cabinet-body">
                         <h3>Bubble Shooter</h3>
-                        <p>Classic puzzle game</p>
+                        <p class="kicker">Classic puzzle game</p>
+                        <ul class="cabinet-tags"><li>Multiple Levels</li><li>Color Matching</li><li>Power-Ups</li></ul>
+                        <a href="bubble.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Bubble Shooter')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Shoot bubbles and match colors. Clear levels and achieve high scores!</p>
-                        <ul class="game-features">
-                            <li>Multiple levels</li>
-                            <li>Color-matching mechanics</li>
-                            <li>Power-ups available</li>
-                            <li>High score tracking</li>
-                        </ul>
-                        <a href="bubble.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Bubble Shooter')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Color by Numbers -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">🎨</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>🎨</span></div>
+                    <div class="cabinet-body">
                         <h3>Color by Numbers</h3>
-                        <p>Creative coloring game</p>
+                        <p class="kicker">Creative coloring game</p>
+                        <ul class="cabinet-tags"><li>Beautiful Images</li><li>Difficulty Levels</li><li>Save Artwork</li></ul>
+                        <a href="colorby.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Color by Numbers')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Color beautiful images by following numbered regions. Relaxing and artistic!</p>
-                        <ul class="game-features">
-                            <li>Beautiful images</li>
-                            <li>Multiple difficulty levels</li>
-                            <li>Save your artwork</li>
-                            <li>Gallery to share</li>
-                        </ul>
-                        <a href="colorby.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Color by Numbers')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Word Scramble -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">🔤</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>🔤</span></div>
+                    <div class="cabinet-body">
                         <h3>Word Scramble</h3>
-                        <p>Word puzzle challenge</p>
+                        <p class="kicker">Word puzzle challenge</p>
+                        <ul class="cabinet-tags"><li>6 Categories</li><li>Hints</li><li>Timer</li></ul>
+                        <a href="word_scramble.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Word Scramble')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Unscramble letters to reveal the hidden word. Categories, hints, and a timer keep it challenging!</p>
-                        <ul class="game-features">
-                            <li>6 word categories</li>
-                            <li>Hint system</li>
-                            <li>Timer challenges</li>
-                            <li>Score tracking</li>
-                        </ul>
-                        <a href="word_scramble.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Word Scramble')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Tic Tac Toe -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">❌⭕</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>❌⭕</span></div>
+                    <div class="cabinet-body">
                         <h3>Tic Tac Toe</h3>
-                        <p>Classic strategy game</p>
+                        <p class="kicker">Classic strategy game</p>
+                        <ul class="cabinet-tags"><li>AI Opponent</li><li>Easy → Impossible</li><li>Score Tracking</li></ul>
+                        <a href="tic_tac_toe.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Tic Tac Toe')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Outsmart the computer in this classic game, with an AI that scales from easy to impossible.</p>
-                        <ul class="game-features">
-                            <li>AI opponent</li>
-                            <li>Easy to impossible difficulty</li>
-                            <li>Clean, fast gameplay</li>
-                            <li>Score tracking</li>
-                        </ul>
-                        <a href="tic_tac_toe.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Tic Tac Toe')">▶️ Play Now</a>
-                    </div>
-                </div>
+                </article>
 
-                <!-- Quest Adventure -->
-                <div class="game-card">
-                    <div class="game-header">
-                        <div class="game-icon">⚔️</div>
+                <article class="cabinet">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>🐉</span></div>
+                    <div class="cabinet-body">
                         <h3>Quest Adventure</h3>
-                        <p>Epic text-based RPG</p>
+                        <p class="kicker">Epic text-based RPG</p>
+                        <ul class="cabinet-tags"><li>Combat</li><li>Inventory</li><li>Branching Story</li></ul>
+                        <a href="quest_adventure.html" class="cabinet-cta" onclick="trackEvent('Game', 'Play', 'Quest Adventure')">▸ PLAY</a>
                     </div>
-                    <div class="game-body">
-                        <p>Embark on an epic quest with combat, inventory management, and multiple story paths to explore.</p>
-                        <ul class="game-features">
-                            <li>Turn-based combat</li>
-                            <li>Inventory system</li>
-                            <li>Multiple story paths</li>
-                            <li>Leveling up</li>
-                        </ul>
-                        <a href="quest_adventure.html" class="play-button" onclick="trackEvent('Game', 'Play', 'Quest Adventure')">▶️ Play Now</a>
+                </article>
+
+                <article class="cabinet locked">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>⚒️</span></div>
+                    <div class="cabinet-body">
+                        <h3>Fraction Forge</h3>
+                        <p class="kicker">Slice, stack & simplify fractions on the clock</p>
+                        <ul class="cabinet-tags"><li>Visual Fractions</li><li>3 Tiers</li><li>Streak Bonus</li></ul>
+                        <span class="cabinet-cta pixel">COMING SOON</span>
                     </div>
-                </div>
+                </article>
+
+                <article class="cabinet locked">
+                    <div class="marquee-strip"></div>
+                    <div class="screen"><span>🗝️</span></div>
+                    <div class="cabinet-body">
+                        <h3>Cipher Trail</h3>
+                        <p class="kicker">Crack ciphers to unlock the next clue</p>
+                        <ul class="cabinet-tags"><li>Logic Puzzles</li><li>Progressive Ciphers</li><li>Hint Tokens</li></ul>
+                        <span class="cabinet-cta pixel">COMING SOON</span>
+                    </div>
+                </article>
 
             </div>
         </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="container">
-            <h2 class="section-title" style="color: white;">Our Impact</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <h3 id="playersCount">10K+</h3>
-                    <p>Happy Players</p>
-                </div>
-                <div class="stat-item">
-                    <h3>12</h3>
-                    <p>Amazing Games</p>
-                </div>
-                <div class="stat-item">
-                    <h3>100%</h3>
-                    <p>Free Forever</p>
-                </div>
-                <div class="stat-item">
-                    <h3>⭐⭐⭐⭐⭐</h3>
-                    <p>5-Star Rated</p>
-                </div>
+    <!-- High score ticker / stats -->
+    <section class="ticker-section">
+        <div class="section-inner">
+            <span class="section-kicker pixel">HIGH SCORE TABLE</span>
+            <h2 class="section-title">Our Impact</h2>
+            <div class="ticker-grid">
+                <div class="ticker-item"><b id="playersCount">10K+</b><span>Happy Players</span></div>
+                <div class="ticker-item"><b>12</b><span>Cabinets Live</span></div>
+                <div class="ticker-item"><b>100%</b><span>Free Forever</span></div>
+                <div class="ticker-item"><b>★★★★★</b><span>5-Star Rated</span></div>
             </div>
         </div>
     </section>
 
-    <!-- Download Section -->
-    <section class="download" id="download">
-        <div class="container">
-            <h2 class="section-title" style="color: white;">Get ACAJOU GAMES on Mobile!</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 1rem;">Download our app and play offline anytime, anywhere!</p>
-            <p style="opacity: 0.9; margin-bottom: 2rem;">Coming Soon to App Stores</p>
-            <div class="download-buttons">
-                <a href="#" class="download-btn" onclick="trackEvent('Download', 'Click', 'App Store'); return false;">
-                    <span>🍎</span>
-                    <div>
-                        <div style="font-size: 0.8rem; opacity: 0.8;">Download on the</div>
-                        <div>App Store</div>
-                    </div>
-                </a>
-                <a href="#" class="download-btn" onclick="trackEvent('Download', 'Click', 'Google Play'); return false;">
-                    <span>📱</span>
-                    <div>
-                        <div style="font-size: 0.8rem; opacity: 0.8;">GET IT ON</div>
-                        <div>Google Play</div>
-                    </div>
-                </a>
-            </div>
-            <p style="margin-top: 2rem; opacity: 0.8;">Or play directly in your browser - no download needed!</p>
+    <!-- Continue screen / download -->
+    <section class="continue-section" id="download">
+        <span class="section-kicker pixel">CONTINUE?</span>
+        <h2 class="section-title">Take Acajou on the Go</h2>
+        <p class="continue-sub">Download the app and play offline anytime, anywhere.</p>
+        <p class="continue-note">Coming soon to app stores</p>
+        <div class="store-buttons">
+            <a href="#" class="store-btn" onclick="trackEvent('Download', 'Click', 'App Store'); return false;">
+                <span class="icon">🍎</span>
+                <div class="lines"><div>Download on the</div><div>App Store</div></div>
+            </a>
+            <a href="#" class="store-btn" onclick="trackEvent('Download', 'Click', 'Google Play'); return false;">
+                <span class="icon">📱</span>
+                <div class="lines"><div>Get it on</div><div>Google Play</div></div>
+            </a>
         </div>
+        <p class="browser-note">Or play directly in your browser — no download needed!</p>
     </section>
 
     <!-- Footer -->
     <footer id="contact">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>ACAJOU GAMES</h3>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>Acajou Games</h3>
                 <p>Making learning fun for kids and families around the world.</p>
-                <div class="social-links">
+                <div class="socials">
                     <a href="#" onclick="trackEvent('Social', 'Click', 'Facebook'); return false;">📘</a>
                     <a href="#" onclick="trackEvent('Social', 'Click', 'Twitter'); return false;">🐦</a>
                     <a href="#" onclick="trackEvent('Social', 'Click', 'Instagram'); return false;">📷</a>
                     <a href="#" onclick="trackEvent('Social', 'Click', 'YouTube'); return false;">📺</a>
                 </div>
             </div>
-            <div class="footer-section">
+            <div class="footer-col">
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="#games">All Games</a></li>
@@ -866,7 +569,7 @@
                     <li><a href="#">Blog</a></li>
                 </ul>
             </div>
-            <div class="footer-section">
+            <div class="footer-col">
                 <h3>Support</h3>
                 <ul>
                     <li><a href="#">Help Center</a></li>
@@ -875,7 +578,7 @@
                     <li><a href="#">Terms of Service</a></li>
                 </ul>
             </div>
-            <div class="footer-section">
+            <div class="footer-col">
                 <h3>For Educators</h3>
                 <ul>
                     <li><a href="#">Classroom Resources</a></li>
@@ -891,45 +594,35 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
         function toggleMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('active');
+            document.getElementById('navLinks').classList.toggle('active');
         }
 
-        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Close mobile menu if open
-                    document.getElementById('navLinks').classList.remove('active');
+                const targetId = this.getAttribute('href');
+                if (targetId.length > 1) {
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior:'smooth', block:'start' });
+                        document.getElementById('navLinks').classList.remove('active');
+                    }
                 }
             });
         });
 
-        // Analytics tracking function
         function trackEvent(category, action, label) {
             if (typeof gtag !== 'undefined') {
-                gtag('event', action, {
-                    'event_category': category,
-                    'event_label': label
-                });
+                gtag('event', action, { 'event_category': category, 'event_label': label });
             }
             console.log(`Event tracked: ${category} - ${action} - ${label}`);
         }
 
-        // Track page views for each game
         window.addEventListener('load', function() {
             trackEvent('Page', 'View', 'Landing Page');
         });
 
-        // Animate counters on scroll
         function animateCounter(element, target, duration = 2000) {
             let start = 0;
             const increment = target / (duration / 16);
@@ -944,14 +637,11 @@
             }, 16);
         }
 
-        // Intersection Observer for animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    if (entry.target.id === 'playersCount' && !entry.target.animated) {
-                        entry.target.animated = true;
-                        animateCounter(entry.target, 10000);
-                    }
+                if (entry.isIntersecting && entry.target.id === 'playersCount' && !entry.target.animated) {
+                    entry.target.animated = true;
+                    animateCounter(entry.target, 10000);
                 }
             });
         });
