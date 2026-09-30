@@ -19,6 +19,15 @@
 - [Fraction Forge](https://acajou.games/fraction_forge.html): A visual fraction-simplifying game with 3 difficulty tiers and a timed, multiple-choice format.
 - [Cipher Trail](https://acajou.games/cipher_trail.html): A Caesar-cipher logic puzzle where dragging a shift dial live-decodes the message, with 3 tiers and hint tokens.
 
+## Blog
+
+- [Best Video Games for a Six-Year-Old Beginner](https://acajou.games/blog-six-year-old-beginner-games.html): 5 free, easy-to-learn games with no reading pressure and forgiving difficulty.
+- [Best Free Video Games for 10-Year-Olds](https://acajou.games/blog-best-free-games-10-year-olds.html): 6 free picks with real strategy and competition.
+- [Best Video Games for 12-Year-Olds (Free, No Download)](https://acajou.games/blog-best-games-12-year-olds.html): 5 games with genuine difficulty tiers, from a text RPG to a full-alphabet cipher.
+- [Best Free Puzzle Games to Play Right Now](https://acajou.games/blog-best-puzzle-games.html): 7 of the best free, browser-based puzzle games.
+- [Free Kids Games You Can Play With No Download](https://acajou.games/blog-free-kids-games-no-download.html): Everything runs in the browser — where to start and how home-screen install works.
+- [The 14 Best Free Games to Play Right Now](https://acajou.games/blog-best-free-games-roundup.html): The full lineup, organized by category.
+
 ## Details
 
 - Cost: 100% free, no subscriptions or hidden fees.
