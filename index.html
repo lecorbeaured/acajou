@@ -9,20 +9,23 @@
     <meta name="description" content="Free educational games for kids and families. Math challenges, word puzzles, brain teasers, and more!">
     <meta name="keywords" content="educational games, kids games, math games, word games, family games, learning games">
     <meta name="author" content="ACAJOU GAMES">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://acajou.games/">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:url" content="https://acajou.games/">
     <meta property="og:title" content="ACAJOU GAMES - Fun Educational Games">
     <meta property="og:description" content="Free educational games for kids and families. Play now!">
-    <meta property="og:image" content="https://yourdomain.com/acajou-preview.png">
+    <meta property="og:image" content="https://acajou.games/apple-touch-icon.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://yourdomain.com/">
+    <meta property="twitter:url" content="https://acajou.games/">
     <meta property="twitter:title" content="ACAJOU GAMES - Fun Educational Games">
     <meta property="twitter:description" content="Free educational games for kids and families. Play now!">
-    <meta property="twitter:image" content="https://yourdomain.com/acajou-preview.png">
+    <meta property="twitter:image" content="https://acajou.games/apple-touch-icon.png">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -30,6 +33,80 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="theme-color" content="#14121C">
+
+    <!-- Structured data: Organization, WebSite, game catalog, FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://acajou.games/#organization",
+          "name": "ACAJOU GAMES",
+          "url": "https://acajou.games/",
+          "logo": "https://acajou.games/apple-touch-icon.png"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://acajou.games/#website",
+          "url": "https://acajou.games/",
+          "name": "ACAJOU GAMES",
+          "description": "Free educational games for kids and families. Math challenges, word puzzles, brain teasers, and more!",
+          "publisher": { "@id": "https://acajou.games/#organization" }
+        },
+        {
+          "@type": "ItemList",
+          "name": "ACAJOU GAMES Collection",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "item": { "@type": "VideoGame", "name": "Math Blaster", "url": "https://acajou.games/math_blaster.html", "description": "Progressive difficulty math challenges with 20+ levels, streak bonuses, and 4 difficulty modes." } },
+            { "@type": "ListItem", "position": 2, "item": { "@type": "VideoGame", "name": "Math Duel", "url": "https://acajou.games/math_duel.html", "description": "Head-to-head 2-player math competition with real-time scoring." } },
+            { "@type": "ListItem", "position": 3, "item": { "@type": "VideoGame", "name": "Brain Quest", "url": "https://acajou.games/brain_quest.html", "description": "Multi-subject trivia covering spelling, geography, science, history and math." } },
+            { "@type": "ListItem", "position": 4, "item": { "@type": "VideoGame", "name": "Connect Four", "url": "https://acajou.games/connect.html", "description": "Drop pieces and get four in a row! Play against AI or a friend." } },
+            { "@type": "ListItem", "position": 5, "item": { "@type": "VideoGame", "name": "Sky Runner", "url": "https://acajou.games/sky_runner.html", "description": "Endless flying adventure with power-ups and a leaderboard." } },
+            { "@type": "ListItem", "position": 6, "item": { "@type": "VideoGame", "name": "Alien Memory Match", "url": "https://acajou.games/alien_memory_game.html", "description": "A memory and concentration game with cute aliens and 4 difficulty levels." } },
+            { "@type": "ListItem", "position": 7, "item": { "@type": "VideoGame", "name": "USA States & Capitals", "url": "https://acajou.games/usageo.html", "description": "Learn all 50 US states and capitals through quiz play." } },
+            { "@type": "ListItem", "position": 8, "item": { "@type": "VideoGame", "name": "Bubble Shooter", "url": "https://acajou.games/bubble.html", "description": "Match and pop colorful bubbles! Aim, shoot, and clear the board." } },
+            { "@type": "ListItem", "position": 9, "item": { "@type": "VideoGame", "name": "Color by Numbers", "url": "https://acajou.games/colorby.html", "description": "Relaxing creative coloring game with numbered regions." } },
+            { "@type": "ListItem", "position": 10, "item": { "@type": "VideoGame", "name": "Word Scramble", "url": "https://acajou.games/word_scramble.html", "description": "Unscramble letters across 6 categories with hints and a timer." } },
+            { "@type": "ListItem", "position": 11, "item": { "@type": "VideoGame", "name": "Tic Tac Toe", "url": "https://acajou.games/tic_tac_toe.html", "description": "Classic strategy game with an AI opponent from easy to impossible." } },
+            { "@type": "ListItem", "position": 12, "item": { "@type": "VideoGame", "name": "Quest Adventure", "url": "https://acajou.games/quest_adventure.html", "description": "An epic text-based RPG with combat, inventory, and branching story paths." } },
+            { "@type": "ListItem", "position": 13, "item": { "@type": "VideoGame", "name": "Fraction Forge", "url": "https://acajou.games/fraction_forge.html", "description": "Slice, stack and simplify fractions on the clock." } },
+            { "@type": "ListItem", "position": 14, "item": { "@type": "VideoGame", "name": "Cipher Trail", "url": "https://acajou.games/cipher_trail.html", "description": "Crack letter-shift ciphers to unlock each waypoint." } }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is Acajou Games free to play?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Yes — all 14 games are completely free to play in your browser, with no sign-up, subscription, or hidden fees." }
+            },
+            {
+              "@type": "Question",
+              "name": "What ages are Acajou Games designed for?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Our games are designed for kids ages 6 to 14, covering math, geography, spelling, logic, and memory skills." }
+            },
+            {
+              "@type": "Question",
+              "name": "Do I need to download anything to play?",
+              "acceptedAnswer": { "@type": "Answer", "text": "No download required — every game runs directly in your web browser on desktop, tablet, or mobile." }
+            },
+            {
+              "@type": "Question",
+              "name": "Are the games safe for kids?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Yes. Acajou Games is a family-friendly, ad-free experience with no chat features or in-app purchases." }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I play Acajou Games on my phone?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Yes — every game is fully responsive and works on phones, tablets, and desktop browsers." }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YH4Z66742N"></script>
@@ -233,6 +310,22 @@
         .ticker-item b{ font-family:'Press Start 2P', monospace; font-size:clamp(1.6rem,3.4vw,2.2rem); color:var(--yellow); display:block; margin-bottom:10px; }
         .ticker-item span{ font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); }
 
+        /* FAQ */
+        .faq-section{ padding:70px 0 10px; }
+        .faq-list{ max-width:760px; margin:44px auto 0; display:flex; flex-direction:column; gap:12px; }
+        .faq-item{
+            background:var(--panel); border:1px solid var(--line); border-radius:10px;
+            padding:4px 20px;
+        }
+        .faq-item summary{
+            cursor:pointer; list-style:none; padding:16px 0; font-weight:600; font-size:15px;
+            color:#fff; display:flex; align-items:center; justify-content:space-between; gap:12px;
+        }
+        .faq-item summary::-webkit-details-marker{ display:none; }
+        .faq-item summary::after{ content:'+'; color:var(--cyan); font-size:20px; flex:none; transition:transform .2s; }
+        .faq-item[open] summary::after{ transform:rotate(45deg); }
+        .faq-item p{ color:var(--dim); font-size:14.5px; padding-bottom:18px; margin:0; line-height:1.6; }
+
         /* Continue screen — download */
         .continue-section{ padding:80px 24px; text-align:center; }
         .continue-section .section-title{ margin-bottom:10px; }
@@ -283,6 +376,7 @@
                 <li><a href="#home" onclick="trackEvent('Navigation', 'Click', 'Home')">Home</a></li>
                 <li><a href="#games" onclick="trackEvent('Navigation', 'Click', 'Games')">Games</a></li>
                 <li><a href="#features" onclick="trackEvent('Navigation', 'Click', 'Features')">Features</a></li>
+                <li><a href="#faq" onclick="trackEvent('Navigation', 'Click', 'FAQ')">FAQ</a></li>
                 <li><a href="#download" onclick="trackEvent('Navigation', 'Click', 'Download')">Download</a></li>
                 <li><a href="#contact" onclick="trackEvent('Navigation', 'Click', 'Contact')">Contact</a></li>
             </ul>
@@ -527,6 +621,36 @@
         </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+        <div class="section-inner">
+            <span class="section-kicker pixel">READ ME</span>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary>Is Acajou Games free to play?</summary>
+                    <p>Yes — all 14 games are completely free to play in your browser, with no sign-up, subscription, or hidden fees.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>What ages are Acajou Games designed for?</summary>
+                    <p>Our games are designed for kids ages 6 to 14, covering math, geography, spelling, logic, and memory skills.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Do I need to download anything to play?</summary>
+                    <p>No download required — every game runs directly in your web browser on desktop, tablet, or mobile.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Are the games safe for kids?</summary>
+                    <p>Yes. Acajou Games is a family-friendly, ad-free experience with no chat features or in-app purchases.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can I play Acajou Games on my phone?</summary>
+                    <p>Yes — every game is fully responsive and works on phones, tablets, and desktop browsers.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
     <!-- Continue screen / download -->
     <section class="continue-section" id="download">
         <span class="section-kicker pixel">CONTINUE?</span>
@@ -588,7 +712,7 @@
             </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2025 ACAJOU GAMES. All rights reserved. Made with ❤️ for learners everywhere.</p>
+            <p>&copy; <span id="copyYear">2025</span> ACAJOU GAMES. All rights reserved. Made with ❤️ for learners everywhere.</p>
         </div>
     </footer>
 
@@ -596,6 +720,8 @@
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
+
+        document.getElementById('copyYear').textContent = new Date().getFullYear();
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {

@@ -1,0 +1,27 @@
+# ACAJOU GAMES
+
+> ACAJOU GAMES is a free, ad-free arcade of 14 browser-based educational games for kids and families, ages 6-14. No sign-up, no downloads, no in-app purchases — every game runs directly in the browser on desktop, tablet, or phone.
+
+## Games
+
+- [Math Blaster](https://acajou.games/math_blaster.html): Progressive difficulty math challenges with 20+ levels, streak bonuses, and 4 difficulty modes.
+- [Math Duel](https://acajou.games/math_duel.html): Head-to-head 2-player math competition with real-time scoring.
+- [Brain Quest](https://acajou.games/brain_quest.html): Multi-subject trivia covering spelling, geography, science, history and math.
+- [Connect Four](https://acajou.games/connect.html): Drop pieces and get four in a row against AI or a friend.
+- [Sky Runner](https://acajou.games/sky_runner.html): Endless flying adventure with power-ups and a leaderboard.
+- [Alien Memory Match](https://acajou.games/alien_memory_game.html): A memory and concentration game with cute aliens and 4 difficulty levels.
+- [USA States & Capitals](https://acajou.games/usageo.html): Learn all 50 US states and capitals through quiz play.
+- [Bubble Shooter](https://acajou.games/bubble.html): Match and pop colorful bubbles to clear the board.
+- [Color by Numbers](https://acajou.games/colorby.html): Relaxing creative coloring game with numbered regions.
+- [Word Scramble](https://acajou.games/word_scramble.html): Unscramble letters across 6 categories with hints and a timer.
+- [Tic Tac Toe](https://acajou.games/tic_tac_toe.html): Classic strategy game with an AI opponent from easy to impossible.
+- [Quest Adventure](https://acajou.games/quest_adventure.html): An epic text-based RPG with combat, inventory, and branching story paths.
+- [Fraction Forge](https://acajou.games/fraction_forge.html): A visual fraction-simplifying game with 3 difficulty tiers and a timed, multiple-choice format.
+- [Cipher Trail](https://acajou.games/cipher_trail.html): A Caesar-cipher logic puzzle where dragging a shift dial live-decodes the message, with 3 tiers and hint tokens.
+
+## Details
+
+- Cost: 100% free, no subscriptions or hidden fees.
+- Audience: kids and families, ages 6-14.
+- Platform: runs in any modern web browser; no installation required (installable as a PWA on mobile/desktop).
+- Safety: ad-free, no chat features, no in-app purchases, no user accounts.
