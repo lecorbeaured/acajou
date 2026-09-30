@@ -8,7 +8,9 @@
     <meta name="description" content="Brain Quest - Multi-subject trivia covering spelling, geography, science, history and math. Free trivia game for kids.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://acajou.games/brain_quest.html">
-    <meta name="theme-color" content="#fa709a">
+    <meta name="theme-color" content="#14121C">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 
     <!-- Open Graph -->
@@ -57,9 +59,24 @@
             box-sizing: border-box;
         }
 
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+            --blue:#5B8DFF;
+            --violet:#9C6BFF;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            font-family: 'Chakra Petch', sans-serif;
+            background: var(--void);
+            color: var(--ink);
             min-height: 100vh;
             padding: 80px 20px 20px 20px;
         }
@@ -70,7 +87,8 @@
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            background: var(--void);
+            border-bottom: 1px solid var(--line);
             padding: 12px 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 99999;
@@ -79,11 +97,19 @@
             align-items: center;
         }
 
+        .acajou-nav::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -4px; height: 4px;
+            background-image: repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+
         .acajou-nav-logo {
-            color: white;
+            color: var(--yellow);
             text-decoration: none;
-            font-weight: bold;
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.7rem, 3vw, 0.9rem);
+            text-shadow: 0 0 10px #ffd23f70;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -96,43 +122,47 @@
         }
 
         .acajou-nav-back {
-            color: white;
+            color: var(--dim);
             text-decoration: none;
-            font-weight: bold;
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 20px;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            padding: 8px 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            transition: all 0.2s;
         }
 
         .acajou-nav-back:hover {
-            background: rgba(255,255,255,0.3);
+            border-color: var(--cyan);
+            color: var(--cyan);
             transform: translateX(-3px);
         }
 
         .game-container {
             max-width: 900px;
             margin: 0 auto;
-            background: white;
-            border-radius: 25px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45);
         }
 
         h1 {
             text-align: center;
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 0 0 22px #ffd23f40;
+            font-size: clamp(2rem, 6vw, 3.2rem);
             margin-bottom: 10px;
         }
 
         .subtitle {
             text-align: center;
-            color: #666;
+            color: var(--dim);
             font-size: clamp(1rem, 3vw, 1.3rem);
             margin-bottom: 30px;
         }
@@ -145,26 +175,28 @@
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            color: white;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3);
         }
 
         .stat-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             opacity: 0.95;
             text-transform: uppercase;
             font-weight: 600;
+            letter-spacing: .04em;
+            color: var(--dim);
             margin-bottom: 8px;
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.3rem;
+            color: var(--yellow);
         }
 
         .category-display {
@@ -176,53 +208,49 @@
         }
 
         .category-badge {
-            padding: 12px 20px;
-            border-radius: 25px;
+            padding: 10px 18px;
+            border-radius: 20px;
             font-weight: bold;
-            font-size: 1rem;
-            border: 3px solid;
+            font-size: 0.95rem;
+            background: var(--panel-2);
+            border: 2px solid;
             transition: all 0.3s;
         }
 
         .category-badge.spelling {
-            background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);
-            color: #1e40af;
-            border-color: #3b82f6;
+            color: var(--blue);
+            border-color: var(--blue);
         }
 
         .category-badge.geography {
-            background: linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%);
-            color: #065f46;
-            border-color: #10b981;
+            color: var(--cyan);
+            border-color: var(--cyan);
         }
 
         .category-badge.science {
-            background: linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%);
-            color: #831843;
-            border-color: #ec4899;
+            color: var(--pink);
+            border-color: var(--pink);
         }
 
         .category-badge.history {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde047 100%);
-            color: #78350f;
-            border-color: #f59e0b;
+            color: var(--yellow);
+            border-color: var(--yellow);
         }
 
         .category-badge.math {
-            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-            color: #3730a3;
-            border-color: #6366f1;
+            color: var(--violet);
+            border-color: var(--violet);
         }
 
         .category-badge.active {
             transform: scale(1.15);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
         }
 
         .question-area {
-            background: linear-gradient(135deg, #fff7ed 0%, #fff 100%);
-            border: 4px solid #fa709a;
-            border-radius: 20px;
+            background: var(--panel-2);
+            border: 2px solid var(--line);
+            border-radius: 16px;
             padding: 40px 30px;
             margin-bottom: 30px;
             min-height: 400px;
@@ -233,16 +261,16 @@
 
         .question-number {
             text-align: center;
-            font-size: 1.2rem;
-            color: #fa709a;
-            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.85rem;
+            color: var(--yellow);
             margin-bottom: 20px;
         }
 
         .question-text {
             font-size: clamp(1.5rem, 4vw, 2.2rem);
             font-weight: bold;
-            color: #333;
+            color: #fff;
             text-align: center;
             margin-bottom: 35px;
             line-height: 1.4;
@@ -257,34 +285,34 @@
 
         .option-btn {
             padding: 20px;
-            background: white;
-            border: 3px solid #fa709a;
-            border-radius: 15px;
-            font-size: 1.2rem;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            font-size: 1.15rem;
+            font-family: 'Chakra Petch', sans-serif;
             font-weight: bold;
-            color: #333;
+            color: var(--ink);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             text-align: center;
         }
 
         .option-btn:hover:not(.correct):not(.wrong):not(:disabled) {
-            background: #fff7ed;
+            border-color: var(--yellow);
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(250, 112, 154, 0.3);
         }
 
         .option-btn.correct {
-            background: linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%);
-            border-color: #10b981;
-            color: #065f46;
+            background: #173a34;
+            border-color: var(--cyan);
+            color: var(--cyan);
             animation: correctPulse 0.6s;
         }
 
         .option-btn.wrong {
-            background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
-            border-color: #ef4444;
-            color: #991b1b;
+            background: #3a1728;
+            border-color: var(--pink);
+            color: var(--pink);
             animation: wrongShake 0.5s;
         }
 
@@ -306,8 +334,8 @@
         .feedback {
             text-align: center;
             padding: 15px;
-            border-radius: 12px;
-            font-size: 1.3rem;
+            border-radius: 10px;
+            font-size: 1.2rem;
             font-weight: bold;
             margin-top: 20px;
             animation: slideDown 0.3s;
@@ -325,15 +353,15 @@
         }
 
         .feedback.correct {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            color: #065f46;
-            border: 3px solid #10b981;
+            background: #173a34;
+            color: var(--cyan);
+            border: 2px solid var(--cyan);
         }
 
         .feedback.wrong {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            color: #991b1b;
-            border: 3px solid #ef4444;
+            background: #3a1728;
+            color: var(--pink);
+            border: 2px solid var(--pink);
         }
 
         .controls {
@@ -345,28 +373,28 @@
 
         .btn {
             padding: 15px 35px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            font-family: 'Chakra Petch', sans-serif;
             font-weight: bold;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s;
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
+            background: var(--cyan);
+            color: var(--void);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            color: white;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
         }
 
         .game-over {
@@ -375,18 +403,21 @@
         }
 
         .game-over h2 {
-            font-size: 3rem;
-            color: #fa709a;
+            font-size: 2.4rem;
+            color: #fff;
+            text-transform: uppercase;
             margin-bottom: 20px;
         }
 
         .final-stats {
-            background: #fff7ed;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 12px;
             margin: 20px 0;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             line-height: 2;
+            color: var(--ink);
         }
 
         .category-stats {
@@ -400,7 +431,8 @@
             padding: 20px;
             border-radius: 12px;
             text-align: center;
-            border: 3px solid;
+            background: var(--panel-2);
+            border: 2px solid;
         }
 
         .hidden {
@@ -439,7 +471,7 @@
     <!-- Navigation -->
     <nav class="acajou-nav">
         <a href="index.html" class="acajou-nav-logo">
-            🎮 <span>ACAJOU GAMES</span>
+            🕹️ <span>ACAJOU</span>
         </a>
         <a href="index.html" class="acajou-nav-back">
             ← All Games

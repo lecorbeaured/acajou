@@ -8,7 +8,9 @@
     <meta name="description" content="Sky Runner - Endless flying adventure with power-ups and a leaderboard. Free arcade game for kids and families.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://acajou.games/sky_runner.html">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#14121C">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 
     <!-- Open Graph -->
@@ -58,9 +60,22 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Chakra Petch', sans-serif;
+            background: var(--void);
+            color: var(--ink);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -75,7 +90,8 @@
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            background: var(--void);
+            border-bottom: 1px solid var(--line);
             padding: 12px 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 99999;
@@ -84,11 +100,19 @@
             align-items: center;
         }
 
+        .acajou-nav::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -4px; height: 4px;
+            background-image: repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+
         .acajou-nav-logo {
-            color: white;
+            color: var(--yellow);
             text-decoration: none;
-            font-weight: bold;
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.7rem, 3vw, 0.9rem);
+            text-shadow: 0 0 10px #ffd23f70;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -101,36 +125,42 @@
         }
 
         .acajou-nav-back {
-            color: white;
+            color: var(--dim);
             text-decoration: none;
-            font-weight: bold;
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 20px;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            padding: 8px 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            transition: all 0.2s;
         }
 
         .acajou-nav-back:hover {
-            background: rgba(255,255,255,0.3);
+            border-color: var(--cyan);
+            color: var(--cyan);
             transform: translateX(-3px);
         }
 
         .game-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
             max-width: 900px;
             width: 100%;
         }
 
         h1 {
             text-align: center;
-            color: #667eea;
-            font-size: clamp(1.8em, 5vw, 2.5em);
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 0 0 22px #33e6c440;
+            font-size: clamp(1.6em, 5vw, 2.4em);
             margin-bottom: 10px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
             animation: float 3s ease-in-out infinite;
         }
 
@@ -142,11 +172,11 @@
         .stats-bar {
             display: flex;
             justify-content: space-around;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 12px;
-            border-radius: 15px;
+            border-radius: 12px;
             margin-bottom: 15px;
-            color: white;
             flex-wrap: wrap;
             gap: 10px;
         }
@@ -160,12 +190,14 @@
         .stat-label {
             font-size: clamp(0.7em, 2.5vw, 0.85em);
             opacity: 0.9;
+            color: var(--dim);
             margin-bottom: 3px;
         }
 
         .stat-value {
-            font-size: clamp(1.2em, 4vw, 1.8em);
-            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1em, 4vw, 1.3em);
+            color: var(--yellow);
         }
 
         #gameCanvas {
@@ -173,11 +205,11 @@
             height: 500px;
             max-height: 60vh;
             background: linear-gradient(180deg, #87ceeb 0%, #e0f6ff 100%);
-            border-radius: 15px;
+            border-radius: 12px;
             display: block;
             margin-bottom: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            border: 4px solid #667eea;
+            border: 3px solid var(--line);
             touch-action: none;
         }
 
@@ -191,15 +223,16 @@
         button {
             flex: 1;
             min-width: 120px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+            background: var(--cyan);
+            color: var(--void);
             border: none;
             padding: 14px;
             font-size: clamp(0.9em, 2.5vw, 1.1em);
+            font-family: 'Chakra Petch', sans-serif;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
+            transition: all 0.2s;
             touch-action: manipulation;
         }
 
@@ -210,21 +243,21 @@
         @media (hover: hover) {
             button:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
             }
         }
 
         .instructions {
-            background: #f0f0f0;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 12px;
             border-radius: 10px;
             font-size: clamp(0.8em, 2.5vw, 0.95em);
             line-height: 1.6;
-            color: #333;
+            color: var(--ink);
         }
 
         .instructions strong {
-            color: #667eea;
+            color: var(--cyan);
         }
 
         .game-over-screen {
@@ -233,15 +266,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--panel);
+            color: var(--ink);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
             text-align: center;
             z-index: 1000;
             max-width: 90%;
-            border: 3px solid white;
+            border: 2px solid var(--cyan);
         }
 
         .game-over-screen.show {
@@ -303,7 +336,7 @@
 <body>
     <nav class="acajou-nav">
         <a href="index.html" class="acajou-nav-logo">
-            🎮 <span>ACAJOU GAMES</span>
+            🕹️ <span>ACAJOU</span>
         </a>
         <a href="index.html" class="acajou-nav-back">
             ← All Games

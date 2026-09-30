@@ -8,7 +8,9 @@
     <meta name="description" content="Color by Numbers - Relaxing creative coloring game with numbered regions. Free art game for kids.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://acajou.games/colorby.html">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#14121C">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
 
     <!-- Open Graph -->
@@ -57,9 +59,22 @@
             box-sizing: border-box;
         }
 
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Chakra Petch', sans-serif;
+            background: var(--void);
+            color: var(--ink);
             min-height: 100vh;
             padding: 80px 20px 20px 20px;
         }
@@ -70,7 +85,8 @@
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            background: var(--void);
+            border-bottom: 1px solid var(--line);
             padding: 12px 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 99999;
@@ -79,11 +95,19 @@
             align-items: center;
         }
 
+        .acajou-nav::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -4px; height: 4px;
+            background-image: repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+
         .acajou-nav-logo {
-            color: white;
+            color: var(--yellow);
             text-decoration: none;
-            font-weight: bold;
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.7rem, 3vw, 0.9rem);
+            text-shadow: 0 0 10px #ffd23f70;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -96,43 +120,47 @@
         }
 
         .acajou-nav-back {
-            color: white;
+            color: var(--dim);
             text-decoration: none;
-            font-weight: bold;
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 20px;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            padding: 8px 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            transition: all 0.2s;
         }
 
         .acajou-nav-back:hover {
-            background: rgba(255,255,255,0.3);
+            border-color: var(--cyan);
+            color: var(--cyan);
             transform: translateX(-3px);
         }
 
         .game-container {
             max-width: 1000px;
             margin: 0 auto;
-            background: white;
-            border-radius: 25px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45);
         }
 
         h1 {
             text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 0 0 22px #33e6c440;
+            font-size: clamp(2rem, 6vw, 3.2rem);
             margin-bottom: 10px;
         }
 
         .subtitle {
             text-align: center;
-            color: #666;
+            color: var(--dim);
             font-size: clamp(1rem, 3vw, 1.3rem);
             margin-bottom: 30px;
         }
@@ -141,9 +169,10 @@
             display: flex;
             justify-content: space-around;
             margin-bottom: 30px;
-            background: linear-gradient(135deg, #f0f4ff 0%, #fff 100%);
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 12px;
             flex-wrap: wrap;
             gap: 15px;
         }
@@ -155,17 +184,17 @@
         }
 
         .stat-label {
-            font-size: 0.9rem;
-            color: #666;
+            font-size: 0.85rem;
+            color: var(--dim);
             font-weight: 600;
             text-transform: uppercase;
             margin-bottom: 5px;
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.3rem;
+            color: var(--yellow);
         }
 
         .setup-panel {
@@ -187,24 +216,26 @@
 
         .design-btn {
             padding: 15px;
-            border: 3px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 12px;
+            border: 2px solid var(--line);
+            background: var(--panel-2);
+            color: var(--ink);
+            border-radius: 10px;
             font-weight: bold;
+            font-family: 'Chakra Petch', sans-serif;
             font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .design-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            border-color: var(--cyan);
         }
 
         .design-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--cyan);
+            border-color: var(--cyan);
+            color: var(--void);
             transform: scale(1.05);
         }
 
@@ -219,10 +250,11 @@
         }
 
         .canvas-container {
-            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: clamp(10px, 2vw, 20px);
-            border-radius: 20px;
-            box-shadow: inset 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.3);
             width: 100%;
             overflow-x: auto;
             display: flex;
@@ -375,12 +407,12 @@
         }
 
         .color-palette::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: var(--void);
             border-radius: 10px;
         }
 
         .color-palette::-webkit-scrollbar-thumb {
-            background: #667eea;
+            background: var(--line);
             border-radius: 10px;
         }
 
@@ -389,29 +421,30 @@
             align-items: center;
             gap: 10px;
             padding: 10px;
-            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
-            border: 3px solid #ddd;
-            border-radius: 12px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             flex-shrink: 0;
         }
 
         .color-option:hover {
             transform: translateX(5px);
-            border-color: #667eea;
+            border-color: var(--cyan);
         }
 
         .color-option.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: #667eea;
+            background: var(--panel-2);
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 1px var(--cyan);
         }
 
         .color-box {
             width: 35px;
             height: 35px;
             border-radius: 8px;
-            border: 2px solid rgba(0,0,0,0.1);
+            border: 2px solid rgba(255,255,255,0.15);
             flex-shrink: 0;
             display: flex;
             align-items: center;
@@ -424,12 +457,12 @@
 
         .color-label {
             font-weight: 600;
-            color: #333;
+            color: var(--ink);
             font-size: 0.95rem;
         }
 
         .color-option.active .color-label {
-            color: white;
+            color: var(--cyan);
         }
 
         .color-option.active .color-box {
@@ -439,7 +472,8 @@
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: #e5e7eb;
+            background: var(--void);
+            border: 1px solid var(--line);
             border-radius: 10px;
             margin-bottom: 15px;
             overflow: hidden;
@@ -447,7 +481,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--cyan);
             transition: width 0.3s;
         }
 
@@ -461,18 +495,17 @@
 
         .btn {
             padding: 15px 35px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            font-family: 'Chakra Petch', sans-serif;
             font-weight: bold;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s;
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
         .btn:disabled {
@@ -482,13 +515,14 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
+            background: var(--cyan);
+            color: var(--void);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
         }
 
         .completion-message {
@@ -529,9 +563,9 @@
         }
 
         .completion-message.complete {
-            background: linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%);
-            color: #065f46;
-            border: 4px solid #10b981;
+            background: #173a34;
+            color: var(--cyan);
+            border: 3px solid var(--cyan);
         }
 
         .hidden {
@@ -540,7 +574,7 @@
 
         .instructions {
             text-align: center;
-            color: #666;
+            color: var(--dim);
             margin-top: 20px;
             font-size: 0.95rem;
             line-height: 1.6;
@@ -734,7 +768,7 @@
     <!-- Navigation -->
     <nav class="acajou-nav">
         <a href="index.html" class="acajou-nav-logo">
-            🎮 <span>ACAJOU GAMES</span>
+            🕹️ <span>ACAJOU</span>
         </a>
         <a href="index.html" class="acajou-nav-back">
             ← All Games
@@ -763,7 +797,7 @@
 
         <!-- Setup Panel -->
         <div id="setupPanel" class="setup-panel">
-            <h3 style="text-align: center; color: #667eea; margin-bottom: 15px;">Choose a Design:</h3>
+            <h3 style="text-align: center; color: #33E6C4; margin-bottom: 15px;">Choose a Design:</h3>
             <div class="design-selector">
                 <button class="design-btn active" onclick="colorGame.selectDesign(0)">✨ Mandala</button>
                 <button class="design-btn" onclick="colorGame.selectDesign(1)">🔥 Phoenix</button>
@@ -779,7 +813,7 @@
 
         <!-- Color Palette (Always Visible) -->
         <div style="margin-bottom: 30px;">
-            <h3 style="text-align: center; color: #667eea; margin-bottom: 15px;">📋 Color Legend:</h3>
+            <h3 style="text-align: center; color: #33E6C4; margin-bottom: 15px;">📋 Color Legend:</h3>
             <div class="color-palette" id="colorPalette"></div>
         </div>
 
@@ -816,7 +850,7 @@
         </div>
 
         <div class="instructions">
-            <h3 style="color: #667eea; margin-bottom: 15px;">🎨 How to Play:</h3>
+            <h3 style="color: #33E6C4; margin-bottom: 15px;">🎨 How to Play:</h3>
             <p><strong>1.</strong> Choose a design from the options above</p>
             <p><strong>2.</strong> Click "Start Coloring" to begin</p>
             <p><strong>3.</strong> Select a color by clicking on one of the color cards (each has a number)</p>
@@ -1477,38 +1511,38 @@
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: #1D1B29;
+                    border: 2px solid #302c44;
                     padding: 40px 50px;
-                    border-radius: 25px;
-                    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+                    border-radius: 20px;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
                     text-align: center;
                     z-index: 10000;
                     animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                    color: white;
+                    color: #E7E5F2;
                     max-width: 90vw;
                     width: 400px;
                 `;
-                
+
                 statsDiv.innerHTML = `
-                    <h2 style="font-size: 2.5rem; margin-bottom: 25px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">🎉 Design Complete! 🎉</h2>
-                    <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 15px; margin-bottom: 25px; backdrop-filter: blur(10px);">
-                        <p style="font-size: 1.2rem; margin: 10px 0;"><strong>⏱️ Time:</strong> <span style="color: #FFD700; font-weight: bold;">${timeStr}</span></p>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 25px; color: #fff;">🎉 Design Complete! 🎉</h2>
+                    <div style="background: #241f36; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                        <p style="font-size: 1.2rem; margin: 10px 0;"><strong>⏱️ Time:</strong> <span style="color: #FFD23F; font-weight: bold;">${timeStr}</span></p>
                         <p style="font-size: 1.2rem; margin: 10px 0;"><strong>🎨 Design:</strong> ${design.name} ${design.emoji}</p>
-                        <p style="font-size: 1.2rem; margin: 10px 0;"><strong>🖌️ Pixels:</strong> <span style="color: #FFD700; font-weight: bold;">${design.pixels.length}</span></p>
+                        <p style="font-size: 1.2rem; margin: 10px 0;"><strong>🖌️ Pixels:</strong> <span style="color: #FFD23F; font-weight: bold;">${design.pixels.length}</span></p>
                     </div>
                     <button class="close-modal-btn" style="
                         margin-top: 20px;
                         padding: 14px 40px;
-                        background: white;
-                        color: #667eea;
+                        background: #33E6C4;
+                        color: #14121C;
                         border: none;
-                        border-radius: 12px;
+                        border-radius: 10px;
                         cursor: pointer;
                         font-size: 1.1rem;
                         font-weight: bold;
                         transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-                    " onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.2)'">
+                    " onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                         Continue ✨
                     </button>
                 `;

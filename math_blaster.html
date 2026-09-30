@@ -8,8 +8,10 @@
     <meta name="description" content="Math Blaster - Progressive difficulty math challenges with 20+ levels, streak bonuses, and 4 difficulty modes. Free math game for kids.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://acajou.games/math_blaster.html">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#14121C">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -57,9 +59,22 @@
             box-sizing: border-box;
         }
 
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Chakra Petch', sans-serif;
+            background: var(--void);
+            color: var(--ink);
             min-height: 100vh;
             padding: 80px 20px 20px 20px;
         }
@@ -70,7 +85,8 @@
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            background: var(--void);
+            border-bottom: 1px solid var(--line);
             padding: 12px 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 99999;
@@ -79,11 +95,19 @@
             align-items: center;
         }
 
+        .acajou-nav::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -4px; height: 4px;
+            background-image: repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+
         .acajou-nav-logo {
-            color: white;
+            color: var(--yellow);
             text-decoration: none;
-            font-weight: bold;
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.7rem, 3vw, 0.9rem);
+            text-shadow: 0 0 10px #ffd23f70;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -96,43 +120,47 @@
         }
 
         .acajou-nav-back {
-            color: white;
+            color: var(--dim);
             text-decoration: none;
-            font-weight: bold;
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 20px;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            padding: 8px 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            transition: all 0.2s;
         }
 
         .acajou-nav-back:hover {
-            background: rgba(255,255,255,0.3);
+            border-color: var(--cyan);
+            color: var(--cyan);
             transform: translateX(-3px);
         }
 
         .game-container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
-            border-radius: 25px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45);
         }
 
         h1 {
             text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 0 0 22px #33e6c440;
+            font-size: clamp(2rem, 6vw, 3.2rem);
             margin-bottom: 10px;
         }
 
         .subtitle {
             text-align: center;
-            color: #666;
+            color: var(--dim);
             font-size: clamp(1rem, 3vw, 1.3rem);
             margin-bottom: 30px;
         }
@@ -145,25 +173,28 @@
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             opacity: 0.9;
             text-transform: uppercase;
             font-weight: 600;
+            letter-spacing: .04em;
+            color: var(--dim);
             margin-bottom: 8px;
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.4rem;
+            color: var(--yellow);
         }
 
         .difficulty-selector {
@@ -175,31 +206,33 @@
 
         .difficulty-btn {
             padding: 15px;
-            border: 3px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 12px;
+            border: 2px solid var(--line);
+            background: var(--panel-2);
+            color: var(--ink);
+            border-radius: 10px;
             font-weight: bold;
+            font-family: 'Chakra Petch', sans-serif;
             font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .difficulty-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            border-color: var(--cyan);
         }
 
         .difficulty-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--cyan);
+            border-color: var(--cyan);
+            color: var(--void);
             transform: scale(1.05);
         }
 
         .game-area {
-            background: linear-gradient(135deg, #f0f4ff 0%, #f5f0ff 100%);
-            border: 4px solid #667eea;
-            border-radius: 20px;
+            background: var(--panel-2);
+            border: 2px solid var(--line);
+            border-radius: 16px;
             padding: 40px 20px;
             margin-bottom: 20px;
             min-height: 350px;
@@ -210,9 +243,9 @@
         }
 
         .level-display {
-            font-size: 1.5rem;
-            color: #667eea;
-            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.95rem;
+            color: var(--cyan);
             margin-bottom: 20px;
             text-align: center;
         }
@@ -220,7 +253,7 @@
         .question {
             font-size: clamp(3rem, 10vw, 6rem);
             font-weight: bold;
-            color: #764ba2;
+            color: #fff;
             margin-bottom: 30px;
             text-align: center;
             animation: fadeIn 0.5s;
@@ -243,8 +276,11 @@
             padding: 20px;
             font-size: 2.5rem;
             text-align: center;
-            border: 4px solid #667eea;
-            border-radius: 15px;
+            background: var(--void);
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            color: var(--ink);
+            font-family: 'Chakra Petch', sans-serif;
             font-weight: bold;
             margin-bottom: 20px;
             transition: all 0.3s;
@@ -252,8 +288,8 @@
 
         .answer-input:focus {
             outline: none;
-            border-color: #764ba2;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(51, 230, 196, 0.35);
             transform: scale(1.05);
         }
 
@@ -267,7 +303,7 @@
 
         @keyframes correctPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); background: #d1fae5; border-color: #10b981; }
+            50% { transform: scale(1.1); background: #173a34; border-color: var(--cyan); }
         }
 
         @keyframes wrongShake {
@@ -285,28 +321,28 @@
 
         .btn {
             padding: 15px 35px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
+            font-family: 'Chakra Petch', sans-serif;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s;
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
+            background: var(--cyan);
+            color: var(--void);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
         }
 
         .btn:disabled {
@@ -318,8 +354,8 @@
         .feedback {
             text-align: center;
             padding: 15px;
-            border-radius: 12px;
-            font-size: 1.3rem;
+            border-radius: 10px;
+            font-size: 1.2rem;
             font-weight: bold;
             margin-top: 20px;
             animation: slideDown 0.3s;
@@ -337,27 +373,27 @@
         }
 
         .feedback.correct {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            color: #065f46;
-            border: 3px solid #10b981;
+            background: #173a34;
+            color: var(--cyan);
+            border: 2px solid var(--cyan);
         }
 
         .feedback.wrong {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            color: #991b1b;
-            border: 3px solid #ef4444;
+            background: #3a1728;
+            color: var(--pink);
+            border: 2px solid var(--pink);
         }
 
         .timer {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.4rem;
+            color: var(--yellow);
             text-align: center;
             margin-bottom: 20px;
         }
 
         .timer.warning {
-            color: #ef4444;
+            color: var(--pink);
             animation: timerPulse 0.5s infinite;
         }
 
@@ -372,24 +408,27 @@
         }
 
         .game-over h2 {
-            font-size: 3rem;
-            color: #667eea;
+            font-size: 2.4rem;
+            color: #fff;
+            text-transform: uppercase;
             margin-bottom: 20px;
         }
 
         .final-stats {
-            background: #f0f4ff;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 12px;
             margin: 20px 0;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             line-height: 2;
+            color: var(--ink);
         }
 
         .streak-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: white;
+            background: var(--yellow);
+            color: var(--void);
             padding: 8px 16px;
             border-radius: 20px;
             font-weight: bold;
@@ -434,7 +473,7 @@
     <!-- Navigation -->
     <nav class="acajou-nav">
         <a href="index.html" class="acajou-nav-logo">
-            🎮 <span>ACAJOU GAMES</span>
+            🕹️ <span>ACAJOU</span>
         </a>
         <a href="index.html" class="acajou-nav-back">
             ← All Games
@@ -467,7 +506,7 @@
 
         <!-- Difficulty Selection -->
         <div id="difficultyPanel">
-            <h3 style="text-align: center; color: #667eea; margin-bottom: 15px;">Choose Difficulty:</h3>
+            <h3 style="text-align: center; color: #33E6C4; margin-bottom: 15px;">Choose Difficulty:</h3>
             <div class="difficulty-selector">
                 <button class="difficulty-btn" onclick="setDifficulty('easy')">😊 Easy<br><small>+, - (1-20)</small></button>
                 <button class="difficulty-btn active" onclick="setDifficulty('medium')">😎 Medium<br><small>+, -, × (1-50)</small></button>

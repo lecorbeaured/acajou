@@ -6,7 +6,9 @@
     <meta name="description" content="Bubble Shooter - Match and pop colorful bubbles! Aim, shoot, and clear the board in this addictive puzzle game.">
     <meta name="keywords" content="bubble shooter, puzzle game, match bubbles, pop bubbles, casual game">
     <meta name="author" content="ACAJOU GAMES">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#14121C">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
@@ -70,10 +72,22 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
+            font-family: 'Chakra Petch', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--void);
+            color: var(--ink);
             min-height: 100vh;
             padding-top: 60px;
             padding-bottom: 20px;
@@ -84,7 +98,8 @@
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            background: var(--void);
+            border-bottom: 1px solid var(--line);
             padding: 12px 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 1000;
@@ -93,57 +108,75 @@
             align-items: center;
         }
 
+        .acajou-nav::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -4px; height: 4px;
+            background-image: repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+
         .acajou-nav-logo {
-            color: white;
+            color: var(--yellow);
             text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.85rem;
+            text-shadow: 0 0 10px #ffd23f70;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
         .acajou-nav-back {
-            color: white;
+            color: var(--dim);
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .04em;
             padding: 6px 15px;
-            background: rgba(255,255,255,0.2);
+            border: 1px solid var(--line);
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .acajou-nav-back:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
         }
 
         .game-container {
             max-width: 600px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 18px;
             padding: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
         }
 
         h1 {
             text-align: center;
-            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 0 0 22px #33e6c440;
             font-size: clamp(2rem, 6vw, 2.5rem);
             margin-bottom: 8px;
         }
 
         .subtitle {
             text-align: center;
-            color: #666;
+            color: var(--dim);
             font-size: clamp(0.85rem, 2vw, 1rem);
             margin-bottom: 15px;
         }
 
         /* Game Stats */
         .game-stats {
-            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 14px;
             margin-bottom: 15px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -152,37 +185,37 @@
 
         .stat-box {
             text-align: center;
-            background: white;
+            background: var(--panel);
             padding: 12px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .stat-label {
             font-size: 0.75rem;
-            color: #666;
+            color: var(--dim);
             font-weight: 600;
             text-transform: uppercase;
             margin-bottom: 5px;
         }
 
         .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #667eea;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.2rem;
+            color: var(--cyan);
         }
 
         .stat-value.score {
-            color: #f39c12;
+            color: var(--yellow);
         }
 
         .stat-value.shots {
-            color: #e74c3c;
+            color: var(--pink);
         }
 
         /* Canvas Container */
         .canvas-container {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: var(--void);
+            border: 1px solid var(--line);
             border-radius: 15px;
             padding: 10px;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
@@ -221,12 +254,12 @@
         .btn {
             padding: 12px 20px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 0.95rem;
+            font-family: 'Chakra Petch', sans-serif;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             min-width: 44px;
             min-height: 44px;
             flex: 1;
@@ -238,13 +271,14 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
+            background: var(--cyan);
+            color: var(--void);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
         }
 
         .btn:disabled {
@@ -254,16 +288,17 @@
 
         /* Power-ups */
         .powerups {
-            background: linear-gradient(135deg, #fff9e6 0%, #ffe6e6 100%);
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 14px;
             margin-bottom: 15px;
         }
 
         .powerups-title {
             font-size: 1rem;
             font-weight: bold;
-            color: #667eea;
+            color: var(--yellow);
             margin-bottom: 10px;
             text-align: center;
         }
@@ -275,13 +310,14 @@
         }
 
         .powerup-btn {
-            background: white;
-            border: 3px solid #667eea;
-            border-radius: 12px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 10px;
             padding: 12px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             text-align: center;
+            color: var(--ink);
         }
 
         .powerup-btn:active {
@@ -289,9 +325,9 @@
         }
 
         .powerup-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: #764ba2;
+            background: var(--cyan);
+            color: var(--void);
+            border-color: var(--cyan);
         }
 
         .powerup-btn.disabled {
@@ -311,12 +347,12 @@
 
         .powerup-count {
             font-size: 0.7rem;
-            color: #666;
+            color: var(--dim);
             margin-top: 3px;
         }
 
         .powerup-btn.active .powerup-count {
-            color: rgba(255,255,255,0.8);
+            color: rgba(20,18,28,0.7);
         }
 
         /* Modals */
@@ -345,9 +381,10 @@
         }
 
         .modal-content {
-            background: white;
+            background: var(--panel);
+            border: 2px solid var(--line);
             padding: 30px 25px;
-            border-radius: 25px;
+            border-radius: 20px;
             text-align: center;
             max-width: 400px;
             width: 100%;
@@ -374,20 +411,19 @@
             font-size: 2rem;
             font-weight: bold;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #fff;
+            text-transform: uppercase;
         }
 
         .modal-message {
             font-size: 1.1rem;
-            color: #666;
+            color: var(--dim);
             margin-bottom: 20px;
         }
 
         .modal-stats {
-            background: #f0f4ff;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 20px;
@@ -396,25 +432,25 @@
         .modal-stat {
             font-size: 1rem;
             margin: 8px 0;
-            color: #666;
+            color: var(--dim);
         }
 
         .modal-stat strong {
-            color: #667eea;
+            color: var(--yellow);
             font-size: 1.2rem;
         }
 
         /* Instructions */
         .instructions {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            background: var(--panel-2);
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 14px;
             margin-bottom: 15px;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid var(--cyan);
         }
 
         .instructions h3 {
-            color: #4CAF50;
+            color: var(--cyan);
             font-size: 1.1rem;
             margin-bottom: 10px;
         }
@@ -426,27 +462,28 @@
 
         .instructions li {
             margin-bottom: 6px;
-            color: #333;
+            color: var(--ink);
             font-size: 0.9rem;
         }
 
         .footer {
             text-align: center;
             padding: 15px 0;
-            color: #666;
+            color: var(--dim);
             font-size: 0.85rem;
         }
 
         .footer-link {
-            color: #667eea;
+            color: var(--cyan);
             text-decoration: none;
             font-weight: bold;
         }
 
         /* Mobile hint */
         .mobile-hint {
-            background: #e3f2fd;
-            color: #1565c0;
+            background: var(--panel-2);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
             padding: 10px;
             border-radius: 8px;
             text-align: center;
@@ -502,7 +539,7 @@
 
             .powerup-btn:hover:not(.disabled) {
                 transform: translateY(-3px);
-                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+                border-color: var(--cyan);
             }
         }
 
@@ -522,7 +559,7 @@
 <body>
     <nav class="acajou-nav">
         <a href="index.html" class="acajou-nav-logo">
-            🎯 ACAJOU GAMES
+            🕹️ ACAJOU
         </a>
         <a href="index.html" class="acajou-nav-back">
             ← Back

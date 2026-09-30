@@ -8,7 +8,9 @@
     <meta name="description" content="Alien Memory Match - A memory and concentration game with cute aliens and 4 difficulty levels. Free memory game for kids.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://acajou.games/alien_memory_game.html">
-    <meta name="theme-color" content="#1e3c72">
+    <meta name="theme-color" content="#14121C">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👽</text></svg>">
 
     <!-- Open Graph -->
@@ -58,9 +60,22 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            font-family: 'Chakra Petch', sans-serif;
+            background: var(--void);
+            color: var(--ink);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -75,7 +90,8 @@
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            background: var(--void);
+            border-bottom: 1px solid var(--line);
             padding: 12px 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 99999;
@@ -84,11 +100,19 @@
             align-items: center;
         }
 
+        .acajou-nav::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -4px; height: 4px;
+            background-image: repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+
         .acajou-nav-logo {
-            color: white;
+            color: var(--yellow);
             text-decoration: none;
-            font-weight: bold;
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.7rem, 3vw, 0.9rem);
+            text-shadow: 0 0 10px #ffd23f70;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -101,41 +125,47 @@
         }
 
         .acajou-nav-back {
-            color: white;
+            color: var(--dim);
             text-decoration: none;
-            font-weight: bold;
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 20px;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            padding: 8px 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            transition: all 0.2s;
         }
 
         .acajou-nav-back:hover {
-            background: rgba(255,255,255,0.3);
+            border-color: var(--cyan);
+            color: var(--cyan);
             transform: translateX(-3px);
         }
 
         .game-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
             max-width: 600px;
             width: 100%;
         }
 
         h1 {
             text-align: center;
-            color: #7e22ce;
-            font-size: clamp(1.5em, 5vw, 2.5em);
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 0 0 22px #33e6c440;
+            font-size: clamp(1.3em, 5vw, 2.1em);
             margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .subtitle {
             text-align: center;
-            color: #666;
+            color: var(--dim);
             margin-bottom: 20px;
             font-size: clamp(0.9em, 3vw, 1.1em);
         }
@@ -143,11 +173,11 @@
         .score-panel {
             display: flex;
             justify-content: space-around;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 15px 10px;
-            border-radius: 15px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            color: white;
         }
 
         .score-item {
@@ -158,12 +188,14 @@
         .score-label {
             font-size: clamp(0.7em, 2.5vw, 0.9em);
             opacity: 0.9;
+            color: var(--dim);
             margin-bottom: 5px;
         }
 
         .score-value {
-            font-size: clamp(1.3em, 4vw, 2em);
-            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1em, 4vw, 1.5em);
+            color: var(--yellow);
         }
 
         .game-board {
@@ -176,15 +208,15 @@
 
         .card {
             aspect-ratio: 1;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--panel-2);
+            border: 2px solid var(--line);
             border-radius: 10px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: clamp(1.5em, 6vw, 3em);
-            transition: all 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s;
             position: relative;
             transform-style: preserve-3d;
             user-select: none;
@@ -199,17 +231,18 @@
         @media (hover: hover) {
             .card:hover:not(.flipped):not(.matched) {
                 transform: scale(1.05);
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+                border-color: var(--cyan);
             }
         }
 
         .card.flipped, .card.matched {
-            background: white;
-            border: 2px solid #764ba2;
+            background: var(--void);
+            border: 2px solid var(--cyan);
         }
 
         .card.matched {
-            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            background: #173a34;
+            border-color: var(--cyan);
             animation: matchPulse 0.5s;
         }
 
@@ -249,15 +282,16 @@
         button {
             flex: 1;
             min-width: 120px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+            background: var(--cyan);
+            color: var(--void);
             border: none;
             padding: 12px 20px;
             font-size: clamp(0.9em, 3vw, 1.1em);
+            font-family: 'Chakra Petch', sans-serif;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
+            transition: all 0.2s;
             touch-action: manipulation;
         }
 
@@ -268,7 +302,6 @@
         @media (hover: hover) {
             button:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
             }
         }
 
@@ -277,7 +310,7 @@
             font-size: clamp(1em, 3.5vw, 1.3em);
             font-weight: bold;
             margin-bottom: 15px;
-            color: #7e22ce;
+            color: var(--yellow);
             min-height: 25px;
             line-height: 1.4;
         }
@@ -290,16 +323,18 @@
 
         .difficulty-btn {
             flex: 1;
-            background: #e0e0e0;
-            color: #333;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
             padding: 8px 5px;
             font-size: clamp(0.7em, 2.5vw, 0.9em);
             min-width: 0;
         }
 
         .difficulty-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--cyan);
+            border-color: var(--cyan);
+            color: var(--void);
         }
 
         @keyframes float {
@@ -350,7 +385,7 @@
 <body>
     <nav class="acajou-nav">
         <a href="index.html" class="acajou-nav-logo">
-            🎮 <span>ACAJOU GAMES</span>
+            🕹️ <span>ACAJOU</span>
         </a>
         <a href="index.html" class="acajou-nav-back">
             ← All Games

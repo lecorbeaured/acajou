@@ -6,7 +6,7 @@
     <meta name="description" content="Connect Four - Drop pieces and get four in a row! Play against AI or a friend.">
     <meta name="keywords" content="connect four, connect 4, strategy game, board game, puzzle">
     <meta name="author" content="ACAJOU GAMES">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#14121C">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
@@ -16,6 +16,8 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔴</text></svg>">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://acajou.games/connect.html">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -70,10 +72,22 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
+            font-family: 'Chakra Petch', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--void);
+            color: var(--ink);
             min-height: 100vh;
             padding-top: 60px;
             padding-bottom: 20px;
@@ -84,7 +98,8 @@
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            background: var(--void);
+            border-bottom: 1px solid var(--line);
             padding: 12px 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 1000;
@@ -93,38 +108,55 @@
             align-items: center;
         }
 
+        .acajou-nav::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -4px; height: 4px;
+            background-image: repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+
         .acajou-nav-logo {
-            color: white;
+            color: var(--yellow);
             text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.85rem;
+            text-shadow: 0 0 10px #ffd23f70;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
         .acajou-nav-back {
-            color: white;
+            color: var(--dim);
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .04em;
             padding: 6px 15px;
-            background: rgba(255,255,255,0.2);
+            border: 1px solid var(--line);
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .acajou-nav-back:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
         }
 
         .game-container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 18px;
             padding: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
         }
 
         h1 {
             text-align: center;
-            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+            background: linear-gradient(135deg, var(--pink) 0%, var(--yellow) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -134,24 +166,25 @@
 
         .subtitle {
             text-align: center;
-            color: #666;
+            color: var(--dim);
             font-size: clamp(0.9rem, 2vw, 1.1rem);
             margin-bottom: 20px;
         }
 
         /* Game Status */
         .game-status {
-            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 14px;
             margin-bottom: 20px;
             text-align: center;
         }
 
         .current-player {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            color: #667eea;
+            color: var(--yellow);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -167,7 +200,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             animation: pulse 2s infinite;
         }
 
@@ -185,23 +218,23 @@
 
         .score-box {
             flex: 1;
-            background: white;
+            background: var(--panel);
+            border: 1px solid var(--line);
             padding: 15px;
             border-radius: 12px;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .score-label {
-            font-size: 0.9rem;
-            color: #666;
+            font-size: 0.85rem;
+            color: var(--dim);
             margin-bottom: 5px;
             font-weight: 600;
         }
 
         .score-value {
-            font-size: 2rem;
-            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.4rem;
         }
 
         .score-box.red .score-value {
@@ -214,9 +247,10 @@
 
         /* Game Board */
         .board-container {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            background: var(--panel-2);
+            border: 2px solid var(--line);
             padding: 20px;
-            border-radius: 20px;
+            border-radius: 18px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             margin-bottom: 20px;
             position: relative;
@@ -242,7 +276,7 @@
         }
 
         .column:hover:not(.disabled) {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.06);
             transform: translateY(-3px);
         }
 
@@ -253,13 +287,14 @@
 
         .cell {
             aspect-ratio: 1;
-            background: white;
+            background: var(--void);
+            border: 1px solid var(--line);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: clamp(1.5rem, 4vw, 2.5rem);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
             transition: all 0.3s;
             position: relative;
         }
@@ -297,11 +332,11 @@
         @keyframes winPulse {
             0%, 100% {
                 transform: scale(1);
-                box-shadow: 0 4px 15px rgba(46, 204, 113, 0.6);
+                box-shadow: 0 4px 15px rgba(51, 230, 196, 0.6);
             }
             50% {
                 transform: scale(1.15);
-                box-shadow: 0 6px 25px rgba(46, 204, 113, 1);
+                box-shadow: 0 6px 25px rgba(51, 230, 196, 1);
             }
         }
 
@@ -317,12 +352,12 @@
         .btn {
             padding: 12px 24px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 1rem;
+            font-family: 'Chakra Petch', sans-serif;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             min-width: 44px;
             min-height: 44px;
             flex: 1;
@@ -334,18 +369,19 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
+            background: var(--cyan);
+            color: var(--void);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
+            background: var(--pink);
+            color: var(--void);
         }
 
         .btn:disabled {
@@ -355,16 +391,17 @@
 
         /* Mode Selection */
         .mode-selection {
-            background: linear-gradient(135deg, #fff9e6 0%, #ffe6e6 100%);
+            background: var(--panel-2);
+            border: 1px solid var(--line);
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 14px;
             margin-bottom: 20px;
         }
 
         .mode-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
-            color: #667eea;
+            color: var(--yellow);
             margin-bottom: 15px;
             text-align: center;
         }
@@ -377,23 +414,23 @@
 
         .mode-btn {
             padding: 15px;
-            background: white;
-            border: 3px solid #667eea;
-            border-radius: 12px;
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             text-align: center;
         }
 
         .mode-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+            border-color: var(--cyan);
         }
 
         .mode-btn.selected {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: #764ba2;
+            background: var(--cyan);
+            color: var(--void);
+            border-color: var(--cyan);
         }
 
         .mode-btn-icon {
@@ -408,12 +445,12 @@
 
         .mode-btn-desc {
             font-size: 0.8rem;
-            color: #666;
+            color: var(--dim);
             margin-top: 5px;
         }
 
         .mode-btn.selected .mode-btn-desc {
-            color: rgba(255,255,255,0.8);
+            color: rgba(20,18,28,0.7);
         }
 
         /* Win Modal */
@@ -442,9 +479,10 @@
         }
 
         .modal-content {
-            background: white;
+            background: var(--panel);
+            border: 2px solid var(--line);
             padding: 40px 30px;
-            border-radius: 25px;
+            border-radius: 20px;
             text-align: center;
             max-width: 400px;
             width: 100%;
@@ -483,22 +521,22 @@
 
         .modal-message {
             font-size: 1.2rem;
-            color: #666;
+            color: var(--dim);
             margin-bottom: 25px;
         }
 
         /* Instructions */
         .instructions {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            background: var(--panel-2);
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 14px;
             margin-bottom: 20px;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid var(--cyan);
         }
 
         .instructions h3 {
-            color: #4CAF50;
-            font-size: 1.2rem;
+            color: var(--cyan);
+            font-size: 1.15rem;
             margin-bottom: 15px;
         }
 
@@ -509,22 +547,22 @@
 
         .instructions li {
             margin-bottom: 8px;
-            color: #333;
+            color: var(--ink);
         }
 
         .instructions strong {
-            color: #4CAF50;
+            color: var(--cyan);
         }
 
         .footer {
             text-align: center;
             padding: 15px 0;
-            color: #666;
+            color: var(--dim);
             font-size: 0.9rem;
         }
 
         .footer-link {
-            color: #667eea;
+            color: var(--cyan);
             text-decoration: none;
             font-weight: bold;
         }
@@ -629,10 +667,10 @@
 <body>
     <nav class="acajou-nav">
         <a href="index.html" class="acajou-nav-logo">
-            🔴 ACAJOU GAMES
+            🕹️ ACAJOU
         </a>
         <a href="index.html" class="acajou-nav-back">
-            ← Back
+            ← All Games
         </a>
     </nav>
 

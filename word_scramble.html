@@ -8,7 +8,9 @@
     <meta name="description" content="Word Scramble - Unscramble letters across 6 categories with hints and a timer. Free word puzzle game for kids.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://acajou.games/word_scramble.html">
-    <meta name="theme-color" content="#4facfe">
+    <meta name="theme-color" content="#14121C">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔤</text></svg>">
 
     <!-- Open Graph -->
@@ -58,10 +60,24 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+            --violet:#9C6BFF;
+        }
+
         /* FIXED: Changed body to work with fixed navigation */
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%);
+            font-family: 'Chakra Petch', sans-serif;
+            background: var(--void);
+            color: var(--ink);
             min-height: 100vh;
             padding: 80px 10px 20px 10px; /* Top padding for fixed nav */
         }
@@ -72,7 +88,8 @@
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            background: var(--void);
+            border-bottom: 1px solid var(--line);
             padding: 12px 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 99999;
@@ -81,11 +98,19 @@
             align-items: center;
         }
 
+        .acajou-nav::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: -4px; height: 4px;
+            background-image: repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+
         .acajou-nav-logo {
-            color: white;
+            color: var(--yellow);
             text-decoration: none;
-            font-weight: bold;
-            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.7rem, 3vw, 0.9rem);
+            text-shadow: 0 0 10px #ffd23f70;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -98,18 +123,21 @@
         }
 
         .acajou-nav-back {
-            color: white;
+            color: var(--dim);
             text-decoration: none;
-            font-weight: bold;
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 20px;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            padding: 8px 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            transition: all 0.2s;
         }
 
         .acajou-nav-back:hover {
-            background: rgba(255,255,255,0.3);
+            border-color: var(--cyan);
+            color: var(--cyan);
             transform: translateX(-3px);
         }
 
@@ -123,29 +151,29 @@
         }
 
         .game-container {
-            background: white;
-            border-radius: 25px;
+            background: var(--panel);
+            border-radius: 16px;
             padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45);
             max-width: 700px;
             width: 100%;
-            border: 4px solid #4facfe;
+            border: 2px solid var(--line);
             margin: 0 auto; /* Center the container */
         }
 
         h1 {
             text-align: center;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: clamp(2em, 6vw, 3em);
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 0 0 22px #33e6c440;
+            font-size: clamp(1.8em, 6vw, 2.8em);
             margin-bottom: 10px;
         }
 
         .subtitle {
             text-align: center;
-            color: #666;
+            color: var(--dim);
             margin-bottom: 25px;
             font-size: clamp(0.9em, 2.5vw, 1.1em);
         }
@@ -158,25 +186,27 @@
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
         }
 
         .stat-label {
             font-size: clamp(0.7em, 2vw, 0.85em);
             opacity: 0.9;
+            color: var(--dim);
             margin-bottom: 5px;
             text-transform: uppercase;
             font-weight: bold;
         }
 
         .stat-value {
-            font-size: clamp(1.3em, 4vw, 1.8em);
-            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1em, 4vw, 1.3em);
+            color: var(--yellow);
         }
 
         .category-selector {
@@ -188,24 +218,26 @@
 
         .category-btn {
             padding: 12px;
-            border: 3px solid #4facfe;
-            background: white;
-            color: #4facfe;
-            border-radius: 12px;
+            border: 2px solid var(--line);
+            background: var(--panel-2);
+            color: var(--ink);
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
+            font-family: 'Chakra Petch', sans-serif;
             font-size: clamp(0.85em, 2vw, 1em);
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .category-btn.active {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
+            background: var(--cyan);
+            border-color: var(--cyan);
+            color: var(--void);
             transform: scale(1.05);
         }
 
         .category-btn:hover:not(.active) {
-            background: #e6f7ff;
+            border-color: var(--cyan);
         }
 
         .difficulty-selector {
@@ -217,25 +249,27 @@
 
         .difficulty-btn {
             padding: 10px 20px;
-            border: 2px solid #4facfe;
-            background: white;
-            color: #4facfe;
+            border: 2px solid var(--line);
+            background: var(--panel-2);
+            color: var(--ink);
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
+            font-family: 'Chakra Petch', sans-serif;
             font-size: clamp(0.9em, 2vw, 1em);
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .difficulty-btn.active {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
+            background: var(--cyan);
+            border-color: var(--cyan);
+            color: var(--void);
         }
 
         .game-panel {
-            background: linear-gradient(135deg, #e6f7ff 0%, #e6fffb 100%);
-            border: 4px solid #4facfe;
-            border-radius: 20px;
+            background: var(--panel-2);
+            border: 2px solid var(--line);
+            border-radius: 16px;
             padding: 30px 20px;
             margin-bottom: 25px;
             min-height: 350px;
@@ -246,9 +280,9 @@
 
         .scrambled-word {
             text-align: center;
-            font-size: clamp(2.5em, 7vw, 4em);
+            font-size: clamp(2.2em, 7vw, 3.6em);
             font-weight: bold;
-            color: #4facfe;
+            color: #fff;
             letter-spacing: 8px;
             margin-bottom: 30px;
             text-transform: uppercase;
@@ -266,12 +300,12 @@
         }
 
         .hint-box {
-            background: rgba(79, 172, 254, 0.1);
-            border: 2px solid #4facfe;
+            background: var(--panel);
+            border: 2px solid var(--line);
             padding: 15px;
             border-radius: 12px;
             font-size: clamp(1em, 2.5vw, 1.2em);
-            color: #666;
+            color: var(--dim);
             font-style: italic;
             margin-top: 10px;
         }
@@ -281,33 +315,36 @@
             padding: 20px;
             font-size: clamp(1.5em, 4vw, 2em);
             text-align: center;
-            border: 3px solid #4facfe;
-            border-radius: 15px;
+            background: var(--void);
+            color: var(--ink);
+            border: 2px solid var(--line);
+            border-radius: 12px;
             margin-bottom: 15px;
+            font-family: 'Chakra Petch', sans-serif;
             font-weight: bold;
             text-transform: uppercase;
         }
 
         .answer-input:focus {
             outline: none;
-            border-color: #00f2fe;
-            box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(51, 230, 196, 0.35);
             transform: scale(1.02);
         }
 
         .answer-input.correct {
             animation: correctPulse 0.5s;
-            border-color: #10b981;
+            border-color: var(--cyan);
         }
 
         .answer-input.incorrect {
             animation: incorrectShake 0.5s;
-            border-color: #ef4444;
+            border-color: var(--pink);
         }
 
         @keyframes correctPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); background: #d1fae5; }
+            50% { transform: scale(1.05); background: #173a34; }
         }
 
         @keyframes incorrectShake {
@@ -324,21 +361,20 @@
         }
 
         .action-btn {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
+            background: var(--cyan);
+            color: var(--void);
             border: none;
             padding: 15px;
             font-size: clamp(1em, 2.5vw, 1.2em);
-            border-radius: 12px;
+            font-family: 'Chakra Petch', sans-serif;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
         }
 
         .action-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
         }
 
         .action-btn:disabled {
@@ -347,15 +383,15 @@
         }
 
         .action-btn.hint {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: var(--yellow);
         }
 
         .action-btn.skip {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: var(--pink);
         }
 
         .action-btn.reveal {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: var(--violet);
         }
 
         .controls {
@@ -367,27 +403,28 @@
         .control-btn {
             flex: 1;
             min-width: 140px;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
             padding: 15px;
             font-size: clamp(1em, 2.5vw, 1.2em);
-            border-radius: 12px;
+            font-family: 'Chakra Petch', sans-serif;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .control-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.5);
+            border-color: var(--cyan);
         }
 
         .feedback {
             text-align: center;
             padding: 15px;
             margin: 15px 0;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: clamp(1.1em, 3vw, 1.3em);
             font-weight: bold;
             animation: slideIn 0.3s;
@@ -405,27 +442,27 @@
         }
 
         .feedback.correct {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            color: #065f46;
-            border: 3px solid #10b981;
+            background: #173a34;
+            color: var(--cyan);
+            border: 2px solid var(--cyan);
         }
 
         .feedback.incorrect {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            color: #991b1b;
-            border: 3px solid #ef4444;
+            background: #3a1728;
+            color: var(--pink);
+            border: 2px solid var(--pink);
         }
 
         .timer {
             text-align: center;
-            font-size: clamp(1.2em, 3vw, 1.5em);
-            font-weight: bold;
-            color: #4facfe;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(1em, 3vw, 1.3em);
+            color: var(--yellow);
             margin-bottom: 15px;
         }
 
         .timer.warning {
-            color: #ef4444;
+            color: var(--pink);
             animation: timerPulse 1s infinite;
         }
 
@@ -446,15 +483,18 @@
         }
 
         .game-over-screen h2 {
-            color: #4facfe;
-            font-size: clamp(2em, 5vw, 3em);
+            color: #fff;
+            text-transform: uppercase;
+            font-size: clamp(1.8em, 5vw, 2.6em);
             margin-bottom: 20px;
         }
 
         .final-stats {
-            background: #f0f0f0;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 12px;
             margin: 20px 0;
             font-size: clamp(1em, 2.5vw, 1.2em);
             line-height: 2;
@@ -483,7 +523,7 @@
     <!-- Navigation -->
     <nav class="acajou-nav">
         <a href="index.html" class="acajou-nav-logo">
-            🎮 <span>ACAJOU GAMES</span>
+            🕹️ <span>ACAJOU</span>
         </a>
         <a href="index.html" class="acajou-nav-back">
             ← All Games
