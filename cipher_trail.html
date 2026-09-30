@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Cipher Trail - Crack letter-shift ciphers to unlock each waypoint. A logic puzzle game for kids.">
+    <meta name="keywords" content="cipher game, logic puzzle, code breaking, kids puzzle, educational game">
+    <meta name="author" content="ACAJOU GAMES">
+    <meta name="theme-color" content="#14121C">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Cipher Trail - ACAJOU GAMES</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗝️</text></svg>">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YH4Z66742N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YH4Z66742N');
+    </script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+        }
+
+        html,body{ background:var(--void); }
+        body{
+            font-family:'Chakra Petch', sans-serif;
+            color:var(--ink);
+            min-height:100vh;
+            padding:96px 18px 40px;
+        }
+        .pixel{ font-family:'Press Start 2P', monospace; }
+
+        /* Nav */
+        .acajou-nav{
+            position:fixed; top:0; left:0; right:0; z-index:999;
+            background:var(--void); border-bottom:1px solid var(--line);
+            display:flex; align-items:center; justify-content:space-between;
+            padding:14px 20px;
+        }
+        .acajou-nav::after{
+            content:''; position:absolute; left:0; right:0; bottom:-4px; height:4px;
+            background-image:repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+        .acajou-nav-logo{
+            display:flex; align-items:center; gap:9px; text-decoration:none;
+            font-family:'Press Start 2P', monospace; font-size:13px; color:var(--yellow);
+            text-shadow:0 0 10px #ffd23f70;
+        }
+        .acajou-nav-back{
+            text-decoration:none; color:var(--dim); font-weight:600; font-size:13px;
+            text-transform:uppercase; letter-spacing:.05em; border:1px solid var(--line);
+            padding:9px 16px; border-radius:8px; transition:border-color .2s, color .2s;
+        }
+        .acajou-nav-back:hover{ border-color:var(--cyan); color:var(--cyan); }
+
+        /* Game shell */
+        .game-container{
+            max-width:720px; margin:0 auto; background:var(--panel);
+            border:2px solid var(--line); border-radius:16px; padding:34px 30px 40px;
+            box-shadow:0 20px 60px rgba(0,0,0,.45);
+        }
+        h1{
+            text-align:center; font-weight:700; text-transform:uppercase; letter-spacing:.02em;
+            font-size:clamp(1.7rem, 5vw, 2.4rem); color:#fff; margin-bottom:8px;
+            text-shadow:0 0 22px #33e6c440;
+        }
+        .subtitle{ text-align:center; color:var(--dim); font-size:15px; margin-bottom:28px; }
+
+        /* Tier select */
+        #tierPanel h3{
+            text-align:center; font-size:13px; text-transform:uppercase; letter-spacing:.08em;
+            color:var(--dim); margin-bottom:16px;
+        }
+        .tier-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:14px; }
+        .tier-btn{
+            background:var(--panel-2); border:2px solid var(--line); color:var(--ink);
+            border-radius:12px; padding:18px 14px; cursor:pointer; text-align:center;
+            font-family:'Chakra Petch', sans-serif; transition:border-color .15s, transform .1s;
+        }
+        .tier-btn:hover{ transform:translateY(-3px); }
+        .tier-btn b{ display:block; font-size:16px; text-transform:uppercase; margin-bottom:6px; }
+        .tier-btn span{ font-size:12.5px; color:var(--dim); }
+        .tier-btn.scout{ border-color:var(--cyan); }
+        .tier-btn.ranger{ border-color:var(--yellow); }
+        .tier-btn.trailblazer{ border-color:var(--pink); }
+
+        /* Stats */
+        .stats-container{
+            display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:20px;
+        }
+        .stat-box{
+            background:var(--panel-2); border:1px solid var(--line); border-radius:10px;
+            text-align:center; padding:12px 6px;
+        }
+        .stat-label{ font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); margin-bottom:6px; }
+        .stat-value{ font-family:'Press Start 2P', monospace; font-size:15px; color:var(--yellow); }
+
+        /* Trail progress dots */
+        .trail-dots{ display:flex; justify-content:center; gap:8px; margin-bottom:22px; flex-wrap:wrap; }
+        .trail-dot{ width:14px; height:14px; border-radius:50%; background:var(--void); border:2px solid var(--line); }
+        .trail-dot.current{ border-color:var(--yellow); box-shadow:0 0 8px #ffd23f70; }
+        .trail-dot.cracked{ background:var(--cyan); border-color:var(--cyan); }
+        .trail-dot.missed{ background:var(--pink); border-color:var(--pink); }
+
+        /* Timer */
+        .timer-track{ height:8px; background:var(--void); border:1px solid var(--line); border-radius:5px; overflow:hidden; margin-bottom:26px; }
+        .timer-fill{ height:100%; width:100%; background:var(--cyan); transition:width .1s linear, background .3s; }
+
+        /* Cipher terminal */
+        .terminal-label{ text-align:center; color:var(--dim); font-size:12px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+        .terminal{
+            background:#0f0e17; border:1px solid var(--line); border-radius:10px;
+            padding:20px 14px; text-align:center; margin-bottom:6px;
+        }
+        .terminal .cipher-text{
+            font-family:'Press Start 2P', monospace; font-size:clamp(1.1rem, 4.5vw, 1.6rem);
+            letter-spacing:6px; color:var(--pink); word-break:break-all;
+        }
+        .terminal.decoded{ margin-bottom:22px; }
+        .terminal.decoded .cipher-text{ color:var(--ink); font-family:'Chakra Petch', sans-serif; font-weight:700; letter-spacing:4px; }
+        .terminal.decoded .cipher-text .hit{ color:var(--cyan); text-shadow:0 0 10px #33e6c480; }
+
+        .hint-caption{ text-align:center; font-size:13px; color:var(--yellow); min-height:18px; margin-bottom:18px; }
+
+        /* Shift dial */
+        .dial-row{ display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+        .dial-readout{ font-family:'Press Start 2P', monospace; font-size:14px; color:var(--cyan); min-width:88px; text-align:center; }
+        input[type="range"]{
+            -webkit-appearance:none; appearance:none; flex:1; height:8px; border-radius:6px;
+            background:var(--void); border:1px solid var(--line); cursor:pointer;
+        }
+        input[type="range"]::-webkit-slider-thumb{
+            -webkit-appearance:none; width:26px; height:26px; border-radius:50%;
+            background:var(--yellow); border:3px solid var(--void); box-shadow:0 0 10px #ffd23f80;
+            cursor:pointer; margin-top:-9px;
+        }
+        input[type="range"]::-moz-range-thumb{
+            width:26px; height:26px; border-radius:50%; background:var(--yellow);
+            border:3px solid var(--void); box-shadow:0 0 10px #ffd23f80; cursor:pointer;
+        }
+        input[type="range"]::-moz-range-track{ height:8px; border-radius:6px; background:var(--void); border:1px solid var(--line); }
+
+        .controls-row{ display:flex; justify-content:center; margin-bottom:8px; }
+        .hint-btn{
+            font-family:'Chakra Petch', sans-serif; font-weight:600; font-size:13.5px;
+            background:var(--panel-2); color:var(--yellow); border:1px solid var(--line);
+            padding:10px 18px; border-radius:8px; cursor:pointer; transition:border-color .2s;
+        }
+        .hint-btn:hover:not(:disabled){ border-color:var(--yellow); }
+        .hint-btn:disabled{ color:var(--dim); cursor:not-allowed; opacity:.6; }
+
+        .feedback{ text-align:center; min-height:24px; margin-top:18px; font-weight:600; font-size:14.5px; }
+        .feedback.good{ color:var(--cyan); }
+        .feedback.bad{ color:var(--pink); }
+
+        /* End screen */
+        #endPanel{ text-align:center; }
+        #endPanel .pixel{ color:var(--yellow); font-size:13px; display:block; margin-bottom:14px; }
+        #endPanel h2{ font-size:clamp(1.5rem,4vw,2rem); text-transform:uppercase; color:#fff; margin-bottom:24px; }
+        .end-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:30px; }
+        .end-stats .stat-box .stat-value{ font-size:18px; }
+        .end-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+        .btn-primary, .btn-secondary{
+            font-family:'Press Start 2P', monospace; font-size:11.5px; text-decoration:none;
+            padding:15px 22px; border-radius:8px; cursor:pointer; border:none;
+        }
+        .btn-primary{ background:var(--yellow); color:var(--void); }
+        .btn-secondary{ background:none; border:1px solid var(--line); color:var(--ink); }
+
+        [hidden]{ display:none !important; }
+
+        @media (max-width:520px){
+            .stats-container{ grid-template-columns:repeat(2,1fr); }
+            .end-stats{ grid-template-columns:repeat(1,1fr); }
+            .dial-row{ flex-direction:column; align-items:stretch; }
+            .dial-readout{ text-align:center; }
+        }
+
+        @media (prefers-reduced-motion: reduce){ *{ transition-duration:.001ms !important; } }
+    </style>
+</head>
+<body>
+    <nav class="acajou-nav">
+        <a href="index.html" class="acajou-nav-logo">🕹️ ACAJOU</a>
+        <a href="index.html" class="acajou-nav-back">← All Games</a>
+    </nav>
+
+    <div class="game-container">
+        <h1>🗝️ Cipher Trail</h1>
+        <p class="subtitle">Drag the shift dial and watch the code unlock in real time.</p>
+
+        <!-- Tier select -->
+        <div id="tierPanel">
+            <h3>Choose Your Tier</h3>
+            <div class="tier-grid">
+                <button class="tier-btn scout" onclick="startTier('scout')">
+                    <b>🧭 Scout</b>
+                    <span>Small shifts, short words</span>
+                </button>
+                <button class="tier-btn ranger" onclick="startTier('ranger')">
+                    <b>🏕️ Ranger</b>
+                    <span>Wider shifts, longer words</span>
+                </button>
+                <button class="tier-btn trailblazer" onclick="startTier('trailblazer')">
+                    <b>⛰️ Trailblazer</b>
+                    <span>Full alphabet, fast clock</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Game area -->
+        <div id="gameArea" hidden>
+            <div class="stats-container">
+                <div class="stat-box"><div class="stat-label">Score</div><div class="stat-value" id="scoreVal">0</div></div>
+                <div class="stat-box"><div class="stat-label">Clean</div><div class="stat-value" id="streakVal">0✨</div></div>
+                <div class="stat-box"><div class="stat-label">Waypoint</div><div class="stat-value" id="waypointVal">1/8</div></div>
+                <div class="stat-box"><div class="stat-label">Hints</div><div class="stat-value" id="hintsVal">3</div></div>
+            </div>
+
+            <div class="trail-dots" id="trailDots"></div>
+
+            <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+
+            <p class="terminal-label">Encoded transmission</p>
+            <div class="terminal"><div class="cipher-text" id="cipherDisplay">-----</div></div>
+
+            <p class="terminal-label">Live decode</p>
+            <div class="terminal decoded"><div class="cipher-text" id="decodedDisplay">-----</div></div>
+
+            <p class="hint-caption" id="hintCaption"></p>
+
+            <div class="dial-row">
+                <span class="dial-readout" id="shiftReadout">SHIFT 0</span>
+                <input type="range" id="shiftSlider" min="0" max="25" value="0" oninput="onSliderInput()">
+            </div>
+
+            <div class="controls-row">
+                <button class="hint-btn" id="hintBtn" onclick="useHint()">💡 Use Hint (reveal first letter)</button>
+            </div>
+
+            <p class="feedback" id="feedback"></p>
+        </div>
+
+        <!-- End screen -->
+        <div id="endPanel" hidden>
+            <span class="pixel">TRAIL COMPLETE</span>
+            <h2 id="endHeadline">Nice Work!</h2>
+            <div class="end-stats">
+                <div class="stat-box"><div class="stat-label">Final Score</div><div class="stat-value" id="endScore">0</div></div>
+                <div class="stat-box"><div class="stat-label">Cracked</div><div class="stat-value" id="endCracked">0/8</div></div>
+                <div class="stat-box"><div class="stat-label">Best Clean Streak</div><div class="stat-value" id="endStreak">0</div></div>
+            </div>
+            <div class="end-actions">
+                <button class="btn-primary" onclick="restart()">▸ TRAIL AGAIN</button>
+                <a class="btn-secondary" href="index.html">ALL GAMES</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TIERS = {
+            scout:       { maxShift:5,  timer:20, label:'Scout',
+                words:['CAT','DOG','SUN','MAP','BEE','FOX','OWL','ANT','BAT','PIG','HAT','CUP','BOX','FROG','BOOK','FISH','BIRD','STAR','MOON','LEAF'] },
+            ranger:      { maxShift:12, timer:15, label:'Ranger',
+                words:['TIGER','ROBOT','PLANT','CLOUD','HONEY','SNAKE','TRUCK','APPLE','GRAPE','TABLE','CHAIR','MUSIC','HOUSE','MOUSE','PENCIL','DRAGON','GARDEN','PLANET','WINTER','SPIDER'] },
+            trailblazer: { maxShift:25, timer:11, label:'Trailblazer',
+                words:['DRAGON','PLANET','WIZARD','CASTLE','JOURNEY','MYSTERY','TREASURE','COMPASS','EXPLORE','MOUNTAIN','FOREST','RIVER','VALLEY','BEACON','LANTERN','VOYAGE','PUZZLE','CIPHER','SECRET','UNLOCK'] }
+        };
+        const WAYPOINTS_PER_TRAIL = 8;
+
+        let state = null;
+        let timerInterval = null;
+
+        function shiftChar(ch, shift){
+            const code = ch.charCodeAt(0) - 65;
+            return String.fromCharCode(((code + shift) % 26 + 26) % 26 + 65);
+        }
+        function encode(word, shift){ return word.split('').map(c => shiftChar(c, shift)).join(''); }
+        function decode(word, shift){ return encode(word, -shift); }
+        function randInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function startTier(tier){
+            state = {
+                tier, waypoint:1, score:0, cleanStreak:0, bestCleanStreak:0,
+                crackedCount:0, hintsLeft:3, history:[], lastWord:null, locked:false
+            };
+            document.getElementById('shiftSlider').max = TIERS[tier].maxShift;
+            document.getElementById('tierPanel').hidden = true;
+            document.getElementById('endPanel').hidden = true;
+            document.getElementById('gameArea').hidden = false;
+            renderTrailDots();
+            updateStats();
+            nextWaypoint();
+        }
+
+        function updateStats(){
+            document.getElementById('scoreVal').textContent = state.score;
+            document.getElementById('streakVal').textContent = state.cleanStreak + '✨';
+            document.getElementById('waypointVal').textContent = state.waypoint + '/' + WAYPOINTS_PER_TRAIL;
+            document.getElementById('hintsVal').textContent = state.hintsLeft;
+        }
+
+        function renderTrailDots(){
+            const wrap = document.getElementById('trailDots');
+            wrap.innerHTML = '';
+            for (let i = 1; i <= WAYPOINTS_PER_TRAIL; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'trail-dot';
+                const past = state.history[i - 1];
+                if (past) dot.classList.add(past);
+                else if (i === state.waypoint) dot.classList.add('current');
+                wrap.appendChild(dot);
+            }
+        }
+
+        function pickWord(tier){
+            const pool = TIERS[tier].words;
+            let word;
+            do { word = pool[randInt(0, pool.length - 1)]; } while (word === state.lastWord && pool.length > 1);
+            state.lastWord = word;
+            return word;
+        }
+
+        function nextWaypoint(){
+            clearInterval(timerInterval);
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('hintCaption').textContent = '';
+            state.locked = false;
+            state.hintUsedThisWaypoint = false;
+
+            const word = pickWord(state.tier);
+            const shift = randInt(1, TIERS[state.tier].maxShift);
+            state.current = { word, shift, cipherText: encode(word, shift) };
+
+            document.getElementById('cipherDisplay').textContent = state.current.cipherText;
+            document.getElementById('shiftSlider').value = 0;
+            document.getElementById('hintBtn').disabled = false;
+            renderDecoded(0);
+            renderTrailDots();
+            startTimer(TIERS[state.tier].timer);
+            updateStats();
+        }
+
+        function renderDecoded(sliderVal){
+            const { cipherText, word } = state.current;
+            const decoded = decode(cipherText, sliderVal);
+            document.getElementById('shiftReadout').textContent = 'SHIFT ' + sliderVal;
+
+            const spans = decoded.split('').map((ch, i) => {
+                const hit = ch === word[i];
+                return `<span class="${hit ? 'hit' : ''}">${ch}</span>`;
+            }).join('');
+            document.getElementById('decodedDisplay').innerHTML = spans;
+            return decoded;
+        }
+
+        function onSliderInput(){
+            if (!state || state.locked) return;
+            const sliderVal = parseInt(document.getElementById('shiftSlider').value, 10);
+            const decoded = renderDecoded(sliderVal);
+            if (decoded === state.current.word) {
+                crackIt();
+            }
+        }
+
+        function startTimer(seconds){
+            const fill = document.getElementById('timerFill');
+            let elapsed = 0;
+            const total = seconds * 1000;
+            state.totalTime = seconds;
+            fill.style.width = '100%';
+            fill.style.background = 'var(--cyan)';
+            timerInterval = setInterval(() => {
+                elapsed += 100;
+                const pct = Math.max(0, 100 - (elapsed / total) * 100);
+                fill.style.width = pct + '%';
+                if (pct < 30) fill.style.background = 'var(--pink)';
+                else if (pct < 60) fill.style.background = 'var(--yellow)';
+                if (elapsed >= total) {
+                    clearInterval(timerInterval);
+                    if (!state.locked) timeUp();
+                }
+            }, 100);
+        }
+
+        function crackIt(){
+            if (state.locked) return;
+            state.locked = true;
+            clearInterval(timerInterval);
+            document.getElementById('hintBtn').disabled = true;
+
+            const fillPct = parseFloat(document.getElementById('timerFill').style.width) || 0;
+            const timeRemainingSec = (fillPct / 100) * state.totalTime;
+            let points = 20 + Math.round(timeRemainingSec * 2);
+            if (state.hintUsedThisWaypoint) points = Math.round(points / 2);
+
+            state.score += points;
+            state.crackedCount += 1;
+            if (state.hintUsedThisWaypoint) {
+                state.cleanStreak = 0;
+            } else {
+                state.cleanStreak += 1;
+                state.bestCleanStreak = Math.max(state.bestCleanStreak, state.cleanStreak);
+            }
+            state.history[state.waypoint - 1] = 'cracked';
+
+            showFeedback(true, `Unlocked! +${points}${state.hintUsedThisWaypoint ? ' (hint used)' : ''}`);
+            updateStats();
+            renderTrailDots();
+            advanceAfterDelay();
+        }
+
+        function timeUp(){
+            state.locked = true;
+            state.cleanStreak = 0;
+            state.history[state.waypoint - 1] = 'missed';
+            document.getElementById('decodedDisplay').textContent = state.current.word;
+            document.getElementById('hintBtn').disabled = true;
+            showFeedback(false, `Trail went cold — it was "${state.current.word}".`);
+            updateStats();
+            renderTrailDots();
+            advanceAfterDelay();
+        }
+
+        function useHint(){
+            if (!state || state.locked || state.hintsLeft <= 0 || state.hintUsedThisWaypoint) return;
+            state.hintsLeft -= 1;
+            state.hintUsedThisWaypoint = true;
+            document.getElementById('hintCaption').textContent = `Hint: starts with "${state.current.word[0]}"`;
+            document.getElementById('hintBtn').disabled = true;
+            updateStats();
+        }
+
+        function showFeedback(good, text){
+            const el = document.getElementById('feedback');
+            el.textContent = text;
+            el.className = 'feedback ' + (good ? 'good' : 'bad');
+        }
+
+        function advanceAfterDelay(){
+            setTimeout(() => {
+                state.waypoint += 1;
+                if (state.waypoint > WAYPOINTS_PER_TRAIL) {
+                    endGame();
+                } else {
+                    nextWaypoint();
+                }
+            }, 1400);
+        }
+
+        function endGame(){
+            clearInterval(timerInterval);
+            document.getElementById('gameArea').hidden = true;
+            document.getElementById('endPanel').hidden = false;
+
+            document.getElementById('endScore').textContent = state.score;
+            document.getElementById('endCracked').textContent = state.crackedCount + '/' + WAYPOINTS_PER_TRAIL;
+            document.getElementById('endStreak').textContent = state.bestCleanStreak;
+
+            const headline = document.getElementById('endHeadline');
+            if (state.crackedCount >= 7) headline.textContent = 'Master Codebreaker!';
+            else if (state.crackedCount >= 4) headline.textContent = 'Sharp Eyes!';
+            else headline.textContent = 'Keep Practicing!';
+
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'complete_game', {
+                    'event_category': 'Game',
+                    'event_label': 'Cipher Trail - ' + TIERS[state.tier].label,
+                    'value': state.score
+                });
+            }
+        }
+
+        function restart(){
+            document.getElementById('endPanel').hidden = true;
+            document.getElementById('tierPanel').hidden = false;
+        }
+
+        window.addEventListener('load', function() {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'view', { 'event_category': 'Page', 'event_label': 'Cipher Trail' });
+            }
+        });
+    </script>
+</body>
+</html>

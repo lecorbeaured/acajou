@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Fraction Forge - Slice, stack and simplify fractions on the clock. A visual fractions game for kids.">
+    <meta name="keywords" content="fraction game, math game, simplify fractions, kids math, educational game">
+    <meta name="author" content="ACAJOU GAMES">
+    <meta name="theme-color" content="#14121C">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Fraction Forge - ACAJOU GAMES</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚒️</text></svg>">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YH4Z66742N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YH4Z66742N');
+    </script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap">
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        :root{
+            --void:#14121C;
+            --panel:#1D1B29;
+            --panel-2:#241f36;
+            --line:#302c44;
+            --ink:#E7E5F2;
+            --dim:#8b88a8;
+            --pink:#FF3D7F;
+            --cyan:#33E6C4;
+            --yellow:#FFD23F;
+            --ember:#FF8A3D;
+        }
+
+        html,body{ background:var(--void); }
+        body{
+            font-family:'Chakra Petch', sans-serif;
+            color:var(--ink);
+            min-height:100vh;
+            padding:96px 18px 40px;
+        }
+        .pixel{ font-family:'Press Start 2P', monospace; }
+
+        /* Nav */
+        .acajou-nav{
+            position:fixed; top:0; left:0; right:0; z-index:999;
+            background:var(--void); border-bottom:1px solid var(--line);
+            display:flex; align-items:center; justify-content:space-between;
+            padding:14px 20px;
+        }
+        .acajou-nav::after{
+            content:''; position:absolute; left:0; right:0; bottom:-4px; height:4px;
+            background-image:repeating-linear-gradient(90deg, var(--yellow) 0 3px, transparent 3px 26px);
+        }
+        .acajou-nav-logo{
+            display:flex; align-items:center; gap:9px; text-decoration:none;
+            font-family:'Press Start 2P', monospace; font-size:13px; color:var(--yellow);
+            text-shadow:0 0 10px #ffd23f70;
+        }
+        .acajou-nav-back{
+            text-decoration:none; color:var(--dim); font-weight:600; font-size:13px;
+            text-transform:uppercase; letter-spacing:.05em; border:1px solid var(--line);
+            padding:9px 16px; border-radius:8px; transition:border-color .2s, color .2s;
+        }
+        .acajou-nav-back:hover{ border-color:var(--cyan); color:var(--cyan); }
+
+        /* Game shell */
+        .game-container{
+            max-width:720px; margin:0 auto; background:var(--panel);
+            border:2px solid var(--line); border-radius:16px; padding:34px 30px 40px;
+            box-shadow:0 20px 60px rgba(0,0,0,.45);
+        }
+        h1{
+            text-align:center; font-weight:700; text-transform:uppercase; letter-spacing:.02em;
+            font-size:clamp(1.7rem, 5vw, 2.4rem); color:#fff; margin-bottom:8px;
+            text-shadow:0 0 22px #ff8a3d40;
+        }
+        .subtitle{ text-align:center; color:var(--dim); font-size:15px; margin-bottom:28px; }
+
+        /* Tier select */
+        #tierPanel h3{
+            text-align:center; font-size:13px; text-transform:uppercase; letter-spacing:.08em;
+            color:var(--dim); margin-bottom:16px;
+        }
+        .tier-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:14px; }
+        .tier-btn{
+            background:var(--panel-2); border:2px solid var(--line); color:var(--ink);
+            border-radius:12px; padding:18px 14px; cursor:pointer; text-align:center;
+            font-family:'Chakra Petch', sans-serif; transition:border-color .15s, transform .1s;
+        }
+        .tier-btn:hover{ transform:translateY(-3px); }
+        .tier-btn b{ display:block; font-size:16px; text-transform:uppercase; margin-bottom:6px; }
+        .tier-btn span{ font-size:12.5px; color:var(--dim); }
+        .tier-btn.apprentice{ border-color:var(--cyan); }
+        .tier-btn.journeyman{ border-color:var(--yellow); }
+        .tier-btn.master{ border-color:var(--pink); }
+
+        /* Stats */
+        .stats-container{
+            display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:22px;
+        }
+        .stat-box{
+            background:var(--panel-2); border:1px solid var(--line); border-radius:10px;
+            text-align:center; padding:12px 6px;
+        }
+        .stat-label{ font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); margin-bottom:6px; }
+        .stat-value{ font-family:'Press Start 2P', monospace; font-size:15px; color:var(--yellow); }
+
+        /* Timer */
+        .timer-track{ height:8px; background:var(--void); border:1px solid var(--line); border-radius:5px; overflow:hidden; margin-bottom:26px; }
+        .timer-fill{ height:100%; width:100%; background:var(--cyan); transition:width .1s linear, background .3s; }
+
+        /* Ingot bar (fraction visual) */
+        .forge-label{ text-align:center; color:var(--dim); font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:10px; }
+        .ingot-bar{
+            display:grid; grid-auto-flow:column; grid-auto-columns:1fr; gap:4px;
+            margin-bottom:8px; max-width:100%;
+        }
+        .ingot-bar.wrap{ display:flex; flex-wrap:wrap; grid-auto-flow:unset; }
+        .ingot{
+            height:56px; border-radius:5px; background:#0f0e17; border:1px solid var(--line);
+            flex:1; min-width:26px;
+        }
+        .ingot.lit{
+            background:linear-gradient(180deg, #ffd23f 0%, var(--ember) 55%, #c9481f 100%);
+            box-shadow:0 0 14px #ff8a3d70, inset 0 0 8px #ffe9a8aa;
+            border-color:#ffb066;
+        }
+        .forge-readout{ text-align:center; margin-bottom:26px; }
+        .forge-readout .raw{ font-size:13px; color:var(--dim); }
+        .forge-readout .raw b{ color:var(--ink); }
+
+        /* Answers */
+        .answers-heading{ text-align:center; font-size:13px; color:var(--dim); text-transform:uppercase; letter-spacing:.07em; margin-bottom:14px; }
+        .answer-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; }
+        .answer-btn{
+            background:var(--panel-2); border:2px solid var(--line); border-radius:12px;
+            padding:16px 8px; cursor:pointer; display:flex; flex-direction:column; align-items:center;
+            transition:border-color .15s, transform .1s;
+        }
+        .answer-btn:hover:not(:disabled){ transform:translateY(-3px); border-color:#4a4568; }
+        .answer-btn .num{ font-size:22px; font-weight:700; color:#fff; line-height:1.15; }
+        .answer-btn .bar{ width:34px; height:2px; background:var(--ink); margin:4px 0; }
+        .answer-btn .den{ font-size:22px; font-weight:700; color:#fff; line-height:1.15; }
+        .answer-btn:disabled{ cursor:default; }
+        .answer-btn.correct{ border-color:var(--cyan); background:#173a34; box-shadow:0 0 18px #33e6c450; }
+        .answer-btn.wrong{ border-color:var(--pink); background:#3a1728; box-shadow:0 0 18px #ff3d7f50; }
+
+        .feedback{ text-align:center; min-height:24px; margin-top:16px; font-weight:600; font-size:14.5px; }
+        .feedback.good{ color:var(--cyan); }
+        .feedback.bad{ color:var(--pink); }
+
+        /* End screen */
+        #endPanel{ text-align:center; }
+        #endPanel .pixel{ color:var(--yellow); font-size:13px; display:block; margin-bottom:14px; }
+        #endPanel h2{ font-size:clamp(1.5rem,4vw,2rem); text-transform:uppercase; color:#fff; margin-bottom:24px; }
+        .end-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:30px; }
+        .end-stats .stat-box .stat-value{ font-size:18px; }
+        .end-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+        .btn-primary, .btn-secondary{
+            font-family:'Press Start 2P', monospace; font-size:11.5px; text-decoration:none;
+            padding:15px 22px; border-radius:8px; cursor:pointer; border:none;
+        }
+        .btn-primary{ background:var(--yellow); color:var(--void); }
+        .btn-secondary{ background:none; border:1px solid var(--line); color:var(--ink); }
+
+        [hidden]{ display:none !important; }
+
+        @media (max-width:520px){
+            .answer-grid{ grid-template-columns:1fr; }
+            .stats-container{ grid-template-columns:repeat(2,1fr); }
+            .end-stats{ grid-template-columns:repeat(1,1fr); }
+        }
+
+        @media (prefers-reduced-motion: reduce){ *{ transition-duration:.001ms !important; } }
+    </style>
+</head>
+<body>
+    <nav class="acajou-nav">
+        <a href="index.html" class="acajou-nav-logo">🕹️ ACAJOU</a>
+        <a href="index.html" class="acajou-nav-back">← All Games</a>
+    </nav>
+
+    <div class="game-container">
+        <h1>⚒️ Fraction Forge</h1>
+        <p class="subtitle">Slice, stack and simplify fractions on the clock.</p>
+
+        <!-- Tier select -->
+        <div id="tierPanel">
+            <h3>Choose Your Tier</h3>
+            <div class="tier-grid">
+                <button class="tier-btn apprentice" onclick="startTier('apprentice')">
+                    <b>🔥 Apprentice</b>
+                    <span>Small bars, easy cuts</span>
+                </button>
+                <button class="tier-btn journeyman" onclick="startTier('journeyman')">
+                    <b>⚙️ Journeyman</b>
+                    <span>Bigger bars, trickier cuts</span>
+                </button>
+                <button class="tier-btn master" onclick="startTier('master')">
+                    <b>👑 Master</b>
+                    <span>Big bars, fast clock</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Game area -->
+        <div id="gameArea" hidden>
+            <div class="stats-container">
+                <div class="stat-box"><div class="stat-label">Score</div><div class="stat-value" id="scoreVal">0</div></div>
+                <div class="stat-box"><div class="stat-label">Streak</div><div class="stat-value" id="streakVal">0🔥</div></div>
+                <div class="stat-box"><div class="stat-label">Round</div><div class="stat-value" id="roundVal">1/10</div></div>
+                <div class="stat-box"><div class="stat-label">Best</div><div class="stat-value" id="bestVal">0</div></div>
+            </div>
+
+            <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+
+            <p class="forge-label">This bar is glowing at</p>
+            <div class="ingot-bar" id="ingotBar"></div>
+            <div class="forge-readout"><span class="raw">shown as <b id="rawFraction">-/-</b></span></div>
+
+            <p class="answers-heading">Simplify it to lowest terms</p>
+            <div class="answer-grid" id="answerGrid"></div>
+
+            <p class="feedback" id="feedback"></p>
+        </div>
+
+        <!-- End screen -->
+        <div id="endPanel" hidden>
+            <span class="pixel">FORGE COMPLETE</span>
+            <h2 id="endHeadline">Nice Work!</h2>
+            <div class="end-stats">
+                <div class="stat-box"><div class="stat-label">Final Score</div><div class="stat-value" id="endScore">0</div></div>
+                <div class="stat-box"><div class="stat-label">Accuracy</div><div class="stat-value" id="endAccuracy">0%</div></div>
+                <div class="stat-box"><div class="stat-label">Best Streak</div><div class="stat-value" id="endStreak">0</div></div>
+            </div>
+            <div class="end-actions">
+                <button class="btn-primary" onclick="restart()">▸ FORGE AGAIN</button>
+                <a class="btn-secondary" href="index.html">ALL GAMES</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TIERS = {
+            apprentice: { denoms:[2,3,4,5,6,8,10], time:16, label:'Apprentice' },
+            journeyman: { denoms:[6,8,9,10,12,14,15,16], time:13, label:'Journeyman' },
+            master:     { denoms:[9,10,12,14,15,16,18,20,24], time:10, label:'Master' }
+        };
+        const ROUNDS_PER_SESSION = 10;
+
+        let state = null;
+        let timerInterval = null;
+
+        function gcd(a, b){ return b === 0 ? a : gcd(b, a % b); }
+
+        function simplify(num, den){
+            const g = gcd(num, den);
+            return [num / g, den / g];
+        }
+
+        function sameFraction(n1, d1, n2, d2){
+            return n1 * d2 === n2 * d1;
+        }
+
+        function randInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function generateFraction(tier){
+            const denoms = TIERS[tier].denoms;
+            let num, den;
+            // Bias toward fractions that actually need simplifying
+            if (Math.random() < 0.7) {
+                const baseDen = denoms[randInt(0, denoms.length - 1)];
+                const [simpleNum, simpleDen] = [randInt(1, baseDen - 1), baseDen];
+                const g = gcd(simpleNum, simpleDen);
+                const factor = randInt(2, 3);
+                num = (simpleNum / g) * factor * (g);
+                den = (simpleDen / g) * factor * (g);
+                // keep the ingot bar readable — fall back to the unreduced pair if it got too wide
+                if (den > 24) { num = simpleNum; den = simpleDen; }
+            } else {
+                den = denoms[randInt(0, denoms.length - 1)];
+                num = randInt(1, den - 1);
+            }
+            return { num, den };
+        }
+
+        function generateDistractors(correctNum, correctDen, rawNum, rawDen){
+            const candidates = [];
+            const tryAdd = (n, d) => {
+                if (n > 0 && d > 0 && n < d) {
+                    const [sn, sd] = simplify(n, d);
+                    if (!sameFraction(sn, sd, correctNum, correctDen)) {
+                        candidates.push([sn, sd]);
+                    }
+                }
+            };
+
+            tryAdd(correctDen, correctNum); // flipped — classic mistake
+            tryAdd(correctNum + 1, correctDen);
+            if (correctNum > 1) tryAdd(correctNum - 1, correctDen);
+            tryAdd(correctNum, correctDen + 1);
+            if (correctDen > correctNum + 1) tryAdd(correctNum, correctDen - 1);
+            if (rawDen !== correctDen) tryAdd(rawNum, rawDen); // forgot to fully simplify
+
+            // dedupe
+            const seen = new Set();
+            const unique = [];
+            for (const [n, d] of candidates) {
+                const key = n + '/' + d;
+                if (!seen.has(key)) { seen.add(key); unique.push([n, d]); }
+            }
+
+            // shuffle and take 3, padding with random fallbacks if short
+            for (let i = unique.length - 1; i > 0; i--) {
+                const j = randInt(0, i);
+                [unique[i], unique[j]] = [unique[j], unique[i]];
+            }
+            while (unique.length < 3) {
+                const d = randInt(2, 9);
+                const n = randInt(1, d - 1);
+                const [sn, sd] = simplify(n, d);
+                if (!sameFraction(sn, sd, correctNum, correctDen) &&
+                    !unique.some(([un, ud]) => sameFraction(un, ud, sn, sd))) {
+                    unique.push([sn, sd]);
+                }
+            }
+            return unique.slice(0, 3);
+        }
+
+        function startTier(tier){
+            state = {
+                tier,
+                round: 1,
+                score: 0,
+                streak: 0,
+                bestStreak: 0,
+                correctCount: 0,
+                locked: false
+            };
+            document.getElementById('tierPanel').hidden = true;
+            document.getElementById('endPanel').hidden = true;
+            document.getElementById('gameArea').hidden = false;
+            updateStats();
+            nextQuestion();
+        }
+
+        function updateStats(){
+            document.getElementById('scoreVal').textContent = state.score;
+            document.getElementById('streakVal').textContent = state.streak + '🔥';
+            document.getElementById('roundVal').textContent = state.round + '/' + ROUNDS_PER_SESSION;
+            document.getElementById('bestVal').textContent = state.bestStreak;
+        }
+
+        function renderIngotBar(num, den){
+            const bar = document.getElementById('ingotBar');
+            bar.className = 'ingot-bar' + (den > 12 ? ' wrap' : '');
+            bar.innerHTML = '';
+            for (let i = 0; i < den; i++) {
+                const seg = document.createElement('div');
+                seg.className = 'ingot' + (i < num ? ' lit' : '');
+                if (den > 12) seg.style.flex = '0 0 ' + (100 / Math.min(den, 12) - 2) + '%';
+                bar.appendChild(seg);
+            }
+        }
+
+        function nextQuestion(){
+            clearInterval(timerInterval);
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            state.locked = false;
+
+            const { num, den } = generateFraction(state.tier);
+            const [cNum, cDen] = simplify(num, den);
+            state.current = { num, den, cNum, cDen };
+
+            renderIngotBar(num, den);
+            document.getElementById('rawFraction').textContent = num + '/' + den;
+
+            const distractors = generateDistractors(cNum, cDen, num, den);
+            const options = [[cNum, cDen], ...distractors];
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = randInt(0, i);
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+
+            const grid = document.getElementById('answerGrid');
+            grid.innerHTML = '';
+            options.forEach(([n, d]) => {
+                const btn = document.createElement('button');
+                btn.className = 'answer-btn';
+                btn.innerHTML = `<span class="num">${n}</span><span class="bar"></span><span class="den">${d}</span>`;
+                btn.onclick = () => checkAnswer(n, d, btn);
+                grid.appendChild(btn);
+            });
+
+            startTimer(TIERS[state.tier].time);
+            updateStats();
+        }
+
+        function startTimer(seconds){
+            const fill = document.getElementById('timerFill');
+            let elapsed = 0;
+            const total = seconds * 1000;
+            fill.style.width = '100%';
+            fill.style.background = 'var(--cyan)';
+            timerInterval = setInterval(() => {
+                elapsed += 100;
+                const pct = Math.max(0, 100 - (elapsed / total) * 100);
+                fill.style.width = pct + '%';
+                if (pct < 30) fill.style.background = 'var(--pink)';
+                else if (pct < 60) fill.style.background = 'var(--yellow)';
+                if (elapsed >= total) {
+                    clearInterval(timerInterval);
+                    if (!state.locked) timeUp();
+                }
+            }, 100);
+        }
+
+        function timeUp(){
+            state.locked = true;
+            state.streak = 0;
+            revealCorrect(null);
+            showFeedback(false, "Time's up! It cooled off.");
+            advanceAfterDelay();
+        }
+
+        function checkAnswer(n, d, btnEl){
+            if (state.locked) return;
+            state.locked = true;
+            clearInterval(timerInterval);
+
+            const { cNum, cDen } = state.current;
+            const isCorrect = sameFraction(n, d, cNum, cDen);
+
+            if (isCorrect) {
+                const bonus = Math.min(state.streak * 2, 20);
+                state.score += 10 + bonus;
+                state.streak += 1;
+                state.bestStreak = Math.max(state.bestStreak, state.streak);
+                state.correctCount += 1;
+                btnEl.classList.add('correct');
+                showFeedback(true, bonus > 0 ? `Forged! +${10 + bonus} (streak bonus)` : 'Forged! +10');
+            } else {
+                state.streak = 0;
+                btnEl.classList.add('wrong');
+                revealCorrect(btnEl);
+                showFeedback(false, `Not quite — it simplifies to ${cNum}/${cDen}.`);
+            }
+
+            document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
+            updateStats();
+            advanceAfterDelay();
+        }
+
+        function revealCorrect(exceptBtn){
+            const { cNum, cDen } = state.current;
+            document.querySelectorAll('.answer-btn').forEach(b => {
+                const n = parseInt(b.querySelector('.num').textContent);
+                const d = parseInt(b.querySelector('.den').textContent);
+                if (b !== exceptBtn && sameFraction(n, d, cNum, cDen)) b.classList.add('correct');
+            });
+        }
+
+        function showFeedback(good, text){
+            const el = document.getElementById('feedback');
+            el.textContent = text;
+            el.className = 'feedback ' + (good ? 'good' : 'bad');
+        }
+
+        function advanceAfterDelay(){
+            setTimeout(() => {
+                state.round += 1;
+                if (state.round > ROUNDS_PER_SESSION) {
+                    endGame();
+                } else {
+                    nextQuestion();
+                }
+            }, 1400);
+        }
+
+        function endGame(){
+            clearInterval(timerInterval);
+            document.getElementById('gameArea').hidden = true;
+            document.getElementById('endPanel').hidden = false;
+
+            const accuracy = Math.round((state.correctCount / ROUNDS_PER_SESSION) * 100);
+            document.getElementById('endScore').textContent = state.score;
+            document.getElementById('endAccuracy').textContent = accuracy + '%';
+            document.getElementById('endStreak').textContent = state.bestStreak;
+
+            const headline = document.getElementById('endHeadline');
+            if (accuracy >= 90) headline.textContent = 'Master Smith!';
+            else if (accuracy >= 60) headline.textContent = 'Solid Forge!';
+            else headline.textContent = 'Keep Hammering!';
+
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'complete_game', {
+                    'event_category': 'Game',
+                    'event_label': 'Fraction Forge - ' + TIERS[state.tier].label,
+                    'value': state.score
+                });
+            }
+        }
+
+        function restart(){
+            document.getElementById('endPanel').hidden = true;
+            document.getElementById('tierPanel').hidden = false;
+        }
+
+        window.addEventListener('load', function() {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'view', { 'event_category': 'Page', 'event_label': 'Fraction Forge' });
+            }
+        });
+    </script>
+</body>
+</html>
